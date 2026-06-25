@@ -32,17 +32,27 @@ nav.scrolled{background:rgba(13,13,13,.92);backdrop-filter:blur(12px);border-bot
 .lang-btn.active{background:var(--red);color:white}
 
 /* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:140px 60px 80px;position:relative;overflow:hidden}
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 420px;align-items:center;padding:100px 60px 80px;position:relative;overflow:hidden;gap:60px}
 .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 15% 85%,rgba(30,61,15,.45) 0%,transparent 55%),radial-gradient(ellipse at 85% 15%,rgba(139,26,26,.18) 0%,transparent 50%)}
+.hero-left{position:relative;z-index:1;display:flex;flex-direction:column;justify-content:center}
 .hero-tag{display:flex;align-items:center;gap:10px;margin-bottom:40px}
 .hero-tag-dot{width:6px;height:6px;background:var(--red);border-radius:50%;flex-shrink:0}
 .hero-tag-text{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(247,243,236,.45)}
-.hero-headline{font-family:var(--serif);font-size:clamp(52px,7.5vw,116px);font-weight:400;line-height:1.0;max-width:960px}
+.hero-headline{font-family:var(--serif);font-size:clamp(48px,6vw,96px);font-weight:400;line-height:1.0}
 .hero-headline .line{overflow:hidden;display:block}
 .hero-headline .li{display:block;transform:translateY(110%)}
 .hero-headline em{font-style:italic;color:rgba(247,243,236,.3)}
-.hero-sub{font-size:17px;line-height:1.85;color:rgba(247,243,236,.5);max-width:440px;margin-top:36px}
-.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:52px}
+.hero-sub{font-size:16px;line-height:1.85;color:rgba(247,243,236,.5);max-width:420px;margin-top:32px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:48px}
+/* Photo column */
+.hero-photo-wrap{position:relative;z-index:1;align-self:stretch;display:flex;align-items:flex-end;justify-content:center}
+.hero-photo-frame{position:relative;width:100%;max-width:400px;margin:0 auto}
+.hero-photo-frame::before{content:'';position:absolute;inset:-1px;border:1px solid rgba(247,243,236,.1);z-index:2;pointer-events:none}
+.hero-photo-frame::after{content:'';position:absolute;bottom:0;left:0;right:0;height:45%;background:linear-gradient(to top,rgba(13,13,13,.85) 0%,transparent 100%);z-index:3}
+.hero-photo{width:100%;height:100%;max-height:calc(100vh - 140px);object-fit:cover;object-position:top center;display:block;filter:grayscale(8%)}
+.hero-photo-tag{position:absolute;bottom:24px;left:24px;z-index:4;display:flex;flex-direction:column;gap:3px}
+.hpt-name{font-family:var(--serif);font-size:17px;font-weight:500;color:var(--cream);letter-spacing:.04em}
+.hpt-role{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(247,243,236,.45)}
 .btn-red{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;background:var(--red);color:white;text-decoration:none;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:var(--sans);transition:background .25s;border:none;cursor:pointer}
 .btn-red:hover{background:var(--red2)}
 .btn-ghost{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;border:1px solid rgba(247,243,236,.2);color:rgba(247,243,236,.6);text-decoration:none;font-size:12px;letter-spacing:.14em;text-transform:uppercase;transition:all .25s}
@@ -146,7 +156,8 @@ footer{background:#080808;padding:26px 60px;display:flex;justify-content:space-b
 /* RESPONSIVE */
 @media(max-width:960px){
   nav{padding:0 20px}
-  .hero{padding:100px 24px 72px}
+  .hero{grid-template-columns:1fr;padding:100px 24px 72px;gap:40px}
+  .hero-photo-wrap{display:none}
   .process{grid-template-columns:1fr}
   .proc-right{display:none}
   .proc-left{padding:60px 24px}
@@ -173,6 +184,7 @@ footer{background:#080808;padding:26px 60px;display:flex;justify-content:space-b
 <!-- HERO -->
 <section class="hero" id="hero">
   <div class="hero-bg"></div>
+  <div class="hero-left">
   <div class="hero-tag">
     <span class="hero-tag-dot"></span>
     <span class="hero-tag-text"
@@ -194,6 +206,16 @@ footer{background:#080808;padding:26px 60px;display:flex;justify-content:space-b
   <div class="hero-actions">
     <a href="#contact" class="btn-red"><span data-en="Start Your Brand" data-ar="ابدأ براندك" data-tr="Markanı Başlat">Start Your Brand</span> <span>→</span></a>
     <a href="#process" class="btn-ghost"><span data-en="How It Works" data-ar="كيف يعمل" data-tr="Nasıl Çalışır">How It Works</span></a>
+  </div>
+  </div><!-- /hero-left -->
+  <div class="hero-photo-wrap">
+    <div class="hero-photo-frame">
+      <img src="../assets/kawthar.png" alt="Kawthar Himoudi" class="hero-photo" loading="eager">
+      <div class="hero-photo-tag">
+        <span class="hpt-name">Kawthar Himoudi</span>
+        <span class="hpt-role" data-en="Istanbul · Private Label Expert" data-ar="إسطنبول · خبيرة العلامات الخاصة" data-tr="İstanbul · Özel Etiket Uzmanı">Istanbul · Private Label Expert</span>
+      </div>
+    </div>
   </div>
   <div class="scroll-hint">
     <div class="scroll-line"></div>
@@ -450,6 +472,11 @@ gsap.to('.hero-bg', {
   yPercent:35, ease:'none',
   scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:true }
 });
+gsap.to('.hero-photo', {
+  yPercent:12, ease:'none',
+  scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:true }
+});
+gsap.from('.hero-photo-wrap', { opacity:0, x:40, duration:1.1, delay:.7, ease:'power3.out' });
 
 // PROCESS — pinned, 3 steps
 function activateStep(n) {
