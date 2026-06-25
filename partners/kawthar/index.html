@@ -3,1006 +3,524 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kawthar Himoudi — Private Label Cosmetics</title>
+<title>Kawthar Himoudi — Private Label Cosmetics Istanbul</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 <style>
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-
 :root {
-  --ink: #0D0D0D;
-  --fog: #F0EDE6;
-  --forest: #1A3A0D;
-  --moss: #3D6B22;
-  --sage: #7AAB5A;
-  --wine: #6B1414;
-  --rose: #A02020;
-  --gold: #C8A84B;
-  --glass: rgba(255,255,255,0.08);
-  --glass-border: rgba(255,255,255,0.15);
+  --dark:#0D0D0D; --green:#1E3D0F; --green2:#2E5A18; --green3:#4A7C2F;
+  --red:#8B1A1A; --red2:#B02020; --cream:#F7F3EC; --beige:#EDE5D4;
+  --border:rgba(247,243,236,0.1);
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --ar:'Tajawal',sans-serif;
 }
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--dark);color:var(--cream);font-family:var(--sans);font-weight:300;overflow-x:hidden}
+body.ar{font-family:var(--ar);direction:rtl}
 
-body {
-  background: var(--ink);
-  color: var(--fog);
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 300;
-  overflow-x: hidden;
-}
-body.ar { font-family: 'Tajawal', sans-serif; direction: rtl; }
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 60px;height:68px;display:flex;align-items:center;justify-content:space-between;transition:background .4s,border-bottom .4s}
+nav.scrolled{background:rgba(13,13,13,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.nav-brand{font-family:var(--serif);font-size:18px;font-weight:500;letter-spacing:.06em}
+.lang-switcher{display:flex;border:1px solid var(--border)}
+.lang-btn{padding:7px 14px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-family:var(--sans);background:transparent;color:rgba(247,243,236,.4);border:none;cursor:pointer;transition:all .2s}
+.lang-btn:hover{color:var(--cream)}
+.lang-btn.active{background:var(--red);color:white}
 
-/* ── LANG BAR ── */
-.lang-bar {
-  position: fixed; top:0; left:0; right:0; z-index:1000;
-  padding: 0 48px;
-  height: 48px;
-  display: flex; align-items:center; justify-content:space-between;
-  background: rgba(13,13,13,0.7);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.lang-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 15px; letter-spacing:0.06em;
-  color: rgba(240,237,230,0.7);
-}
-.lang-switcher { display:flex; gap:2px; }
-.lang-btn {
-  padding: 5px 14px; font-size:11px; letter-spacing:0.14em;
-  text-transform:uppercase; border:1px solid rgba(255,255,255,0.1);
-  background:transparent; color:rgba(240,237,230,0.4);
-  cursor:pointer; font-family:inherit; transition:all 0.2s;
-}
-.lang-btn:hover { color:var(--fog); border-color:rgba(255,255,255,0.3); }
-.lang-btn.active { background:var(--wine); border-color:var(--wine); color:white; }
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:140px 60px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 15% 85%,rgba(30,61,15,.45) 0%,transparent 55%),radial-gradient(ellipse at 85% 15%,rgba(139,26,26,.18) 0%,transparent 50%)}
+.hero-tag{display:flex;align-items:center;gap:10px;margin-bottom:40px}
+.hero-tag-dot{width:6px;height:6px;background:var(--red);border-radius:50%;flex-shrink:0}
+.hero-tag-text{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:rgba(247,243,236,.45)}
+.hero-headline{font-family:var(--serif);font-size:clamp(52px,7.5vw,116px);font-weight:400;line-height:1.0;max-width:960px}
+.hero-headline .line{overflow:hidden;display:block}
+.hero-headline .li{display:block;transform:translateY(110%)}
+.hero-headline em{font-style:italic;color:rgba(247,243,236,.3)}
+.hero-sub{font-size:17px;line-height:1.85;color:rgba(247,243,236,.5);max-width:440px;margin-top:36px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:52px}
+.btn-red{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;background:var(--red);color:white;text-decoration:none;font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-family:var(--sans);transition:background .25s;border:none;cursor:pointer}
+.btn-red:hover{background:var(--red2)}
+.btn-ghost{display:inline-flex;align-items:center;gap:10px;padding:15px 32px;border:1px solid rgba(247,243,236,.2);color:rgba(247,243,236,.6);text-decoration:none;font-size:12px;letter-spacing:.14em;text-transform:uppercase;transition:all .25s}
+.btn-ghost:hover{border-color:rgba(247,243,236,.5);color:var(--cream)}
+.scroll-hint{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px}
+.scroll-hint span{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.25)}
+.scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,rgba(247,243,236,.3),transparent);animation:sl 2s ease-in-out infinite}
+@keyframes sl{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* ── HERO ── */
-.hero {
-  min-height: 100vh;
-  padding-top: 48px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-}
+/* MARQUEE */
+.mq-wrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--green);padding:13px 0}
+.mq-track{display:flex;width:max-content;animation:mq 28s linear infinite}
+.mq-item{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,243,236,.55);padding:0 44px;white-space:nowrap}
+.mq-sep{color:var(--red);opacity:.7}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
-.hero-bg {
-  position: absolute; inset:0;
-  background: 
-    radial-gradient(ellipse 80% 60% at 70% 50%, rgba(26,58,13,0.5) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(107,20,20,0.3) 0%, transparent 60%),
-    linear-gradient(160deg, #0D0D0D 0%, #111A0D 50%, #0D0D0D 100%);
-}
+/* PROCESS */
+.process{height:100vh;background:var(--green);display:grid;grid-template-columns:55% 45%;overflow:hidden;position:relative}
+.proc-left{padding:80px 72px;display:flex;flex-direction:column;justify-content:center}
+.proc-ey{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--green3);margin-bottom:14px}
+.proc-title{font-family:var(--serif);font-size:clamp(36px,4vw,56px);font-weight:400;line-height:1.1;color:var(--cream);margin-bottom:52px}
+.proc-title em{font-style:italic;color:rgba(247,243,236,.3)}
+.pstep{padding:22px 0;border-top:1px solid rgba(247,243,236,.08);display:flex;gap:20px;align-items:flex-start;transition:opacity .4s}
+.pstep:last-child{border-bottom:1px solid rgba(247,243,236,.08)}
+.pstep.dim{opacity:.25}
+.pstep-n{font-family:var(--serif);font-size:12px;color:var(--red);min-width:26px;margin-top:5px;letter-spacing:.08em}
+.pstep-t{font-family:var(--serif);font-size:21px;font-weight:500;color:var(--cream);margin-bottom:7px}
+.pstep-d{font-size:13px;line-height:1.75;color:rgba(247,243,236,.5)}
+.proc-right{display:flex;align-items:center;justify-content:center;position:relative;background:rgba(0,0,0,.15)}
+.pvis{position:absolute;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.88);transition:all .7s cubic-bezier(.25,.46,.45,.94)}
+.pvis.on{opacity:1;transform:scale(1)}
+.pvis-ring{width:260px;height:260px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.pvis-1 .pvis-ring{background:rgba(139,26,26,.12);border:1px solid rgba(139,26,26,.25)}
+.pvis-2 .pvis-ring{background:rgba(74,124,47,.12);border:1px solid rgba(74,124,47,.25)}
+.pvis-3 .pvis-ring{background:rgba(247,243,236,.04);border:1px solid rgba(247,243,236,.1)}
+.pvis-num{font-family:var(--serif);font-size:96px;font-weight:300;color:rgba(247,243,236,.12);line-height:1}
+.proc-dots{position:absolute;right:32px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px}
+.pdot{width:4px;height:4px;border-radius:50%;background:rgba(247,243,236,.2);transition:all .35s}
+.pdot.on{height:28px;border-radius:2px;background:var(--red)}
 
-/* Animated particles */
-.particles {
-  position: absolute; inset:0; overflow:hidden; pointer-events:none;
-}
-.particle {
-  position: absolute;
-  width: 1px; height: 1px;
-  background: var(--sage);
-  border-radius: 50%;
-  animation: float linear infinite;
-  opacity: 0;
-}
-@keyframes float {
-  0% { transform:translateY(100vh) translateX(0); opacity:0; }
-  10% { opacity:0.6; }
-  90% { opacity:0.3; }
-  100% { transform:translateY(-20px) translateX(40px); opacity:0; }
-}
+/* PRODUCTS */
+.prod-wrap{background:var(--dark)}
+.prod-sticky{height:100vh;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.prod-hd{padding:0 60px 40px}
+.prod-ey{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:12px}
+.prod-title{font-family:var(--serif);font-size:clamp(32px,3.5vw,52px);font-weight:400;color:var(--cream)}
+.prod-title em{font-style:italic;color:rgba(247,243,236,.28)}
+.prod-outer{overflow:hidden}
+.prod-track{display:flex;gap:18px;padding:0 60px;width:max-content}
+.pc{width:300px;flex-shrink:0;border:1px solid rgba(247,243,236,.07);background:rgba(247,243,236,.02);transition:border-color .3s}
+.pc:hover{border-color:rgba(247,243,236,.14)}
+.pc-vis{height:190px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+.pc-body{padding:26px}
+.pc-name{font-family:var(--serif);font-size:20px;font-weight:500;color:var(--cream);margin-bottom:9px}
+.pc-desc{font-size:12px;line-height:1.75;color:rgba(247,243,236,.4);margin-bottom:18px}
+.pc-tag{display:inline-block;padding:4px 12px;border:1px solid rgba(247,243,236,.1);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(247,243,236,.35)}
 
-.hero-content {
-  position: relative; z-index:2;
-  padding: 80px 72px;
-  max-width: 700px;
-}
+/* MOQ */
+.moq{background:var(--cream);color:var(--dark);padding:120px 60px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.moq-ey{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+.moq-num{font-family:var(--serif);font-size:clamp(80px,12vw,160px);font-weight:400;line-height:1;color:var(--green);overflow:hidden}
+.moq-unit{font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:rgba(13,13,13,.4);margin-top:8px}
+.moq-t{font-family:var(--serif);font-size:clamp(28px,3vw,40px);font-weight:400;color:var(--dark);margin-bottom:20px;line-height:1.2}
+.moq-t em{font-style:italic;color:var(--green)}
+.moq-p{font-size:15px;line-height:1.85;color:rgba(13,13,13,.55);max-width:380px}
+.moq-feats{display:flex;flex-direction:column;gap:13px;margin-top:32px}
+.mfeat{display:flex;align-items:center;gap:12px;font-size:14px;color:rgba(13,13,13,.65)}
+.mcheck{width:22px;height:22px;background:var(--green);color:white;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
 
-.hero-eyebrow {
-  display: inline-flex; align-items:center; gap:10px;
-  margin-bottom: 40px;
-  opacity: 0; animation: fadeUp 0.8s 0.3s ease forwards;
-}
-.hero-eyebrow-dot { width:5px; height:5px; background:var(--rose); border-radius:50%; }
-.hero-eyebrow-text { font-size:11px; letter-spacing:0.24em; text-transform:uppercase; color:var(--sage); }
-
-.hero-headline {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(52px, 7vw, 96px);
-  font-weight: 400;
-  line-height: 1.0;
-  margin-bottom: 32px;
-  opacity: 0; animation: fadeUp 0.9s 0.5s ease forwards;
-}
-.hero-headline em { font-style:italic; color:rgba(240,237,230,0.3); display:block; }
-
-.hero-line {
-  width: 0; height: 1px;
-  background: linear-gradient(90deg, var(--rose), transparent);
-  margin: 36px 0;
-  animation: expandLine 1s 0.9s ease forwards;
-}
-@keyframes expandLine { to { width: 200px; } }
-
-.hero-sub {
-  font-size: 16px; line-height:1.85;
-  color: rgba(240,237,230,0.55);
-  max-width: 480px;
-  margin-bottom: 56px;
-  opacity: 0; animation: fadeUp 0.9s 0.8s ease forwards;
-}
-
-.hero-actions {
-  display: flex; gap:16px; flex-wrap:wrap;
-  opacity: 0; animation: fadeUp 0.9s 1s ease forwards;
-}
-
-.btn-primary {
-  padding: 16px 36px;
-  background: var(--wine);
-  color: white;
-  font-family: inherit; font-size:12px; letter-spacing:0.16em; text-transform:uppercase;
-  border:none; cursor:pointer; text-decoration:none;
-  display:inline-flex; align-items:center; gap:10px;
-  transition: all 0.3s;
-  position: relative; overflow:hidden;
-}
-.btn-primary::before {
-  content:''; position:absolute; inset:0;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-  transform: translateX(-100%);
-  transition: transform 0.5s;
-}
-.btn-primary:hover::before { transform:translateX(100%); }
-.btn-primary:hover { background:var(--rose); transform:translateY(-2px); }
-
-.btn-ghost {
-  padding: 15px 32px;
-  border: 1px solid rgba(255,255,255,0.15);
-  color: rgba(240,237,230,0.6);
-  font-family:inherit; font-size:12px; letter-spacing:0.16em; text-transform:uppercase;
-  text-decoration:none; display:inline-flex; align-items:center; gap:10px;
-  transition: all 0.3s; backdrop-filter:blur(8px);
-}
-.btn-ghost:hover { border-color:var(--sage); color:var(--sage); }
-
-/* Hero right float */
-.hero-float {
-  position: absolute; right:8%; top:50%; transform:translateY(-50%);
-  display: grid; grid-template-columns:1fr 1fr; gap:16px;
-  opacity: 0; animation: fadeIn 1.2s 1.2s ease forwards;
-}
-
-.float-card {
-  background: var(--glass);
-  border: 1px solid var(--glass-border);
-  backdrop-filter: blur(20px);
-  padding: 28px 24px;
-  width: 160px;
-  transition: transform 0.3s, background 0.3s;
-  position: relative; overflow:hidden;
-}
-.float-card::before {
-  content:''; position:absolute;
-  top:0; left:0; right:0; height:1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-}
-.float-card:hover { transform:translateY(-4px); background:rgba(255,255,255,0.12); }
-.float-card:nth-child(2) { margin-top:32px; }
-.float-card:nth-child(4) { margin-top:-32px; }
-
-.float-card-img {
-  width: 100%; height: 100px;
-  object-fit:cover; display:block;
-  margin-bottom:14px;
-  filter: brightness(0.85);
-}
-.float-card-name {
-  font-size:11px; letter-spacing:0.12em; text-transform:uppercase;
-  color:rgba(240,237,230,0.6);
-}
-.float-card-tag {
-  font-size:9px; letter-spacing:0.1em; text-transform:uppercase;
-  color:var(--sage); margin-top:4px;
-}
-
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(24px); }
-  to { opacity:1; transform:translateY(0); }
-}
-@keyframes fadeIn {
-  from { opacity:0; } to { opacity:1; }
-}
-
-/* ── SCROLL REVEAL ── */
-.reveal {
-  opacity:0; transform:translateY(40px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.reveal.visible { opacity:1; transform:translateY(0); }
-.reveal-delay-1 { transition-delay:0.1s; }
-.reveal-delay-2 { transition-delay:0.2s; }
-.reveal-delay-3 { transition-delay:0.3s; }
-.reveal-delay-4 { transition-delay:0.4s; }
-
-/* ── MARQUEE ── */
-.marquee-wrap {
-  background: var(--forest);
-  border-top: 1px solid rgba(255,255,255,0.06);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  padding: 16px 0;
-  overflow:hidden;
-}
-.marquee-track {
-  display:flex; gap:48px;
-  animation: marquee 25s linear infinite;
-  white-space:nowrap;
-}
-.marquee-item {
-  font-size:11px; letter-spacing:0.22em; text-transform:uppercase;
-  color:var(--sage); opacity:0.7;
-  display:flex; align-items:center; gap:16px; flex-shrink:0;
-}
-.marquee-item::after { content:'✦'; font-size:8px; color:var(--rose); }
-@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-
-/* ── SECTIONS ── */
-.section { padding:120px 72px; }
-.section-alt { background: rgba(255,255,255,0.02); }
-
-.eyebrow {
-  font-size:11px; letter-spacing:0.22em; text-transform:uppercase;
-  color:var(--rose); margin-bottom:16px;
-}
-
-.section-title {
-  font-family:'Playfair Display', serif;
-  font-size:clamp(40px,5vw,64px);
-  font-weight:400; line-height:1.1;
-  margin-bottom:0;
-}
-.section-title em { font-style:italic; color:rgba(240,237,230,0.3); }
-
-/* ── PROCESS ── */
-.process-grid {
-  display:grid; grid-template-columns:repeat(3,1fr);
-  gap:1px; background:rgba(255,255,255,0.06);
-  margin-top:64px;
-}
-.process-card {
-  background:var(--ink);
-  padding:56px 44px;
-  position:relative; overflow:hidden;
-  transition: background 0.4s;
-}
-.process-card::before {
-  content:''; position:absolute;
-  top:0; left:0; right:0; height:2px;
-  background: linear-gradient(90deg, var(--forest), var(--moss));
-  transform:scaleX(0); transform-origin:left;
-  transition:transform 0.4s;
-}
-.process-card:hover { background:rgba(26,58,13,0.2); }
-.process-card:hover::before { transform:scaleX(1); }
-
-.process-num {
-  font-family:'Playfair Display',serif;
-  font-size:80px; font-weight:400;
-  color:rgba(255,255,255,0.04);
-  line-height:1; margin-bottom:28px;
-  transition:color 0.4s;
-}
-.process-card:hover .process-num { color:rgba(122,171,90,0.15); }
-
-.process-icon {
-  width:44px; height:44px; margin-bottom:24px;
-}
-
-.process-title {
-  font-family:'Playfair Display',serif;
-  font-size:24px; color:var(--fog);
-  margin-bottom:16px;
-}
-.process-desc { font-size:14px; line-height:1.85; color:rgba(240,237,230,0.45); }
-
-/* ── WHAT YOU GET ── */
-.get-grid {
-  display:grid; grid-template-columns:repeat(2,1fr);
-  gap:16px; margin-top:64px;
-}
-.get-card {
-  background: var(--glass);
-  border:1px solid var(--glass-border);
-  backdrop-filter:blur(20px);
-  padding:44px 40px;
-  position:relative; overflow:hidden;
-  transition:all 0.4s;
-}
-.get-card::after {
-  content:''; position:absolute;
-  bottom:0; left:0; right:0; height:1px;
-  background:linear-gradient(90deg, transparent, var(--sage), transparent);
-  opacity:0; transition:opacity 0.4s;
-}
-.get-card:hover { background:rgba(255,255,255,0.1); transform:translateY(-4px); }
-.get-card:hover::after { opacity:1; }
-
-.get-card-top {
-  display:flex; align-items:flex-start;
-  justify-content:space-between; margin-bottom:24px;
-}
-.get-icon { width:40px; height:40px; }
-.get-num {
-  font-family:'Playfair Display',serif;
-  font-size:48px; font-weight:400;
-  color:rgba(255,255,255,0.05); line-height:1;
-}
-.get-title {
-  font-family:'Playfair Display',serif;
-  font-size:22px; color:var(--fog); margin-bottom:12px;
-}
-.get-desc { font-size:14px; line-height:1.8; color:rgba(240,237,230,0.45); }
-
-/* ── PRODUCTS ── */
-.products-section {
-  padding:120px 72px;
-  background: linear-gradient(180deg, var(--ink) 0%, rgba(26,58,13,0.15) 50%, var(--ink) 100%);
-}
-.products-header {
-  display:flex; align-items:flex-end;
-  justify-content:space-between; margin-bottom:64px;
-}
-.products-grid {
-  display:grid; grid-template-columns:repeat(3,1fr);
-  gap:16px;
-}
-.product-card {
-  background:var(--glass);
-  border:1px solid var(--glass-border);
-  backdrop-filter:blur(12px);
-  overflow:hidden; position:relative;
-  transition:all 0.4s; cursor:pointer;
-  group: product;
-}
-.product-card::before {
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(180deg, transparent 50%, rgba(26,58,13,0.8) 100%);
-  z-index:1;
-}
-.product-card:hover { transform:translateY(-6px); border-color:rgba(122,171,90,0.3); }
-
-.product-img-wrap {
-  height:220px; overflow:hidden; position:relative;
-  background:var(--forest);
-}
-.product-img-wrap img {
-  width:100%; height:100%; object-fit:cover;
-  transition:transform 0.6s ease;
-  filter:brightness(0.7) saturate(0.8);
-}
-.product-card:hover .product-img-wrap img { transform:scale(1.08); }
-
-.product-body {
-  padding:24px 28px 28px;
-  position:relative; z-index:2;
-}
-.product-tag-badge {
-  display:inline-block; padding:3px 10px;
-  background:rgba(107,20,20,0.5);
-  border:1px solid rgba(160,32,32,0.4);
-  font-size:9px; letter-spacing:0.14em; text-transform:uppercase;
-  color:rgba(240,237,230,0.7); margin-bottom:12px;
-}
-.product-name {
-  font-family:'Playfair Display',serif;
-  font-size:20px; color:var(--fog); margin-bottom:8px;
-}
-.product-desc { font-size:13px; line-height:1.7; color:rgba(240,237,230,0.45); }
-
-/* ── MOQ BAND ── */
-.moq-band {
-  padding:80px 72px;
-  background:var(--forest);
-  display:flex; align-items:center;
-  justify-content:space-between; gap:40px;
-  position:relative; overflow:hidden; flex-wrap:wrap;
-}
-.moq-band::before {
-  content:'500'; position:absolute;
-  font-family:'Playfair Display',serif;
-  font-size:400px; font-weight:700;
-  color:rgba(255,255,255,0.03);
-  line-height:1; top:50%; left:30%;
-  transform:translateY(-50%);
-  pointer-events:none;
-}
-.moq-left .eyebrow { color:var(--sage); }
-.moq-num {
-  font-family:'Playfair Display',serif;
-  font-size:96px; font-weight:400; line-height:1;
-  color:var(--fog);
-}
-.moq-unit {
-  font-size:14px; letter-spacing:0.14em; text-transform:uppercase;
-  color:var(--sage); margin-top:8px;
-}
-.moq-checks {
-  display:flex; flex-direction:column; gap:16px;
-  position:relative; z-index:1;
-}
-.moq-check {
-  display:flex; align-items:center; gap:14px;
-  font-size:14px; color:rgba(240,237,230,0.7);
-}
-.moq-check-icon {
-  width:22px; height:22px;
-  border:1px solid var(--sage); display:flex;
-  align-items:center; justify-content:center; flex-shrink:0;
-}
-
-/* ── WHO ── */
-.who-grid {
-  display:grid; grid-template-columns:repeat(3,1fr);
-  gap:16px; margin-top:64px;
-}
-.who-card {
-  padding:44px 36px;
-  border:1px solid rgba(255,255,255,0.06);
-  position:relative; overflow:hidden;
-  transition:all 0.4s;
-}
-.who-card::before {
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(135deg, rgba(26,58,13,0.0), rgba(26,58,13,0.2));
-  opacity:0; transition:opacity 0.4s;
-}
-.who-card:hover { border-color:rgba(122,171,90,0.25); }
-.who-card:hover::before { opacity:1; }
-
-.who-card-img {
-  width:56px; height:56px; border-radius:50%;
-  object-fit:cover; margin-bottom:24px;
-  filter:grayscale(0.3);
-  border:1px solid rgba(255,255,255,0.1);
-}
-.who-card-title {
-  font-family:'Playfair Display',serif;
-  font-size:20px; color:var(--fog); margin-bottom:10px;
-}
-.who-card-desc { font-size:13px; line-height:1.75; color:rgba(240,237,230,0.45); }
-
-/* ── CONTACT ── */
-.contact-section {
-  padding:120px 72px;
-  background:linear-gradient(160deg, rgba(26,58,13,0.2) 0%, var(--ink) 50%);
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:100px; align-items:start;
-}
-.contact-left .section-title { margin-bottom:32px; }
-.contact-left p { font-size:15px; line-height:1.9; color:rgba(240,237,230,0.5); margin-bottom:48px; }
-
-.contact-detail {
-  display:flex; gap:20px; padding:20px 0;
-  border-bottom:1px solid rgba(255,255,255,0.06);
-  align-items:center;
-}
-.contact-detail:first-of-type { border-top:1px solid rgba(255,255,255,0.06); }
-.contact-key { font-size:10px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(240,237,230,0.3); min-width:90px; }
-.contact-val { font-size:15px; color:var(--fog); }
-.contact-val a { color:var(--fog); text-decoration:none; transition:color 0.2s; }
-.contact-val a:hover { color:var(--sage); }
-
-.contact-form {
-  background:var(--glass);
-  border:1px solid var(--glass-border);
-  backdrop-filter:blur(24px);
-  padding:52px;
-}
-.form-title {
-  font-family:'Playfair Display',serif;
-  font-size:28px; color:var(--fog); margin-bottom:36px;
-}
-.field { margin-bottom:20px; }
-.field label {
-  display:block; font-size:10px; letter-spacing:0.18em;
-  text-transform:uppercase; color:rgba(240,237,230,0.35); margin-bottom:8px;
-}
-.field input, .field textarea, .field select {
-  width:100%; padding:14px 18px;
-  background:rgba(255,255,255,0.05);
-  border:1px solid rgba(255,255,255,0.1);
-  color:var(--fog); font-family:inherit; font-size:14px; font-weight:300;
-  outline:none; transition:border-color 0.2s;
-  appearance:none;
-}
-.field input:focus, .field textarea:focus, .field select:focus { border-color:var(--sage); }
-.field input::placeholder, .field textarea::placeholder { color:rgba(240,237,230,0.2); }
-.field textarea { height:90px; resize:vertical; }
-.field select option { background:var(--ink); }
-.submit-btn {
-  width:100%; padding:16px;
-  background:var(--wine); color:white; border:none;
-  font-family:inherit; font-size:12px; letter-spacing:0.18em; text-transform:uppercase;
-  cursor:pointer; transition:all 0.3s; margin-top:8px;
-  position:relative; overflow:hidden;
-}
-.submit-btn::before {
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-  transform:translateX(-100%); transition:transform 0.5s;
-}
-.submit-btn:hover::before { transform:translateX(100%); }
-.submit-btn:hover { background:var(--rose); }
+/* CONTACT */
+.contact{background:var(--green);padding:120px 60px;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
+.ct-ey{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--green3);margin-bottom:14px}
+.ct-title{font-family:var(--serif);font-size:clamp(32px,3.5vw,50px);font-weight:400;line-height:1.1;color:var(--cream);margin-bottom:24px}
+.ct-title em{font-style:italic;color:rgba(247,243,236,.28)}
+.ct-p{font-size:15px;line-height:1.85;color:rgba(247,243,236,.5);margin-bottom:40px}
+.ct-det{display:flex;flex-direction:column}
+.cdet{display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(247,243,236,.07)}
+.cdet:first-child{border-top:1px solid rgba(247,243,236,.07)}
+.ckey{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--green3);min-width:80px}
+.cval{font-size:14px;color:var(--cream)}
+.cval a{color:var(--cream);text-decoration:none}
+.cval a:hover{color:var(--green3)}
+.wa{display:inline-flex;align-items:center;gap:12px;margin-top:28px;padding:15px 28px;background:#25D366;color:white;text-decoration:none;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-family:var(--sans);transition:background .2s}
+.wa:hover{background:#1DAA52}
+.cf{background:rgba(255,255,255,.04);border:1px solid rgba(247,243,236,.07);padding:44px}
+.cf-t{font-family:var(--serif);font-size:24px;font-weight:400;font-style:italic;color:var(--cream);margin-bottom:28px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(247,243,236,.3);margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;padding:11px 14px;background:rgba(247,243,236,.04);border:1px solid rgba(247,243,236,.09);color:var(--cream);font-family:var(--sans);font-size:13px;font-weight:300;outline:none;transition:border-color .2s;appearance:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(247,243,236,.3)}
+.field textarea{height:88px;resize:vertical}
+.field select option{background:var(--green)}
+.sub-btn{width:100%;padding:14px;background:var(--red);color:white;border:none;font-family:var(--sans);font-size:11px;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .2s;margin-top:6px}
+.sub-btn:hover{background:var(--red2)}
 
 /* FOOTER */
-footer {
-  background:rgba(0,0,0,0.5); padding:28px 72px;
-  display:flex; justify-content:space-between; align-items:center;
-  border-top:1px solid rgba(255,255,255,0.06);
-}
-.footer-brand { font-family:'Playfair Display',serif; font-size:16px; color:rgba(240,237,230,0.6); }
-.footer-copy { font-size:11px; color:rgba(240,237,230,0.2); letter-spacing:0.08em; }
+footer{background:#080808;padding:26px 60px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(247,243,236,.05)}
+.fb{font-family:var(--serif);font-size:17px;color:var(--cream);letter-spacing:.08em}
+.fc{font-size:11px;color:rgba(247,243,236,.18)}
 
-/* MOBILE */
+/* RESPONSIVE */
 @media(max-width:960px){
-  .lang-bar{padding:0 20px;}
-  .hero-float{display:none;}
-  .hero-content{padding:80px 24px;}
-  .section, .products-section, .moq-band, .contact-section{padding:80px 24px;}
-  .process-grid, .products-grid, .who-grid{grid-template-columns:1fr;}
-  .get-grid{grid-template-columns:1fr;}
-  .contact-section{grid-template-columns:1fr; gap:48px;}
-  .products-header{flex-direction:column; gap:20px;}
-  footer{padding:24px; flex-direction:column; gap:8px; text-align:center;}
-}
-
-/* REDUCED MOTION */
-@media(prefers-reduced-motion:reduce){
-  *, *::before, *::after{animation:none!important; transition:none!important;}
+  nav{padding:0 20px}
+  .hero{padding:100px 24px 72px}
+  .process{grid-template-columns:1fr}
+  .proc-right{display:none}
+  .proc-left{padding:60px 24px}
+  .prod-hd{padding:0 24px 32px}
+  .prod-track{padding:0 24px}
+  .moq{grid-template-columns:1fr;padding:80px 24px;gap:44px}
+  .contact{grid-template-columns:1fr;padding:80px 24px;gap:48px}
+  footer{padding:22px 24px;flex-direction:column;gap:6px;text-align:center}
 }
 </style>
 </head>
 <body class="en">
 
-<!-- LANG BAR -->
-<div class="lang-bar">
-  <span class="lang-logo">Kawthar Himoudi</span>
+<!-- NAV -->
+<nav id="nav">
+  <span class="nav-brand">Kawthar Himoudi</span>
   <div class="lang-switcher">
     <button class="lang-btn active" onclick="setLang('en')">EN</button>
     <button class="lang-btn" onclick="setLang('ar')">AR</button>
     <button class="lang-btn" onclick="setLang('tr')">TR</button>
   </div>
-</div>
+</nav>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" id="hero">
   <div class="hero-bg"></div>
-  <div class="particles" id="particles"></div>
-
-  <div class="hero-content">
-    <div class="hero-eyebrow">
-      <span class="hero-eyebrow-dot"></span>
-      <span class="hero-eyebrow-text" data-en="Private Label Cosmetics · Istanbul" data-ar="مستحضرات التجميل بعلامتك · إسطنبول" data-tr="Özel Etiket Kozmetik · İstanbul">Private Label Cosmetics · Istanbul</span>
-    </div>
-
-    <h1 class="hero-headline"
-      data-en="Your Cosmetics<br>Brand Starts<br><em>Here</em>"
-      data-ar="براندك التجميلي<br>يبدأ من<br><em>هنا</em>"
-      data-tr="Kozmetik Markan<br>Burada<br><em>Başlıyor</em>">
-      Your Cosmetics<br>Brand Starts<br><em>Here</em>
-    </h1>
-
-    <div class="hero-line"></div>
-
-    <p class="hero-sub"
-      data-en="From Turkish factories to your branded product — ready to sell in Saudi Arabia, UAE, and Qatar. I handle sourcing, packaging, and Arabic marketing."
-      data-ar="من المصانع التركية إلى منتجك المُبرند — جاهز للبيع في السعودية والإمارات وقطر. أتولى التوريد والتغليف والتسويق بالعربي."
-      data-tr="Türk fabrikalarından markalı ürününüze — Körfez'de satışa hazır. Tedarik, ambalaj ve Arapça pazarlamayı ben hallediyorum.">
-      From Turkish factories to your branded product — ready to sell in Saudi Arabia, UAE, and Qatar.
-    </p>
-
-    <div class="hero-actions">
-      <a href="#contact" class="btn-primary">
-        <span data-en="Start Your Brand" data-ar="ابدأ براندك" data-tr="Markanı Başlat">Start Your Brand</span>
-        <span>→</span>
-      </a>
-      <a href="#process" class="btn-ghost">
-        <span data-en="How It Works" data-ar="كيف يعمل" data-tr="Nasıl Çalışır">How It Works</span>
-      </a>
-    </div>
+  <div class="hero-tag">
+    <span class="hero-tag-dot"></span>
+    <span class="hero-tag-text"
+      data-en="Private Label Cosmetics · Istanbul"
+      data-ar="مستحضرات تجميل بعلامتك · إسطنبول"
+      data-tr="Özel Etiket Kozmetik · İstanbul">Private Label Cosmetics · Istanbul</span>
   </div>
-
-  <!-- Floating product cards -->
-  <div class="hero-float">
-    <div class="float-card">
-      <img class="float-card-img" src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&q=80" alt="Creams">
-      <div class="float-card-name" data-en="Face Creams" data-ar="كريمات الوجه" data-tr="Yüz Kremleri">Face Creams</div>
-      <div class="float-card-tag" data-en="Best Seller" data-ar="الأكثر مبيعاً" data-tr="Çok Satan">Best Seller</div>
-    </div>
-    <div class="float-card">
-      <img class="float-card-img" src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=300&q=80" alt="Vitamins">
-      <div class="float-card-name" data-en="Vitamins" data-ar="فيتامينات" data-tr="Vitaminler">Vitamins</div>
-      <div class="float-card-tag" data-en="High Demand" data-ar="طلب عالٍ" data-tr="Yüksek Talep">High Demand</div>
-    </div>
-    <div class="float-card">
-      <img class="float-card-img" src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=300&q=80" alt="Hair">
-      <div class="float-card-name" data-en="Hair Care" data-ar="عناية شعر" data-tr="Saç Bakımı">Hair Care</div>
-      <div class="float-card-tag" data-en="Popular" data-ar="شائع" data-tr="Popüler">Popular</div>
-    </div>
-    <div class="float-card">
-      <img class="float-card-img" src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=300&q=80" alt="Sun">
-      <div class="float-card-name" data-en="Sun Care" data-ar="واقي شمس" data-tr="Güneş">Sun Care</div>
-      <div class="float-card-tag" data-en="Year-Round" data-ar="طوال العام" data-tr="Yıl Boyu">Year-Round</div>
-    </div>
+  <h1 class="hero-headline">
+    <span class="line"><span class="li" data-en="Your Cosmetics" data-ar="براندك التجميلي" data-tr="Kozmetik Markan">Your Cosmetics</span></span>
+    <span class="line"><span class="li" data-en="Brand Starts" data-ar="يبدأ من" data-tr="Burada">Brand Starts</span></span>
+    <span class="line"><span class="li"><em data-en="Here." data-ar="هنا." data-tr="Başlıyor.">Here.</em></span></span>
+  </h1>
+  <p class="hero-sub"
+    data-en="From a Turkish factory to your own branded product — ready to sell in Saudi Arabia, UAE, or Qatar. I handle sourcing, packaging, and marketing."
+    data-ar="من مصنع تركي إلى منتج باسم براندك — جاهز للبيع في الخليج. أتولى التوريد والتغليف والتسويق."
+    data-tr="Türk fabrikasından kendi markalı ürününüze — Körfez'de satışa hazır. Tedarik, ambalaj ve pazarlamayı ben hallediyorum.">
+    From a Turkish factory to your own branded product — ready to sell in the Gulf.
+  </p>
+  <div class="hero-actions">
+    <a href="#contact" class="btn-red"><span data-en="Start Your Brand" data-ar="ابدأ براندك" data-tr="Markanı Başlat">Start Your Brand</span> <span>→</span></a>
+    <a href="#process" class="btn-ghost"><span data-en="How It Works" data-ar="كيف يعمل" data-tr="Nasıl Çalışır">How It Works</span></a>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    <span data-en="scroll" data-ar="مرر" data-tr="kaydır">scroll</span>
   </div>
 </section>
 
 <!-- MARQUEE -->
-<div class="marquee-wrap">
-  <div class="marquee-track" id="marquee">
-    <span class="marquee-item" data-en="Private Label" data-ar="علامة خاصة" data-tr="Özel Etiket">Private Label</span>
-    <span class="marquee-item" data-en="Turkish Quality" data-ar="جودة تركية" data-tr="Türk Kalitesi">Turkish Quality</span>
-    <span class="marquee-item" data-en="Gulf Markets" data-ar="أسواق الخليج" data-tr="Körfez Pazarları">Gulf Markets</span>
-    <span class="marquee-item" data-en="500 Units MOQ" data-ar="500 وحدة حد أدنى" data-tr="500 Adet MOQ">500 Units MOQ</span>
-    <span class="marquee-item" data-en="Arabic Marketing" data-ar="تسويق عربي" data-tr="Arapça Pazarlama">Arabic Marketing</span>
-    <span class="marquee-item" data-en="Custom Packaging" data-ar="تغليف مخصص" data-tr="Özel Ambalaj">Custom Packaging</span>
-    <span class="marquee-item" data-en="Istanbul Based" data-ar="مقرها إسطنبول" data-tr="İstanbul Merkezli">Istanbul Based</span>
-    <span class="marquee-item" data-en="Export Ready" data-ar="جاهز للتصدير" data-tr="İhracata Hazır">Export Ready</span>
-    <!-- duplicate for seamless loop -->
-    <span class="marquee-item" data-en="Private Label" data-ar="علامة خاصة" data-tr="Özel Etiket">Private Label</span>
-    <span class="marquee-item" data-en="Turkish Quality" data-ar="جودة تركية" data-tr="Türk Kalitesi">Turkish Quality</span>
-    <span class="marquee-item" data-en="Gulf Markets" data-ar="أسواق الخليج" data-tr="Körfez Pazarları">Gulf Markets</span>
-    <span class="marquee-item" data-en="500 Units MOQ" data-ar="500 وحدة حد أدنى" data-tr="500 Adet MOQ">500 Units MOQ</span>
-    <span class="marquee-item" data-en="Arabic Marketing" data-ar="تسويق عربي" data-tr="Arapça Pazarlama">Arabic Marketing</span>
-    <span class="marquee-item" data-en="Custom Packaging" data-ar="تغليف مخصص" data-tr="Özel Ambalaj">Custom Packaging</span>
-    <span class="marquee-item" data-en="Istanbul Based" data-ar="مقرها إسطنبول" data-tr="İstanbul Merkezli">Istanbul Based</span>
-    <span class="marquee-item" data-en="Export Ready" data-ar="جاهز للتصدير" data-tr="İhracata Hazır">Export Ready</span>
+<div class="mq-wrap">
+  <div class="mq-track">
+    <span class="mq-item">Private Label</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">Istanbul Factory</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">Gulf Market</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">500 MOQ</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">Custom Packaging</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">Arabic Marketing</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">Export Ready</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">4 Languages</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">Private Label</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">Istanbul Factory</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">Gulf Market</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">500 MOQ</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">Custom Packaging</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">Arabic Marketing</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">Export Ready</span><span class="mq-sep"> ✦ </span>
+    <span class="mq-item">4 Languages</span><span class="mq-sep"> ✦ </span>
   </div>
 </div>
 
-<!-- PROCESS -->
-<section class="section" id="process">
-  <div class="reveal">
-    <p class="eyebrow" data-en="The Process" data-ar="العملية" data-tr="Süreç">The Process</p>
-    <h2 class="section-title" data-en="Your Brand in <em>3 Steps</em>" data-ar="براندك في <em>٣ خطوات</em>" data-tr="Markan <em>3 Adımda</em>">Your Brand in <em>3 Steps</em></h2>
-  </div>
-  <div class="process-grid">
-    <div class="process-card reveal reveal-delay-1">
-      <div class="process-num">01</div>
-      <svg class="process-icon" viewBox="0 0 44 44" fill="none">
-        <circle cx="22" cy="22" r="16" stroke="rgba(122,171,90,0.5)" stroke-width="1.2"/>
-        <circle cx="22" cy="22" r="9" stroke="rgba(122,171,90,0.35)" stroke-width="1.2"/>
-        <circle cx="22" cy="22" r="3.5" fill="#7AAB5A"/>
-        <line x1="22" y1="2" x2="22" y2="8" stroke="rgba(122,171,90,0.5)" stroke-width="1.2"/>
-        <line x1="22" y1="36" x2="22" y2="42" stroke="rgba(122,171,90,0.5)" stroke-width="1.2"/>
-        <line x1="2" y1="22" x2="8" y2="22" stroke="rgba(122,171,90,0.5)" stroke-width="1.2"/>
-        <line x1="36" y1="22" x2="42" y2="22" stroke="rgba(122,171,90,0.5)" stroke-width="1.2"/>
-      </svg>
-      <div class="process-title" data-en="Choose Your Product" data-ar="اختر منتجك" data-tr="Ürününü Seç">Choose Your Product</div>
-      <p class="process-desc" data-en="Tell me what you want to sell — cream, shampoo, vitamins, or sun protection. I match you with the right Turkish manufacturer for your quality and budget." data-ar="أخبرني ما تريد بيعه — كريم، شامبو، فيتامينات، أو واقي شمس. أربطك بالمصنع التركي المناسب لجودتك وميزانيتك." data-tr="Ne satmak istediğini söyle. Kalite ve bütçene uygun doğru Türk üreticiyle seni buluşturuyorum.">Tell me what you want to sell. I find the right factory for you.</p>
+<!-- PROCESS (pinned) -->
+<div id="process">
+  <section class="process" id="processPin">
+    <div class="proc-left">
+      <p class="proc-ey" data-en="The Process" data-ar="العملية" data-tr="Süreç">The Process</p>
+      <h2 class="proc-title" data-en="Your Brand in <em>3 Steps</em>" data-ar="براندك في <em>٣ خطوات</em>" data-tr="Markan <em>3 Adımda</em>">Your Brand in <em>3 Steps</em></h2>
+      <div id="pstepsList">
+        <div class="pstep" data-s="1">
+          <span class="pstep-n">01</span>
+          <div>
+            <div class="pstep-t" data-en="Choose Your Product" data-ar="اختر منتجك" data-tr="Ürününü Seç">Choose Your Product</div>
+            <p class="pstep-d" data-en="Tell me what you want to sell — cream, shampoo, vitamins, or sun protection. I'll match you with the right Turkish manufacturer." data-ar="أخبرني ما تريد بيعه. سأربطك بالمصنع التركي المناسب." data-tr="Ne satmak istediğini söyle. Seni doğru Türk üreticiyle buluşturacağım.">Tell me what you want to sell. I'll find the right factory.</p>
+          </div>
+        </div>
+        <div class="pstep dim" data-s="2">
+          <span class="pstep-n">02</span>
+          <div>
+            <div class="pstep-t" data-en="Brand Your Packaging" data-ar="غلّف باسم براندك" data-tr="Markanla Paketle">Brand Your Packaging</div>
+            <p class="pstep-d" data-en="The factory applies your logo, colors, and design to every unit. Your product looks premium from day one." data-ar="المصنع يطبق شعارك وألوانك على كل وحدة. منتجك يبدو راقياً من اليوم الأول." data-tr="Fabrika logonu her üniteye uygular. İlk günden itibaren premium görünüm.">Your logo on every unit — premium from day one.</p>
+          </div>
+        </div>
+        <div class="pstep dim" data-s="3">
+          <span class="pstep-n">03</span>
+          <div>
+            <div class="pstep-t" data-en="Launch & Sell" data-ar="أطلق وابدأ البيع" data-tr="Başlat ve Sat">Launch & Sell</div>
+            <p class="pstep-d" data-en="Receive your products ready to sell. I support with Arabic marketing content and connect you with Gulf export companies." data-ar="استلم منتجاتك جاهزة للبيع. أدعمك بمحتوى تسويقي عربي وشركات تصدير للخليج." data-tr="Ürünleri satışa hazır teslim al. Arapça pazarlama ve ihracat desteği dahil.">Products ready. Full Arabic marketing support included.</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="process-card reveal reveal-delay-2">
-      <div class="process-num">02</div>
-      <svg class="process-icon" viewBox="0 0 44 44" fill="none">
-        <path d="M6 6H26L38 18V38H6V6Z" stroke="rgba(122,171,90,0.5)" stroke-width="1.2" stroke-linejoin="round"/>
-        <path d="M26 6V18H38" stroke="rgba(122,171,90,0.35)" stroke-width="1.2" stroke-linejoin="round"/>
-        <rect x="12" y="24" width="20" height="1.5" rx="0.75" fill="rgba(122,171,90,0.4)"/>
-        <rect x="12" y="29" width="14" height="1.5" rx="0.75" fill="rgba(122,171,90,0.3)"/>
-        <circle cx="16" cy="18" r="4" stroke="#A02020" stroke-width="1.2"/>
-        <path d="M14 18h4M16 16v4" stroke="#A02020" stroke-width="1.2" stroke-linecap="round"/>
-      </svg>
-      <div class="process-title" data-en="Brand Your Packaging" data-ar="غلّف باسم براندك" data-tr="Markanla Paketle">Brand Your Packaging</div>
-      <p class="process-desc" data-en="The factory applies your logo, colors, and design to every unit. Your product looks premium from day one — no design agency needed." data-ar="المصنع يطبق شعارك وألوانك وتصميمك على كل وحدة. منتجك يبدو راقياً من اليوم الأول." data-tr="Fabrika logonu, renklerini ve tasarımını her üniteye uygular. İlk günden premium görünüm.">Your logo on every unit — premium from day one.</p>
+    <div class="proc-right">
+      <div class="pvis pvis-1 on" id="pv1"><div class="pvis-ring"><span class="pvis-num">01</span></div></div>
+      <div class="pvis pvis-2" id="pv2"><div class="pvis-ring"><span class="pvis-num">02</span></div></div>
+      <div class="pvis pvis-3" id="pv3"><div class="pvis-ring"><span class="pvis-num">03</span></div></div>
+      <div class="proc-dots">
+        <div class="pdot on" id="pd1"></div>
+        <div class="pdot" id="pd2"></div>
+        <div class="pdot" id="pd3"></div>
+      </div>
     </div>
-    <div class="process-card reveal reveal-delay-3">
-      <div class="process-num">03</div>
-      <svg class="process-icon" viewBox="0 0 44 44" fill="none">
-        <path d="M22 4C22 4 36 10 36 22C36 30 30 38 22 42C14 38 8 30 8 22C8 10 22 4 22 4Z" stroke="rgba(122,171,90,0.5)" stroke-width="1.2" stroke-linejoin="round"/>
-        <circle cx="22" cy="21" r="4" fill="#7AAB5A" opacity="0.7"/>
-        <path d="M12 34L6 40" stroke="rgba(122,171,90,0.4)" stroke-width="1.2" stroke-linecap="round"/>
-        <path d="M32 34L38 40" stroke="rgba(122,171,90,0.4)" stroke-width="1.2" stroke-linecap="round"/>
-      </svg>
-      <div class="process-title" data-en="Launch & Sell" data-ar="أطلق وابدأ البيع" data-tr="Başlat ve Sat">Launch & Sell</div>
-      <p class="process-desc" data-en="Products arrive ready to sell. I support with Arabic marketing content and connect you with export companies for seamless Gulf delivery." data-ar="المنتجات تصل جاهزة للبيع. أدعمك بمحتوى تسويقي عربي وأربطك بشركات التصدير للخليج." data-tr="Ürünler satışa hazır gelir. Arapça pazarlama ve ihracat desteğiyle yanındayım.">Products arrive ready to sell, with full Arabic marketing support.</p>
-    </div>
-  </div>
-</section>
+  </section>
+</div>
 
-<!-- WHAT YOU GET -->
-<section class="section section-alt">
-  <div class="reveal">
-    <p class="eyebrow" data-en="Everything Included" data-ar="كل شيء مشمول" data-tr="Her Şey Dahil">Everything Included</p>
-    <h2 class="section-title" data-en="What You Get <em>With Me</em>" data-ar="ما ستحصل عليه <em>معي</em>" data-tr="Benimle <em>Ne Alırsın</em>">What You Get <em>With Me</em></h2>
-  </div>
-  <div class="get-grid">
-    <div class="get-card reveal reveal-delay-1">
-      <div class="get-card-top">
-        <svg class="get-icon" viewBox="0 0 40 40" fill="none">
-          <rect x="4" y="18" width="32" height="18" rx="1" stroke="rgba(122,171,90,0.6)" stroke-width="1.2"/>
-          <path d="M4 18L13 10V18" stroke="rgba(122,171,90,0.4)" stroke-width="1.2"/>
-          <path d="M13 18L22 10V18" stroke="rgba(122,171,90,0.4)" stroke-width="1.2"/>
-          <path d="M22 18L31 10V18" stroke="rgba(122,171,90,0.4)" stroke-width="1.2"/>
-          <rect x="8" y="4" width="6" height="14" stroke="rgba(122,171,90,0.3)" stroke-width="1.2"/>
-          <rect x="17" y="4" width="6" height="14" stroke="rgba(122,171,90,0.3)" stroke-width="1.2"/>
-          <rect x="14" y="26" width="6" height="10" fill="rgba(122,171,90,0.15)" stroke="rgba(122,171,90,0.4)" stroke-width="1.2"/>
-        </svg>
-        <span class="get-num">01</span>
-      </div>
-      <div class="get-title" data-en="Factory Access" data-ar="الوصول للمصانع" data-tr="Fabrika Erişimi">Factory Access</div>
-      <p class="get-desc" data-en="Direct relationships with vetted Turkish manufacturers. I negotiate competitive pricing and terms — no language barrier, no middleman surprises." data-ar="علاقات مباشرة مع مصانع تركية موثوقة. أتفاوض على أسعار تنافسية — بدون حاجز لغوي." data-tr="Güvenilir Türk üreticilerle doğrudan ilişkiler. Rekabetçi fiyatları ben müzakere ediyorum.">Direct access to vetted manufacturers — competitive pricing negotiated for you.</p>
+<!-- PRODUCTS horizontal scroll -->
+<div class="prod-wrap" id="products">
+  <div class="prod-sticky">
+    <div class="prod-hd">
+      <p class="prod-ey" data-en="Product Range" data-ar="نطاق المنتجات" data-tr="Ürün Yelpazesi">Product Range</p>
+      <h2 class="prod-title" data-en="What You Can <em>Brand & Sell</em>" data-ar="ما يمكنك <em>تسميته وبيعه</em>" data-tr="Ne <em>Markalaştırıp Satabilirsin</em>">What You Can <em>Brand & Sell</em></h2>
     </div>
-    <div class="get-card reveal reveal-delay-2">
-      <div class="get-card-top">
-        <svg class="get-icon" viewBox="0 0 40 40" fill="none">
-          <path d="M20 4L36 12V28L20 36L4 28V12L20 4Z" stroke="rgba(122,171,90,0.6)" stroke-width="1.2"/>
-          <path d="M20 4V36" stroke="rgba(122,171,90,0.3)" stroke-width="1"/>
-          <path d="M4 12L36 12" stroke="rgba(122,171,90,0.3)" stroke-width="1"/>
-          <circle cx="20" cy="20" r="4" fill="rgba(160,32,32,0.5)" stroke="rgba(160,32,32,0.6)" stroke-width="1"/>
-        </svg>
-        <span class="get-num">02</span>
-      </div>
-      <div class="get-title" data-en="Custom Packaging" data-ar="تغليف مخصص" data-tr="Özel Ambalaj">Custom Packaging</div>
-      <p class="get-desc" data-en="Your logo, your colors, your brand on every single unit. The factory handles the full packaging design and production." data-ar="شعارك، ألوانك، براندك على كل وحدة. المصنع يتولى تصميم التغليف وإنتاجه كاملاً." data-tr="Her ünitenizde logonuz, renkleriniz, markanız. Fabrika tam ambalaj tasarımını halleder.">Your brand on every unit — full packaging handled by the factory.</p>
-    </div>
-    <div class="get-card reveal reveal-delay-3">
-      <div class="get-card-top">
-        <svg class="get-icon" viewBox="0 0 40 40" fill="none">
-          <path d="M6 14H12L28 6V34L12 26H6V14Z" stroke="rgba(122,171,90,0.6)" stroke-width="1.2"/>
-          <path d="M12 26V34" stroke="rgba(122,171,90,0.4)" stroke-width="1.2" stroke-linecap="round"/>
-          <path d="M32 14C34 16.5 34 23.5 32 26" stroke="rgba(122,171,90,0.5)" stroke-width="1.2" stroke-linecap="round"/>
-          <path d="M35 11C38.5 15 38.5 25 35 29" stroke="rgba(122,171,90,0.3)" stroke-width="1.2" stroke-linecap="round"/>
-        </svg>
-        <span class="get-num">03</span>
-      </div>
-      <div class="get-title" data-en="Arabic Marketing" data-ar="تسويق عربي" data-tr="Arapça Pazarlama">Arabic Marketing</div>
-      <p class="get-desc" data-en="Product descriptions, social media content, and marketing materials — fully in Arabic, tailored for Saudi, Emirati, and Qatari buyers." data-ar="وصف المنتجات ومحتوى السوشيال ميديا والمواد التسويقية — بالعربي كاملاً، مصممة للمشترين الخليجيين." data-tr="Ürün açıklamaları, sosyal medya içeriği — Körfez alıcıları için tam Arapça.">Full Arabic content tailored for Gulf buyers.</p>
-    </div>
-    <div class="get-card reveal reveal-delay-4">
-      <div class="get-card-top">
-        <svg class="get-icon" viewBox="0 0 40 40" fill="none">
-          <circle cx="20" cy="20" r="16" stroke="rgba(122,171,90,0.6)" stroke-width="1.2"/>
-          <ellipse cx="20" cy="20" rx="6" ry="16" stroke="rgba(122,171,90,0.35)" stroke-width="1.2"/>
-          <line x1="4" y1="20" x2="36" y2="20" stroke="rgba(122,171,90,0.35)" stroke-width="1"/>
-          <line x1="20" y1="4" x2="20" y2="36" stroke="rgba(122,171,90,0.2)" stroke-width="1"/>
-          <circle cx="30" cy="10" r="4" fill="rgba(160,32,32,0.6)" stroke="rgba(160,32,32,0.7)" stroke-width="1"/>
-          <path d="M28.5 10h3M30 8.5v3" stroke="white" stroke-width="1" stroke-linecap="round"/>
-        </svg>
-        <span class="get-num">04</span>
-      </div>
-      <div class="get-title" data-en="Export Connections" data-ar="ربط بالتصدير" data-tr="İhracat Bağlantıları">Export Connections</div>
-      <p class="get-desc" data-en="I connect you with trusted Turkish freight companies that specialize in Gulf routes — seamless delivery from Istanbul to your door." data-ar="أربطك بشركات شحن تركية موثوقة متخصصة في مسارات الخليج — توصيل سلس من إسطنبول لبابك." data-tr="Körfez güzergahlarında uzmanlaşmış güvenilir nakliye şirketleriyle bağlantı.">Trusted freight partners for Istanbul-to-Gulf delivery.</p>
-    </div>
-  </div>
-</section>
+    <div class="prod-outer">
+      <div class="prod-track" id="ptrack">
 
-<!-- PRODUCTS -->
-<section class="products-section" id="products">
-  <div class="products-header reveal">
-    <div>
-      <p class="eyebrow" data-en="Product Range" data-ar="نطاق المنتجات" data-tr="Ürün Yelpazesi">Product Range</p>
-      <h2 class="section-title" data-en="What You Can <em>Brand & Sell</em>" data-ar="ما يمكنك <em>تسميته وبيعه</em>" data-tr="Ne <em>Markalaştırıp Satabilirsin</em>">What You Can <em>Brand & Sell</em></h2>
-    </div>
-  </div>
-  <div class="products-grid">
-    <div class="product-card reveal reveal-delay-1">
-      <div class="product-img-wrap">
-        <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=600&q=80" alt="Vitamins">
-      </div>
-      <div class="product-body">
-        <span class="product-tag-badge" data-en="High Demand" data-ar="طلب عالٍ" data-tr="Yüksek Talep">High Demand</span>
-        <div class="product-name" data-en="Vitamins & Supplements" data-ar="الفيتامينات والمكملات" data-tr="Vitaminler ve Takviyeler">Vitamins & Supplements</div>
-        <p class="product-desc" data-en="Skin, hair & health supplements — strong demand in Gulf pharmacies and wellness stores." data-ar="مكملات للبشرة والشعر والصحة — طلب قوي في صيدليات الخليج." data-tr="Cilt, saç ve sağlık takviyeleri.">Strong demand in Gulf pharmacies.</p>
-      </div>
-    </div>
-    <div class="product-card reveal reveal-delay-2">
-      <div class="product-img-wrap">
-        <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=600&q=80" alt="Creams">
-      </div>
-      <div class="product-body">
-        <span class="product-tag-badge" data-en="Best Seller" data-ar="الأكثر مبيعاً" data-tr="Çok Satan">Best Seller</span>
-        <div class="product-name" data-en="Face & Body Creams" data-ar="كريمات الوجه والجسم" data-tr="Yüz ve Vücut Kremleri">Face & Body Creams</div>
-        <p class="product-desc" data-en="Moisturizers, whitening, anti-aging serums — suited for Gulf climate." data-ar="مرطبات وكريمات تفتيح وسيرومات — مناسبة لمناخ الخليج." data-tr="Körfez iklimine uygun ürünler.">Suited for Gulf climate.</p>
-      </div>
-    </div>
-    <div class="product-card reveal reveal-delay-3">
-      <div class="product-img-wrap">
-        <img src="https://images.unsplash.com/photo-1522338242992-e1a54906a8da?w=600&q=80" alt="Hair">
-      </div>
-      <div class="product-body">
-        <span class="product-tag-badge" data-en="Popular" data-ar="شائع" data-tr="Popüler">Popular</span>
-        <div class="product-name" data-en="Shampoo & Hair Care" data-ar="شامبو وعناية بالشعر" data-tr="Şampuan ve Saç Bakımı">Shampoo & Hair Care</div>
-        <p class="product-desc" data-en="Cleansing, repair masks, scalp treatments for all hair types." data-ar="تنظيف وأقنعة إصلاح وعلاجات لجميع أنواع الشعر." data-tr="Tüm saç tipleri için.">For all hair types.</p>
-      </div>
-    </div>
-    <div class="product-card reveal reveal-delay-1">
-      <div class="product-img-wrap">
-        <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&q=80" alt="Keratin">
-      </div>
-      <div class="product-body">
-        <span class="product-tag-badge" data-en="Salon Grade" data-ar="جودة صالون" data-tr="Salon Kalitesi">Salon Grade</span>
-        <div class="product-name" data-en="Protein & Keratin" data-ar="بروتين وكيراتين" data-tr="Protein ve Keratin">Protein & Keratin</div>
-        <p class="product-desc" data-en="Professional treatments for salons and home use — strong KSA & UAE market." data-ar="علاجات احترافية للصالونات والمنزل — سوق قوي في السعودية والإمارات." data-tr="KSA ve BAE'de güçlü pazar.">Strong market in KSA & UAE.</p>
-      </div>
-    </div>
-    <div class="product-card reveal reveal-delay-2">
-      <div class="product-img-wrap">
-        <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?w=600&q=80" alt="Sun">
-      </div>
-      <div class="product-body">
-        <span class="product-tag-badge" data-en="Year-Round" data-ar="طوال العام" data-tr="Yıl Boyu">Year-Round</span>
-        <div class="product-name" data-en="Sun Protection" data-ar="واقي الشمس" data-tr="Güneş Koruyucu">Sun Protection</div>
-        <p class="product-desc" data-en="SPF 30–50 for hot climates — essential Gulf product." data-ar="SPF 30-50 للمناخات الحارة — منتج أساسي للخليج." data-tr="Sıcak iklimler için SPF 30-50.">Essential Gulf product year-round.</p>
-      </div>
-    </div>
-    <div class="product-card reveal reveal-delay-3">
-      <div class="product-img-wrap">
-        <img src="https://images.unsplash.com/photo-1526045431048-f857369baa09?w=600&q=80" alt="OEM">
-      </div>
-      <div class="product-body">
-        <span class="product-tag-badge" data-en="OEM Available" data-ar="OEM متاح" data-tr="OEM Mevcut">OEM Available</span>
-        <div class="product-name" data-en="Custom Formula" data-ar="تركيبة مخصصة" data-tr="Özel Formül">Custom Formula</div>
-        <p class="product-desc" data-en="Develop your own exclusive formula with selected manufacturers." data-ar="طوّر تركيبتك الخاصة الحصرية مع مصانع مختارة." data-tr="Seçili üreticilerle kendi formülünü geliştir.">Your own exclusive formula.</p>
-      </div>
-    </div>
-  </div>
-</section>
+        <div class="pc">
+          <div class="pc-vis" style="background:linear-gradient(135deg,#1E3D0F,#4A7C2F)">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none"><circle cx="36" cy="28" r="15" stroke="rgba(247,243,236,.65)" stroke-width="1.5"/><rect x="22" y="41" width="28" height="7" rx="3.5" stroke="rgba(247,243,236,.45)" stroke-width="1.5"/><path d="M30 28h12M36 22v12" stroke="rgba(247,243,236,.8)" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="pc-body">
+            <div class="pc-name" data-en="Vitamins & Supplements" data-ar="الفيتامينات والمكملات" data-tr="Vitaminler">Vitamins & Supplements</div>
+            <p class="pc-desc" data-en="Skin brightening, hair growth, collagen — high demand in Gulf pharmacies." data-ar="إشراق البشرة، نمو الشعر، كولاجين — طلب عالٍ في صيدليات الخليج." data-tr="Cilt aydınlatma, saç büyümesi, kolajen.">High demand in Gulf pharmacies.</p>
+            <span class="pc-tag" data-en="High Demand" data-ar="طلب عالٍ" data-tr="Yüksek Talep">High Demand</span>
+          </div>
+        </div>
 
-<!-- MOQ BAND -->
-<div class="moq-band reveal">
-  <div class="moq-left">
-    <p class="eyebrow" data-en="Low Entry Point" data-ar="نقطة دخول منخفضة" data-tr="Düşük Giriş Noktası">Low Entry Point</p>
-    <div class="moq-num">500</div>
-    <div class="moq-unit" data-en="Units Minimum Order" data-ar="وحدة كحد أدنى للطلب" data-tr="Adet Minimum Sipariş">Units Minimum Order</div>
-  </div>
-  <div class="moq-checks">
-    <div class="moq-check">
-      <div class="moq-check-icon"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#7AAB5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
-      <span data-en="No prior experience needed" data-ar="لا تحتاج خبرة سابقة" data-tr="Önceki deneyim gerekmez">No prior experience needed</span>
-    </div>
-    <div class="moq-check">
-      <div class="moq-check-icon"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#7AAB5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
-      <span data-en="Your logo on every unit" data-ar="شعارك على كل وحدة" data-tr="Her ünitenizde logonuz">Your logo on every unit</span>
-    </div>
-    <div class="moq-check">
-      <div class="moq-check-icon"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#7AAB5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
-      <span data-en="Arabic marketing content included" data-ar="محتوى تسويقي عربي مشمول" data-tr="Arapça pazarlama içeriği dahil">Arabic marketing content included</span>
-    </div>
-    <div class="moq-check">
-      <div class="moq-check-icon"><svg width="12" height="12" viewBox="0 0 12 12"><path d="M2 6l3 3 5-5" stroke="#7AAB5A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></div>
-      <span data-en="Export connections available" data-ar="ربط بشركات التصدير" data-tr="İhracat bağlantıları mevcut">Export connections available</span>
+        <div class="pc">
+          <div class="pc-vis" style="background:linear-gradient(135deg,#2E1A0A,#8B4A2A)">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none"><rect x="24" y="26" width="24" height="34" rx="3" stroke="rgba(247,243,236,.7)" stroke-width="1.5"/><rect x="28" y="18" width="16" height="10" rx="2" stroke="rgba(247,243,236,.5)" stroke-width="1.5"/><line x1="24" y1="40" x2="48" y2="40" stroke="rgba(247,243,236,.2)" stroke-width="1"/><rect x="30" y="46" width="12" height="1.5" rx=".75" fill="rgba(247,243,236,.3)"/></svg>
+          </div>
+          <div class="pc-body">
+            <div class="pc-name" data-en="Face & Body Creams" data-ar="كريمات الوجه والجسم" data-tr="Yüz ve Vücut Kremleri">Face & Body Creams</div>
+            <p class="pc-desc" data-en="Moisturizers, whitening, anti-aging serums for Gulf climate." data-ar="مرطبات وكريمات تفتيح وسيرومات لمناخ الخليج." data-tr="Körfez iklimine uygun nemlendirici ürünler.">Suited for Gulf climate.</p>
+            <span class="pc-tag" data-en="Best Seller" data-ar="الأكثر مبيعاً" data-tr="Çok Satan">Best Seller</span>
+          </div>
+        </div>
+
+        <div class="pc">
+          <div class="pc-vis" style="background:linear-gradient(135deg,#0A1E2E,#1A3D5A)">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none"><rect x="30" y="12" width="12" height="48" rx="6" stroke="rgba(247,243,236,.7)" stroke-width="1.5"/><rect x="30" y="12" width="12" height="20" rx="6" fill="rgba(47,90,122,.45)"/><path d="M25 38 Q36 34 47 38" stroke="rgba(247,243,236,.35)" stroke-width="1.2" fill="none" stroke-linecap="round"/></svg>
+          </div>
+          <div class="pc-body">
+            <div class="pc-name" data-en="Shampoo & Hair Care" data-ar="شامبو وعناية بالشعر" data-tr="Şampuan ve Saç Bakımı">Shampoo & Hair Care</div>
+            <p class="pc-desc" data-en="Cleansing, repair masks, scalp treatments for all hair types." data-ar="تنظيف وأقنعة إصلاح لجميع أنواع الشعر." data-tr="Tüm saç tipleri için temizleme ve onarım.">For all hair types.</p>
+            <span class="pc-tag" data-en="Popular" data-ar="شائع" data-tr="Popüler">Popular</span>
+          </div>
+        </div>
+
+        <div class="pc">
+          <div class="pc-vis" style="background:linear-gradient(135deg,#1E0A2E,#3A1A5A)">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none"><rect x="14" y="22" width="16" height="36" rx="3" stroke="rgba(247,243,236,.6)" stroke-width="1.5"/><rect x="14" y="22" width="16" height="11" rx="3" fill="rgba(122,171,90,.35)"/><rect x="36" y="28" width="22" height="30" rx="3" stroke="rgba(247,243,236,.7)" stroke-width="1.5"/><rect x="36" y="28" width="22" height="11" rx="3" fill="rgba(139,26,26,.35)"/></svg>
+          </div>
+          <div class="pc-body">
+            <div class="pc-name" data-en="Protein & Keratin" data-ar="بروتين وكيراتين" data-tr="Protein ve Keratin">Protein & Keratin</div>
+            <p class="pc-desc" data-en="Professional-grade treatments for salons and home use in KSA and UAE." data-ar="علاجات احترافية للصالونات في السعودية والإمارات." data-tr="KSA ve BAE'de salon kalitesinde tedaviler.">Strong market in KSA & UAE salons.</p>
+            <span class="pc-tag" data-en="Salon Grade" data-ar="جودة صالون" data-tr="Salon Kalitesi">Salon Grade</span>
+          </div>
+        </div>
+
+        <div class="pc">
+          <div class="pc-vis" style="background:linear-gradient(135deg,#2E1E0A,#8B5A0A)">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none"><circle cx="36" cy="30" r="16" stroke="rgba(247,243,236,.7)" stroke-width="1.5"/><circle cx="36" cy="30" r="9" fill="rgba(139,100,26,.3)"/><line x1="36" y1="8" x2="36" y2="4" stroke="rgba(247,243,236,.5)" stroke-width="1.5" stroke-linecap="round"/><line x1="36" y1="56" x2="36" y2="60" stroke="rgba(247,243,236,.5)" stroke-width="1.5" stroke-linecap="round"/><line x1="14" y1="30" x2="10" y2="30" stroke="rgba(247,243,236,.5)" stroke-width="1.5" stroke-linecap="round"/><line x1="58" y1="30" x2="62" y2="30" stroke="rgba(247,243,236,.5)" stroke-width="1.5" stroke-linecap="round"/><rect x="22" y="58" width="28" height="9" rx="2" stroke="rgba(247,243,236,.45)" stroke-width="1.5"/></svg>
+          </div>
+          <div class="pc-body">
+            <div class="pc-name" data-en="Sun Protection" data-ar="واقي الشمس" data-tr="Güneş Koruyucu">Sun Protection</div>
+            <p class="pc-desc" data-en="SPF 30–50 formulations for hot climates. Essential Gulf product year-round." data-ar="تركيبات SPF 30-50 للمناخات الحارة. منتج أساسي طوال العام." data-tr="Sıcak iklimler için SPF 30-50.">Essential Gulf product year-round.</p>
+            <span class="pc-tag" data-en="Year-Round" data-ar="طوال العام" data-tr="Yıl Boyu">Year-Round</span>
+          </div>
+        </div>
+
+        <div class="pc">
+          <div class="pc-vis" style="background:linear-gradient(135deg,#0A2E1A,#1A5A3A)">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none"><rect x="14" y="12" width="44" height="48" rx="3" stroke="rgba(247,243,236,.4)" stroke-width="1.5" stroke-dasharray="4 3"/><rect x="20" y="18" width="32" height="36" rx="2" stroke="rgba(247,243,236,.3)" stroke-width="1"/><path d="M28 38 L36 28 L44 38" stroke="rgba(122,171,90,.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M36 28 L36 48" stroke="rgba(122,171,90,.85)" stroke-width="1.5" stroke-linecap="round"/></svg>
+          </div>
+          <div class="pc-body">
+            <div class="pc-name" data-en="Custom Formula (OEM)" data-ar="تركيبة مخصصة (OEM)" data-tr="Özel Formül (OEM)">Custom Formula (OEM)</div>
+            <p class="pc-desc" data-en="Develop your own exclusive formula with selected manufacturers." data-ar="طوّر تركيبتك الخاصة الحصرية مع مصانع مختارة." data-tr="Seçili üreticilerle kendi formülünü geliştir.">Your own exclusive formula.</p>
+            <span class="pc-tag" data-en="OEM Available" data-ar="OEM متاح" data-tr="OEM Mevcut">OEM Available</span>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </div>
 
-<!-- WHO -->
-<section class="section">
-  <div class="reveal">
-    <p class="eyebrow" data-en="Who Is This For" data-ar="لمن هذا" data-tr="Bu Kim İçin">Who Is This For</p>
-    <h2 class="section-title" data-en="Built for Gulf <em>Entrepreneurs</em>" data-ar="مصمم لرواد الأعمال <em>الخليجيين</em>" data-tr="Körfez <em>Girişimcileri İçin</em>">Built for Gulf <em>Entrepreneurs</em></h2>
+<!-- MOQ -->
+<section class="moq" id="moq">
+  <div>
+    <p class="moq-ey" data-en="Minimum Order" data-ar="الحد الأدنى للطلب" data-tr="Minimum Sipariş">Minimum Order</p>
+    <div class="moq-num" id="moqNum">500</div>
+    <p class="moq-unit" data-en="units to start" data-ar="وحدة للبدء" data-tr="adet ile başla">units to start</p>
   </div>
-  <div class="who-grid">
-    <div class="who-card reveal reveal-delay-1">
-      <img class="who-card-img" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80" alt="">
-      <div class="who-card-title" data-en="Women Entrepreneurs" data-ar="رائدات الأعمال" data-tr="Kadın Girişimciler">Women Entrepreneurs</div>
-      <p class="who-card-desc" data-en="You have the idea and the audience — I handle product, sourcing, and the full supply chain." data-ar="لديك الفكرة والجمهور — أنا أتولى المنتج والتوريد وسلسلة التوريد." data-tr="Fikrin ve kitlen var — ürün ve tedariki ben hallediyorum.">You have the audience — I handle everything else.</p>
+  <div>
+    <h2 class="moq-t" data-en="Start Small, <em>Grow Fast</em>" data-ar="ابدأ صغيراً، <em>انمُ بسرعة</em>" data-tr="Küçük Başla, <em>Hızlı Büyü</em>">Start Small, <em>Grow Fast</em></h2>
+    <p class="moq-p" data-en="You don't need a large investment to launch your own cosmetics brand. Start with 500 units and scale when you're ready." data-ar="لا تحتاج استثماراً كبيراً. ابدأ بـ500 وحدة وتوسع حين تكون مستعداً." data-tr="Büyük bir yatırıma gerek yok. 500 adet ile başlayın, hazır olduğunuzda ölçeklendirin.">No large investment needed. Start with 500 units and scale.</p>
+    <div class="moq-feats">
+      <div class="mfeat"><span class="mcheck">✓</span><span data-en="No prior experience needed" data-ar="لا تحتاج خبرة سابقة" data-tr="Deneyim gerekmez">No prior experience needed</span></div>
+      <div class="mfeat"><span class="mcheck">✓</span><span data-en="Your logo on every unit" data-ar="شعارك على كل وحدة" data-tr="Her ünitenizde logonuz">Your logo on every unit</span></div>
+      <div class="mfeat"><span class="mcheck">✓</span><span data-en="Arabic marketing content included" data-ar="محتوى تسويقي عربي مشمول" data-tr="Arapça pazarlama içeriği dahil">Arabic marketing content included</span></div>
+      <div class="mfeat"><span class="mcheck">✓</span><span data-en="Gulf export support" data-ar="دعم التصدير للخليج" data-tr="Körfez ihracat desteği">Gulf export support</span></div>
     </div>
-    <div class="who-card reveal reveal-delay-2">
-      <img class="who-card-img" src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=200&q=80" alt="">
-      <div class="who-card-title" data-en="Store & Shop Owners" data-ar="أصحاب المتاجر" data-tr="Mağaza Sahipleri">Store & Shop Owners</div>
-      <p class="who-card-desc" data-en="Add a private label cosmetics line — higher margins, exclusive products, stronger brand." data-ar="أضف خطاً من الكوزمتك بعلامتك — هوامش أعلى ومنتجات حصرية." data-tr="Özel etiket hattı ekle — daha yüksek marj, özel ürünler.">Higher margins with your own exclusive line.</p>
-    </div>
-    <div class="who-card reveal reveal-delay-3">
-      <img class="who-card-img" src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=200&q=80" alt="">
-      <div class="who-card-title" data-en="Online Sellers" data-ar="البائعون أونلاين" data-tr="Online Satıcılar">Online Sellers</div>
-      <p class="who-card-desc" data-en="Selling on Salla, Noon, or Instagram? Build a product line that looks premium and converts." data-ar="تبيع على سلة أو نون أو انستقرام؟ ابنِ خطاً يبدو راقياً ويُباع." data-tr="Salla, Noon veya Instagram'da mı satıyorsun? Premium görünen bir hat oluştur.">Build a premium line that sells.</p>
-    </div>
+    <a href="#contact" class="btn-red" style="margin-top:36px;display:inline-flex;color:white;text-decoration:none"><span data-en="Request a Quote →" data-ar="اطلب عرض سعر ←" data-tr="Teklif İste →">Request a Quote →</span></a>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section class="contact-section" id="contact">
-  <div class="contact-left reveal">
-    <p class="eyebrow" data-en="Ready to Start?" data-ar="مستعد للبدء؟" data-tr="Başlamaya Hazır mısın?">Ready to Start?</p>
-    <h2 class="section-title" data-en="Let's Build Your Brand <em>Together</em>" data-ar="لنبني براندك <em>معاً</em>" data-tr="Markanı <em>Birlikte</em> İnşa Edelim">Let's Build Your Brand <em>Together</em></h2>
-    <p data-en="Tell me your idea and I'll walk you through everything — from product selection to your first order arriving at your door." data-ar="أخبرني بفكرتك وسأرشدك خلال كل شيء — من اختيار المنتج إلى وصول طلبك الأول." data-tr="Fikrini söyle, seni her şeyde yönlendireyim.">Tell me your idea — I'll guide you through everything.</p>
-    <div>
-      <div class="contact-detail">
-        <span class="contact-key">WhatsApp</span>
-        <span class="contact-val"><a href="https://wa.me/905354490419">+90 535 449 04 19</a></span>
+<section class="contact" id="contact">
+  <div>
+    <p class="ct-ey" data-en="Let's Talk" data-ar="لنتحدث" data-tr="Konuşalım">Let's Talk</p>
+    <h2 class="ct-title" data-en="Ready to Build Your Brand <em>Together?</em>" data-ar="مستعد لبناء براندك <em>معاً؟</em>" data-tr="Markanı <em>Birlikte</em> İnşa Edelim">Ready to Build Your Brand <em>Together?</em></h2>
+    <p class="ct-p" data-en="Tell me your idea and I'll walk you through everything — from product selection to your first shipment to the Gulf." data-ar="أخبرني بفكرتك وسأرشدك خلال كل شيء — من اختيار المنتج إلى أول شحنة للخليج." data-tr="Fikrini söyle, ürün seçiminden Körfez'e ilk sevkiyata kadar yönlendireyim.">Tell me your idea — I'll guide you through everything.</p>
+    <div class="ct-det">
+      <div class="cdet">
+        <span class="ckey">WhatsApp</span>
+        <span class="cval"><a href="https://wa.me/905354490419">+90 535 449 04 19</a></span>
       </div>
-      <div class="contact-detail">
-        <span class="contact-key" data-en="Phone" data-ar="الهاتف" data-tr="Telefon">Phone</span>
-        <span class="contact-val"><a href="tel:+905354490419">+90 535 449 04 19</a></span>
+      <div class="cdet">
+        <span class="ckey" data-en="Location" data-ar="الموقع" data-tr="Konum">Location</span>
+        <span class="cval" data-en="Istanbul, Turkey" data-ar="إسطنبول، تركيا" data-tr="İstanbul, Türkiye">Istanbul, Turkey</span>
       </div>
-      <div class="contact-detail">
-        <span class="contact-key" data-en="Location" data-ar="الموقع" data-tr="Konum">Location</span>
-        <span class="contact-val" data-en="Istanbul, Turkey" data-ar="إسطنبول، تركيا" data-tr="İstanbul, Türkiye">Istanbul, Turkey</span>
-      </div>
-      <div class="contact-detail">
-        <span class="contact-key" data-en="Languages" data-ar="اللغات" data-tr="Diller">Languages</span>
-        <span class="contact-val" data-en="Arabic · Turkish · French · English" data-ar="العربية · التركية · الفرنسية · الإنجليزية" data-tr="Arapça · Türkçe · Fransızca · İngilizce">Arabic · Turkish · French · English</span>
+      <div class="cdet">
+        <span class="ckey" data-en="Languages" data-ar="اللغات" data-tr="Diller">Languages</span>
+        <span class="cval" data-en="Arabic · Turkish · French · English" data-ar="العربية · التركية · الفرنسية · الإنجليزية" data-tr="Arapça · Türkçe · Fransızca · İngilizce">Arabic · Turkish · French · English</span>
       </div>
     </div>
+    <a href="https://wa.me/905354490419" class="wa" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span data-en="Chat on WhatsApp" data-ar="تحدث على واتساب" data-tr="WhatsApp'ta Yaz">Chat on WhatsApp</span>
+    </a>
   </div>
-
-  <div class="contact-form reveal reveal-delay-2">
-    <h3 class="form-title" data-en="Tell Me Your Idea" data-ar="أخبرني بفكرتك" data-tr="Fikrini Anlat">Tell Me Your Idea</h3>
+  <div class="cf">
+    <h3 class="cf-t" data-en="Tell Me Your Idea" data-ar="أخبرني بفكرتك" data-tr="Fikrini Anlat">Tell Me Your Idea</h3>
     <div class="field">
       <label data-en="Your Name" data-ar="اسمك" data-tr="Adın">Your Name</label>
-      <input type="text" placeholder="...">
+      <input type="text">
     </div>
     <div class="field">
       <label data-en="Country" data-ar="الدولة" data-tr="Ülke">Country</label>
       <select>
         <option data-en="— Select —" data-ar="— اختر —" data-tr="— Seçin —">— Select —</option>
-        <option data-en="Saudi Arabia" data-ar="السعودية" data-tr="Suudi Arabistan">Saudi Arabia</option>
-        <option data-en="UAE" data-ar="الإمارات" data-tr="BAE">UAE</option>
-        <option data-en="Qatar" data-ar="قطر" data-tr="Katar">Qatar</option>
-        <option data-en="Kuwait" data-ar="الكويت" data-tr="Kuveyt">Kuwait</option>
-        <option data-en="Other" data-ar="أخرى" data-tr="Diğer">Other</option>
+        <option>Saudi Arabia</option><option>UAE</option><option>Qatar</option><option>Kuwait</option><option>Other</option>
       </select>
     </div>
     <div class="field">
-      <label data-en="Product Interest" data-ar="المنتج المطلوب" data-tr="Ürün İlgisi">Product Interest</label>
+      <label data-en="Product Interest" data-ar="المنتج المطلوب" data-tr="İlgilendiğiniz Ürün">Product Interest</label>
       <select>
         <option data-en="— Select —" data-ar="— اختر —" data-tr="— Seçin —">— Select —</option>
-        <option data-en="Vitamins & Supplements" data-ar="فيتامينات ومكملات" data-tr="Vitaminler">Vitamins & Supplements</option>
-        <option data-en="Face & Body Creams" data-ar="كريمات وجه وجسم" data-tr="Kremler">Face & Body Creams</option>
-        <option data-en="Shampoo & Hair Care" data-ar="شامبو وعناية شعر" data-tr="Şampuan">Shampoo & Hair Care</option>
-        <option data-en="Protein & Keratin" data-ar="بروتين وكيراتين" data-tr="Keratin">Protein & Keratin</option>
-        <option data-en="Sun Protection" data-ar="واقي شمس" data-tr="Güneş">Sun Protection</option>
-        <option data-en="Multiple / Not Sure" data-ar="عدة / غير متأكد" data-tr="Birden fazla">Multiple / Not Sure</option>
+        <option>Vitamins & Supplements</option>
+        <option>Face & Body Creams</option>
+        <option>Shampoo & Hair Care</option>
+        <option>Protein & Keratin</option>
+        <option>Sun Protection</option>
+        <option>Custom OEM</option>
       </select>
     </div>
     <div class="field">
-      <label data-en="Your Message" data-ar="رسالتك" data-tr="Mesajın">Your Message</label>
-      <textarea placeholder="..."></textarea>
+      <label data-en="Message" data-ar="الرسالة" data-tr="Mesaj">Message</label>
+      <textarea></textarea>
     </div>
-    <button class="submit-btn" data-en="Send My Idea →" data-ar="أرسل فكرتي ←" data-tr="Fikrimi Gönder →">Send My Idea →</button>
+    <button class="sub-btn" data-en="Send My Idea →" data-ar="أرسل فكرتي ←" data-tr="Fikrimi Gönder →">Send My Idea →</button>
   </div>
 </section>
 
 <footer>
-  <span class="footer-brand">Kawthar Himoudi</span>
-  <span class="footer-copy" data-en="Istanbul · Private Label Cosmetics for the Gulf" data-ar="إسطنبول · مستحضرات التجميل بعلامتك للخليج" data-tr="İstanbul · Körfez için Özel Etiket Kozmetik">Istanbul · Private Label Cosmetics for the Gulf</span>
+  <span class="fb">Kawthar Himoudi</span>
+  <span class="fc" data-en="Istanbul · Private Label Cosmetics for the Gulf" data-ar="إسطنبول · مستحضرات التجميل بعلامتك للخليج" data-tr="İstanbul · Körfez için Özel Etiket Kozmetik">Istanbul · Private Label Cosmetics for the Gulf</span>
 </footer>
 
 <script>
-// Particles
-(function(){
-  const container = document.getElementById('particles');
-  for(let i=0;i<30;i++){
-    const p = document.createElement('div');
-    p.className = 'particle';
-    p.style.left = Math.random()*100+'%';
-    p.style.width = p.style.height = (Math.random()*3+1)+'px';
-    p.style.animationDuration = (Math.random()*20+15)+'s';
-    p.style.animationDelay = (Math.random()*20)+'s';
-    container.appendChild(p);
+gsap.registerPlugin(ScrollTrigger);
+
+// NAV
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+// HERO entrance
+gsap.from('.hero-tag', { opacity:0, y:16, duration:.8, delay:.3, ease:'power2.out' });
+gsap.from('.hero-headline .li', { y:'110%', duration:1, stagger:.11, delay:.5, ease:'power3.out' });
+gsap.from('.hero-sub', { opacity:0, y:20, duration:.8, delay:1.1, ease:'power2.out' });
+gsap.from('.hero-actions', { opacity:0, y:20, duration:.8, delay:1.3, ease:'power2.out' });
+gsap.from('.scroll-hint', { opacity:0, duration:.8, delay:1.9 });
+
+// Hero parallax
+gsap.to('.hero-bg', {
+  yPercent:35, ease:'none',
+  scrollTrigger:{ trigger:'.hero', start:'top top', end:'bottom top', scrub:true }
+});
+
+// PROCESS — pinned, 3 steps
+function activateStep(n) {
+  document.querySelectorAll('.pstep').forEach((s,i) => {
+    s.classList.toggle('dim', i >= n);
+  });
+  ['pv1','pv2','pv3'].forEach((id,i) => {
+    document.getElementById(id).classList.toggle('on', i === n-1);
+  });
+  ['pd1','pd2','pd3'].forEach((id,i) => {
+    document.getElementById(id).classList.toggle('on', i === n-1);
+  });
+}
+
+ScrollTrigger.create({
+  trigger:'#processPin', start:'top top', end:'+=220%', pin:true, scrub:.6,
+  onUpdate(self) {
+    const p = self.progress;
+    if (p < .33) activateStep(1);
+    else if (p < .66) activateStep(2);
+    else activateStep(3);
   }
+});
+
+// PRODUCTS — horizontal scroll
+(function() {
+  const track = document.getElementById('ptrack');
+  const getD = () => track.scrollWidth - document.querySelector('.prod-outer').clientWidth;
+
+  gsap.to(track, {
+    x: () => -getD(),
+    ease:'none',
+    scrollTrigger:{
+      trigger:'.prod-wrap', start:'top top',
+      end: () => `+=${getD()}`,
+      pin:true, scrub:1.2, invalidateOnRefresh:true
+    }
+  });
 })();
 
-// Scroll reveal
-const observer = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
-},{threshold:0.12});
-document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+// MOQ counter
+gsap.from('#moqNum', {
+  textContent:0, duration:1.6, ease:'power2.out',
+  snap:{ textContent:1 },
+  scrollTrigger:{ trigger:'.moq', start:'top 75%', toggleActions:'play none none none' }
+});
 
-// Lang switch
-function setLang(lang){
-  document.body.className = lang;
-  document.documentElement.dir = lang==='ar'?'rtl':'ltr';
-  document.documentElement.lang = lang;
-  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.textContent.toLowerCase()===lang));
-  document.querySelectorAll('[data-'+lang+']').forEach(el=>{
-    const v = el.getAttribute('data-'+lang);
-    if(!v) return;
-    if(el.tagName==='INPUT'||el.tagName==='TEXTAREA') el.placeholder=v;
-    else if(el.tagName==='OPTION'||el.tagName==='BUTTON') el.textContent=v;
-    else el.innerHTML=v;
+// Section fade-ins
+gsap.utils.toArray('.moq, .contact, .cf').forEach(el => {
+  gsap.from(el, {
+    opacity:0, y:40, duration:.9, ease:'power2.out',
+    scrollTrigger:{ trigger:el, start:'top 80%', toggleActions:'play none none none' }
   });
+});
+
+// LANGUAGE SWITCH
+function setLang(lang) {
+  document.body.className = lang;
+  document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang-btn').forEach(b =>
+    b.classList.toggle('active', b.textContent.toLowerCase() === lang)
+  );
+  document.querySelectorAll(`[data-${lang}]`).forEach(el => {
+    const v = el.getAttribute(`data-${lang}`);
+    if (!v) return;
+    if (['INPUT','TEXTAREA'].includes(el.tagName)) el.placeholder = v;
+    else if (['OPTION','BUTTON'].includes(el.tagName)) el.textContent = v;
+    else el.innerHTML = v;
+  });
+  setTimeout(() => ScrollTrigger.refresh(), 120);
 }
 </script>
 </body>
