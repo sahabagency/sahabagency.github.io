@@ -1,0 +1,50 @@
+name: Generate Arabic knowledge lessons (MP3)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - ".github/scripts/generate_reading_audio.py"
+      - ".github/workflows/generate-reading-audio.yml"
+      - "reading/index.html"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: arabic-reading-audio
+  cancel-in-progress: false
+
+jobs:
+  render-narration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install audio tools
+        run: |
+          python -m pip install --disable-pip-version-check "edge-tts>=7.0,<8" "pydub>=0.25.1,<0.26"
+          ffmpeg -version | head -1
+      - name: Generate lessons with natural pauses
+        run: python .github/scripts/generate_reading_audio.py
+      - name: Commit generated MP3 files
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -d reading/audio ]; then
+            git add reading/audio
+          fi
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish narrated Arabic knowledge lessons"
+            git push
+          else
+            echo "No new audio files to publish"
+          fi
