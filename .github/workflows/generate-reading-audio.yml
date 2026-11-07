@@ -27,6 +27,12 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+      - name: Install FFmpeg for MP3 processing
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          command -v ffmpeg
+          command -v ffprobe
       - name: Install audio tools
         run: |
           python -m pip install --disable-pip-version-check "edge-tts>=7.0,<8" "pydub>=0.25.1,<0.26"
