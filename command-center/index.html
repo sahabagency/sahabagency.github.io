@@ -196,7 +196,7 @@ async function googleFetch(url,options={}){
 }
 function fromSheetValues(row){
  const typeLabel=String(row[0]||''),scopeLabel=String(row[2]||''),statusLabel=String(row[3]||'');
- const type=typeLabel.includes('عميل')?'client':typeLabel.includes('ملف')?'file':typeLabel.includes('دراسة')?'study':typeLabel.includes('عرض')||typeLabel.includes('عقد')?'proposal':typeLabel.includes('فكرة')?'idea':typeLabel.includes('مهمة')?'task':typeLabel.includes('فرصة')?'signal':'project';
+ const type=typeLabel.includes('عميل')?'client':typeLabel.includes('ملف')?'file':typeLabel.includes('دراسة')?'study':typeLabel.includes('عرض')||typeLabel.includes('عقد')?'proposal':typeLabel.includes('فكرة')?'idea':typeLabel.includes('مهمة')?'task':typeLabel.includes('فرصة')?'signal':typeLabel.includes('قرار')||typeLabel.includes('معرفة')?'memory':'project';
  return {type,title:String(row[1]||''),scope:scopeLabel.includes('شخصي')?'personal':scopeLabel.includes('منتج')?'product':'agency',
  status:statusLabel.includes('فكرة')?'idea':statusLabel.includes('رابط موثق')?'live':statusLabel.includes('منشور')?'live':'progress',
  url:urlOK(row[4]||''),desc:String(row[5]||''),tags:String(row[6]||'').split(/[,،]/).map(x=>x.trim()).filter(Boolean),priority:String(row[7]||'normal'),due:String(row[8]||'')};
@@ -242,16 +242,16 @@ async function syncGoogle(){
  const afterSheet=db.records.length;
  // A bounded recent-files scan, not an unbounded claim of indexing the entire Drive.
  const params=new URLSearchParams({pageSize:'100',orderBy:'modifiedTime desc',q:'trashed = false',fields:'nextPageToken,files(id,name,mimeType,webViewLink,modifiedTime)'});
- const drive=await googleFetch('https://www.googleapis.com/drive/v3/files?'+params.toString());
+ let drive={files:[],nextPageToken:null},driveError='';try{drive=await googleFetch('https://www.googleapis.com/drive/v3/files?'+params.toString())}catch(err){driveError=err.message}
  const files=(drive.files||[]).filter(x=>x.name&&x.webViewLink).map(x=>({
  type:'file',scope:'agency',title:x.name,url:x.webViewLink,status:'live',
  desc:'أحد أحدث 100 ملف ظاهر بحساب Google Drive؛ تم تحديثه '+(x.modifiedTime||'')+'. تصنيفه مبدئي ويحتاج مراجعة.',
  tags:['Google Drive','مزامنة حديثة']}));
  merge(files);
- const uploaded=await uploadPending(sheet.values||[]);
- db.lastGoogleSync={at:new Date().toISOString(),email:googleEmail,sheetRows:raw.length,recentDriveFiles:files.length,moreDrivePages:!!drive.nextPageToken};
+ let uploaded=0,uploadError='';try{uploaded=await uploadPending(sheet.values||[])}catch(err){uploadError=err.message}
+ db.lastGoogleSync={at:new Date().toISOString(),email:googleEmail,sheetRows:raw.length,recentDriveFiles:files.length,moreDrivePages:!!drive.nextPageToken,driveError,uploadError};
  await save();draw();
- toast('تمت مزامنة '+raw.length+' سجلًا و'+files.length+' ملفًا؛ رفع '+uploaded+' سجل جديد إلى Google Sheets');
+ toast('تم استيراد '+raw.length+' سجلًا و'+files.length+' ملفًا؛ رُفع '+uploaded+' سجل'+(driveError?' (تعذر جلب ملفات Drive)':'')+(uploadError?' (فشل رفع السجلات)':''));
  return {raw:raw.length,files:files.length,sheetAdded:afterSheet-existing.size};
 }
 
