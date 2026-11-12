@@ -50,6 +50,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 <script>
 (function(){
 'use strict';
+const GOOGLE_ID_KEY='sahab-google-oauth-clientid-v1', GOOGLE_SHEET_ID='1QWkzo383aW1Px1YKluSRCElcgXq2WO-U83zuO9BAXFA';
+let googleToken='',googleEmail='',googleClient=null;
 const KEY='sahab-command-center-v1', encoder=new TextEncoder(), decoder=new TextDecoder();
 const PUBLIC_SEED=[
 {type:'project',scope:'product',title:'حاسبة سحاب للتسويق',status:'live',url:'https://sahabagency.github.io/calculator/',desc:'أداة حسابات التسويق والربحية، رابط عام على GitHub Pages.',tags:['حاسبة','تسويق']},
@@ -57,12 +59,13 @@ const PUBLIC_SEED=[
 {type:'project',scope:'product',title:'Lead Engine / X-Ray',status:'live',url:'https://lead-engine-v1-production.up.railway.app',desc:'أداة تحليل المواقع والعملاء المحتملين.',tags:['Leads','SEO']},
 {type:'project',scope:'product',title:'AI Shorts Studio',status:'live',url:'https://sahab-video-studio-production.up.railway.app',desc:'منصة إنتاج الفيديوهات القصيرة.',tags:['AI','Video']},
 {type:'project',scope:'product',title:'Trading OS',status:'live',url:'https://trading.sahab.agency',desc:'رابط واجهة نظام التداول. لا تعني حالة الرابط الجاهزية الحقيقية للتداول.',tags:['Trading','Research']},
+{type:'project',scope:'product',title:'Sahab AI Employee — واتساب',status:'wait',url:'',desc:'MVP محلي بتشغيل Docker على Mac وربط QR عبر Evolution API، مسودات AI، اعتماد الردود، إدارة عملاء محتملين. لم يُنشر ولم يُختبر برقم واتساب حقيقي. ارجع إلى README-AR.md في مكتبة ChatGPT.',tags:['WhatsApp','AI','Docker']},
 {type:'project',scope:'agency',title:'Sahab OS',status:'wait',url:'https://os.sahab.agency',desc:'لوحة العمليات الداخلية؛ الربط الحي بالمركز لم يفعّل.',tags:['Operations','CRM']},
 {type:'project',scope:'personal',title:'مكتبة القراءة الذاتية',status:'live',url:'https://sahabagency.github.io/reading/',desc:'مسار القراءة والتعلّم باللغة العربية.',tags:['تعلم','قراءة']},
 {type:'file',scope:'agency',title:'مكتبة عروض سحاب',status:'live',url:'https://github.com/sahabagency/proposals',desc:'مستودع العروض المنشورة. الملفات السرية يجب حفظها في خزنة خاصة.',tags:['عروض','GitHub']},
 {type:'file',scope:'agency',title:'موقع سحاب العام',status:'live',url:'https://sahab.agency',desc:'الموقع التعريفي للوكالة.',tags:['Brand','Website']}
 ];
-const NAV=[['home','⌂','الرئيسية'],['project','◈','المشاريع والمنتجات'],['client','♙','العملاء'],['idea','✧','الأفكار'],['study','⌕','الدراسات والأبحاث'],['proposal','▤','العقود والعروض'],['file','▣','الملفات والمصادر'],['task','☑','المهام'],['signal','↗','رادار السوق'],['notifications','◎','التنبيهات'],['assistant','✦','المساعد'],['settings','⚙','الإعدادات']];
+const NAV=[['home','⌂','الرئيسية'],['project','◈','المشاريع والمنتجات'],['client','♙','العملاء'],['idea','✧','الأفكار'],['study','⌕','الدراسات والأبحاث'],['proposal','▤','العقود والعروض'],['file','▣','الملفات والمصادر'],['task','☑','المهام'],['signal','↗','رادار السوق'],['notifications','◎','التنبيهات'],['agents','✦','مركز الوكلاء'],['assistant','✦','المساعد'],['settings','⚙','الإعدادات']];
 const TYPES={project:'مشروع / منتج',client:'عميل',idea:'فكرة',study:'دراسة / بحث',proposal:'عرض وعقد',file:'ملف',task:'مهمة',signal:'مستجد / فرصة'};
 const ICONS={project:'◈',client:'♙',idea:'✧',study:'⌕',proposal:'▤',file:'▣',task:'☑',signal:'↗'};
 const STATUSES={live:'منشور / موثق',progress:'جاري العمل',idea:'فكرة',wait:'بانتظار الربط',done:'منجز'};
@@ -112,9 +115,94 @@ function insights(){const tasks=all('task').filter(x=>x.status!=='done'),overdue
 }
 function market(){return header('رادار السوق','نقطة واحدة لمصادر التسويق والتجارة الإلكترونية والبراندنج والذكاء الاصطناعي، مع تسجيل فرصك.')+'<div class="terminal"><h3>حدود التحديث</h3><p>هذه نسخة روابط وملاحظات السوق؛ لا تنفّذ بحثًا يوميًا في الخلفية بعد. عند فتح المصدر يمكنك حفظ ما يهمك كـ«إشارة سوق» وإعادته إلى المساعد.</p><button class="pbtn" data-new="signal">+ تسجيل فرصة جديدة</button></div><div class="section-title"><h2>مصادر تستحق المراقبة</h2><span class="note">روابط رسمية أو معروفة</span></div><div class="researchcards">'+SOURCES.map(a=>'<div class="research"><b>'+escape(a[0])+'</b><p>'+escape(a[2])+'</p><a target="_blank" rel="noopener noreferrer" href="'+escape(a[1])+'">تصفح المصدر ↗</a></div>').join('')+'</div><div class="section-title"><h2>الفرص التي حفظتها</h2></div><div class="cards">'+all('signal').map(card).join('')+'</div>';
 }
+
+const AGENT_STEPS=[
+['باحث السوق','تحديد المنافسين واتجاهات العملاء والأدلة والمصادر الأولية','research'],
+['محلل الجدوى','بناء افتراضات التكلفة والإيرادات والهوامش والمخاطر مع توثيق المصادر','finance'],
+['مخطط المنتج','تحويل الفكرة إلى نطاق MVP وقائمة ميزات ومعايير قبول واضحة','product'],
+['منفذ التقنية','صياغة مواصفات التنفيذ والخطوات التقنية ومراجعات الاعتماد','engineering'],
+['مراجع الجودة','تحضير حالات الاختبار والخصوصية وتجربة المستخدم وخطة التراجع','quality'],
+['مسؤول الإطلاق','إعداد قنوات الإطلاق والقياس والمتابعة دون نشر فعلي قبل الموافقة','launch']
+];
+function makeAgentPlan(project){
+ if(db.records.some(x=>x.parentId===project.id&&x.agentRole))return 0;
+ for(const [role,description,key] of AGENT_STEPS){
+ db.records.unshift(makeRecord({type:'task',scope:project.scope,title:'['+role+'] '+project.title,desc:'خطة أولية — '+description+'. المشروع: '+project.title+'. هذه مهمة مسجلة، وليست وكيلاً يعمل على خادم.',status:'idea',priority:project.priority||'normal',tags:['وكيل','خطة عمل',key],parentId:project.id,agentRole:role,executionMode:'blueprint'}));
+ }
+ return AGENT_STEPS.length;
+}
+function agents(){
+ const backlog=db.records.filter(x=>x.agentRole),projects=db.records.filter(x=>['project','idea','study'].includes(x.type)),closed=backlog.filter(x=>x.status==='done');
+ return header('مركز الوكلاء','يحّول أفكارك إلى فرق عمل وخطوات مترابطة. التنفيذ الحقيقي عبر نموذج AI وخادم مستقل لم يُفعّل بعد.')
+ +'<div class="grid4"><div class="metric"><small>خطط الوكلاء</small><strong>'+backlog.length+'</strong><em>مسارات محفوظة محليًا</em></div><div class="metric"><small>مهام الوكلاء المنجزة</small><strong>'+closed.length+'</strong></div><div class="metric"><small>المشاريع المتاحة</small><strong>'+projects.length+'</strong></div><div class="metric"><small>الوكلاء المتصلون بخادم</small><strong>0</strong><em>يحتاج خادمًا آمنًا</em></div></div>'
+ +'<section class="panel" style="margin-top:18px"><div class="panelhead"><h2>تكوين فريق وكلاء لمشروع</h2><span class="pill">قوالب عمل</span></div><div class="fields"><div class="field"><label>اختر المشروع</label><select id="agentProject"><option value="">اختر مشروعًا</option>'+projects.map(x=>'<option value="'+escape(x.id)+'">'+escape(x.title)+'</option>').join('')+'</select></div><div class="field"><label>طريقة التشغيل</label><input disabled value="تجهيز خطة فقط — يتطلب التنفيذ الفعلي ربط API آمن"></div></div><div class="actions"><button class="pbtn" id="planAgents">تكوين خطة العمل</button><button class="subbtn" data-new="idea">إضافة فكرة مشروع</button></div></section>'
+ +'<div class="section-title"><h2>مهام الفرق المقترحة</h2></div>'
+ +(backlog.length?'<div class="cards">'+backlog.slice(0,80).map(card).join('')+'</div>':'<div class="empty"><strong>لا توجد خطط بعد</strong>أضف فكرة أو اختر مشروعًا لإنشاء مهام الوكلاء الستة.</div>');
+}
+async function loadGoogleScript(){
+ if(window.google?.accounts?.oauth2)return;
+ await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.async=true;s.onload=resolve;s.onerror=()=>reject(new Error('فشل تحميل أداة Google'));document.head.appendChild(s)});
+}
+async function connectGoogle(){
+ const clientId=(localStorage.getItem(GOOGLE_ID_KEY)||'').trim();
+ if(!/^\d+-[\w-]+\.apps\.googleusercontent\.com$/.test(clientId)){view('settings');toast('يلزم إعداد Google OAuth Client ID أولًا');return false}
+ await loadGoogleScript();
+ const accessToken=await new Promise((resolve,reject)=>{
+   googleClient=google.accounts.oauth2.initTokenClient({
+     client_id:clientId,
+     scope:'openid email profile https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/drive.metadata.readonly',
+     callback:(r)=>r.error?reject(new Error(r.error)):resolve(r.access_token),
+     error_callback:(err)=>reject(new Error(err.type||'فشل الدخول إلى Google'))
+   });
+   googleClient.requestAccessToken({prompt:'consent'});
+ });
+ if(!accessToken)throw Error('لم يرجع Google رمز وصول');
+ googleToken=accessToken;
+ const identity=await googleFetch('https://openidconnect.googleapis.com/v1/userinfo');
+ if(String(identity.email||'').toLowerCase()!=='mohammedjazea@sahab.agency'){googleToken='';throw Error('اختر الحساب المصرح: mohammedjazea@sahab.agency');}
+ googleEmail=identity.email||'';
+ toast('تم ربط حساب Google بنجاح');
+ draw();
+ return true;
+}
+async function googleFetch(url){
+ if(!googleToken)throw Error('حساب Google غير متصل');
+ const response=await fetch(url,{headers:{Authorization:'Bearer '+googleToken}});
+ if(!response.ok)throw Error('Google API: '+response.status+' — '+(await response.text()).slice(0,250));
+ return response.json();
+}
+function fromSheetValues(row){
+ const typeLabel=String(row[0]||''),scopeLabel=String(row[2]||''),statusLabel=String(row[3]||'');
+ const type=typeLabel.includes('عميل')?'client':typeLabel.includes('ملف')?'file':typeLabel.includes('دراسة')?'study':typeLabel.includes('عرض')||typeLabel.includes('عقد')?'proposal':typeLabel.includes('فكرة')?'idea':typeLabel.includes('مهمة')?'task':typeLabel.includes('فرصة')?'signal':'project';
+ return {type,title:String(row[1]||''),scope:scopeLabel.includes('شخصي')?'personal':scopeLabel.includes('منتج')?'product':'agency',
+ status:statusLabel.includes('فكرة')?'idea':statusLabel.includes('رابط موثق')?'live':statusLabel.includes('منشور')?'live':'progress',
+ url:urlOK(row[4]||''),desc:String(row[5]||''),tags:String(row[6]||'').split(/[,،]/).map(x=>x.trim()).filter(Boolean),priority:String(row[7]||'normal'),due:String(row[8]||'')};
+}
+async function syncGoogle(){
+ if(!googleToken){const ok=await connectGoogle();if(!ok)return}
+ const src='https://sheets.googleapis.com/v4/spreadsheets/'+GOOGLE_SHEET_ID+'/values/'+encodeURIComponent("'السجل المركزي'!A1:I500");
+ const sheet=await googleFetch(src),raw=(sheet.values||[]).slice(1).filter(x=>x[1]);
+ const existing=new Set(db.records.map(x=>String(x.type+'|'+x.title).toLowerCase()));
+ merge(raw.map(fromSheetValues));
+ const afterSheet=db.records.length;
+ // A bounded recent-files scan, not an unbounded claim of indexing the entire Drive.
+ const params=new URLSearchParams({pageSize:'100',orderBy:'modifiedTime desc',q:'trashed = false',fields:'nextPageToken,files(id,name,mimeType,webViewLink,modifiedTime)'});
+ const drive=await googleFetch('https://www.googleapis.com/drive/v3/files?'+params.toString());
+ const files=(drive.files||[]).filter(x=>x.name&&x.webViewLink).map(x=>({
+ type:'file',scope:'agency',title:x.name,url:x.webViewLink,status:'live',
+ desc:'أحد أحدث 100 ملف ظاهر بحساب Google Drive؛ تم تحديثه '+(x.modifiedTime||'')+'. تصنيفه مبدئي ويحتاج مراجعة.',
+ tags:['Google Drive','مزامنة حديثة']}));
+ merge(files);
+ db.lastGoogleSync={at:new Date().toISOString(),email:googleEmail,sheetRows:raw.length,recentDriveFiles:files.length,moreDrivePages:!!drive.nextPageToken};
+ await save();draw();
+ toast('تمت مزامنة '+raw.length+' سجلًا من Sheet و'+files.length+' ملفًا حديثًا من Drive');
+ return {raw:raw.length,files:files.length,sheetAdded:afterSheet-existing.size};
+}
+
 function assistant(){return header('مساعدك المعرفي','ابحث في سجلاتك وأنشئ سياقًا كاملًا تتابعه مع ChatGPT.')+'<div class="split"><div class="panel"><div class="panelhead"><h2>اسأل عن مشاريعك</h2><span class="pill">بحث محلي</span></div><div class="assistant"><div class="field"><label>ماذا تريد أن تعرف أو تطور؟</label><textarea id="question" placeholder="مثال: ما المشاريع التسويقية الموجودة؟ وأي فكرة تحتاج متابعة؟" rows="5"></textarea></div><button class="pbtn" id="askBtn">تحليل سجلاتي</button><div id="localAnswer" class="answer hidden"></div><div class="actions"><button class="subbtn hidden" id="copyPrompt">نسخ السياق لـ ChatGPT</button><a class="subbtn" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">فتح ChatGPT ↗</a></div></div></div><div class="panel"><h2>ما الذي يفعله حاليًا؟</h2><div class="items" style="margin-top:15px"><div class="item"><span class="ic">⌕</span><span class="body"><b>بحث داخل معرفتك</b><small>العناوين والوصف والوسوم</small></span></div><div class="item"><span class="ic">▤</span><span class="body"><b>تجهيز سياق قابل للنسخ</b><small>لإرساله إلى ChatGPT وتحليله</small></span></div><div class="item"><span class="ic">⚑</span><span class="body"><b>لا ينفذ إجراءات خارجية</b><small>لا يراسل العملاء ولا يغير الملفات</small></span></div></div><p class="note" style="margin-top:18px">الذكاء الاصطناعي الحي وتنفيذ المهام يتطلبان خادمًا آمنًا وربطًا مصرحًا، ولم يتم تفعيلهما في هذه النسخة.</p></div></div>';}
-function settings(){return header('إعدادات الخزنة','الخصوصية، نقل البيانات بين الأجهزة، والنسخ الاحتياطي.')+'<div class="split"><div class="panel"><h2>بياناتك وخصوصيتك</h2><p class="note">كل السجلات محفوظة في localStorage مشفرة باستخدام AES-GCM بمفتاح مشتق من كلمة مرورك. إذا مسحت بيانات المتصفح ستحتاج نسخة احتياطية.</p><div class="stack" style="margin-top:16px"><button class="item" id="exportSettings"><span class="ic">↓</span><span class="body"><b>تصدير نسخة مشفرة</b><small>احتفظ بها في مكان آمن أو انقلها إلى جهاز آخر</small></span></button><button class="item" id="importSettings"><span class="ic">↑</span><span class="body"><b>استيراد سجلات أو نسخة مشفرة</b><small>يُدمج ملف البداية أو تُستعاد نسخة الاحتياط</small></span></button><button class="item" id="lockSettings"><span class="ic">◎</span><span class="body"><b>قفل الواجهة</b><small>دون حذف البيانات من الجهاز</small></span></button></div></div><div class="panel"><h2>خارطة التكامل</h2><div class="items" style="margin-top:14px"><div class="item"><span class="ic">✓</span><span class="body"><b>المشاريع والأفكار والمهام</b><small>إضافة وتعديل وحذف مشفر على الجهاز</small></span>'+labelStatus('live')+'</div><div class="item"><span class="ic">◉</span><span class="body"><b>Gmail وGoogle Drive وGitHub</b><small>روابط وفهرسة مستوردة، دون مزامنة مباشرة</small></span>'+labelStatus('wait')+'</div><div class="item"><span class="ic">✦</span><span class="body"><b>مساعد الذكاء الاصطناعي المنفّذ</b><small>يتطلب خادمًا ومفاتيح وصول آمنة</small></span>'+labelStatus('wait')+'</div><div class="item"><span class="ic">♧</span><span class="body"><b>إشعارات الأجهزة</b><small>تتطلب خلفية خادمية وموافقة الإشعارات</small></span>'+labelStatus('wait')+'</div></div></div></div>';}
-function draw(){document.title='سحاب · '+(NAV.find(x=>x[0]===page)||['','','مركز القيادة'])[2];$('nav').innerHTML=NAV.map(x=>'<button type="button" data-jump="'+x[0]+'" class="'+(page===x[0]?'active':'')+'"><em>'+x[1]+'</em>'+x[2]+'</button>').join('');$('topdate').textContent=new Date().toLocaleDateString('ar-SA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});$('view').innerHTML=page==='home'?home():page==='assistant'?assistant():page==='settings'?settings():page==='notifications'?insights():page==='signal'?market():listing(page);if($('scopeFilter'))$('scopeFilter').value=scopeFilter;if($('statusFilter'))$('statusFilter').value=statusFilter;}
+function settings(){return header('إعدادات الخزنة','الخصوصية، نقل البيانات بين الأجهزة، والنسخ الاحتياطي.')+
+'<section class="panel" style="margin:12px 0 20px"><div class="panelhead"><h2>الدخول بحساب Google وربط السجل الخاص</h2><span class="pill">OAuth — قيد الإعداد</span></div><p class="note">لبدء الدخول والمزامنة يحتاج هذا الموقع Client ID من Google Cloud مع إضافة https://sahabagency.github.io إلى Authorized JavaScript origins. لا تضع Client Secret هنا. بعد إعداده يمكن توثيق الحساب وإضافة سجلات السجل المركزي وأحدث 100 ملف من Drive إلى خزنتك الخاصة على هذا الجهاز. الدخول بالموقع نفسه يبقى بكلمة مرور الخزنة حتى يتوفر خادم هوية آمن.</p><div class="field"><label>Google OAuth Client ID (ليس سرًا)</label><input id="googleClientId" placeholder="000000000-xxxxxxxx.apps.googleusercontent.com"></div><div class="actions"><button class="subbtn" id="saveGoogleClient">حفظ معرف Google</button><button class="pbtn" id="connectGoogle">ربط حساب Google</button><button class="subbtn" id="syncGoogle">تحديث العملاء والملفات</button></div><p id="googleStatus" class="note">'+(googleEmail?'متصل: '+escape(googleEmail):'غير متصل بهذه الجلسة')+(db.lastGoogleSync?' · آخر مزامنة: '+escape(fmt(db.lastGoogleSync.at)):'')+'</p><a target="_blank" rel="noopener noreferrer" class="textlink" href="https://console.cloud.google.com/auth/clients">فتح إعداد عميل Google OAuth ↗</a></section>'+'<div class="split"><div class="panel"><h2>بياناتك وخصوصيتك</h2><p class="note">كل السجلات محفوظة في localStorage مشفرة باستخدام AES-GCM بمفتاح مشتق من كلمة مرورك. إذا مسحت بيانات المتصفح ستحتاج نسخة احتياطية.</p><div class="stack" style="margin-top:16px"><button class="item" id="exportSettings"><span class="ic">↓</span><span class="body"><b>تصدير نسخة مشفرة</b><small>احتفظ بها في مكان آمن أو انقلها إلى جهاز آخر</small></span></button><button class="item" id="importSettings"><span class="ic">↑</span><span class="body"><b>استيراد سجلات أو نسخة مشفرة</b><small>يُدمج ملف البداية أو تُستعاد نسخة الاحتياط</small></span></button><button class="item" id="lockSettings"><span class="ic">◎</span><span class="body"><b>قفل الواجهة</b><small>دون حذف البيانات من الجهاز</small></span></button></div></div><div class="panel"><h2>خارطة التكامل</h2><div class="items" style="margin-top:14px"><div class="item"><span class="ic">✓</span><span class="body"><b>المشاريع والأفكار والمهام</b><small>إضافة وتعديل وحذف مشفر على الجهاز</small></span>'+labelStatus('live')+'</div><div class="item"><span class="ic">◉</span><span class="body"><b>Gmail وGoogle Drive وGitHub</b><small>روابط وفهرسة مستوردة، دون مزامنة مباشرة</small></span>'+labelStatus('wait')+'</div><div class="item"><span class="ic">✦</span><span class="body"><b>مساعد الذكاء الاصطناعي المنفّذ</b><small>يتطلب خادمًا ومفاتيح وصول آمنة</small></span>'+labelStatus('wait')+'</div><div class="item"><span class="ic">♧</span><span class="body"><b>إشعارات الأجهزة</b><small>تتطلب خلفية خادمية وموافقة الإشعارات</small></span>'+labelStatus('wait')+'</div></div></div></div>';}
+function draw(){document.title='سحاب · '+(NAV.find(x=>x[0]===page)||['','','مركز القيادة'])[2];$('nav').innerHTML=NAV.map(x=>'<button type="button" data-jump="'+x[0]+'" class="'+(page===x[0]?'active':'')+'"><em>'+x[1]+'</em>'+x[2]+'</button>').join('');$('topdate').textContent=new Date().toLocaleDateString('ar-SA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});$('view').innerHTML=page==='home'?home():page==='assistant'?assistant():page==='settings'?settings():page==='notifications'?insights():page==='agents'?agents():page==='signal'?market():listing(page);if($('scopeFilter'))$('scopeFilter').value=scopeFilter;if($('statusFilter'))$('statusFilter').value=statusFilter;if($('googleClientId'))$('googleClientId').value=localStorage.getItem(GOOGLE_ID_KEY)||'';}
 function editor(id,type){const x=id?db.records.find(v=>v.id===id):null;$('entryForm').reset();$('entryId').value=x?x.id:'';$('entryType').value=x?x.type:type||'idea';$('entryScope').value=x?x.scope:'agency';$('entryTitle').value=x?x.title:'';$('entryStatus').value=x?x.status:'idea';$('entryPriority').value=x?x.priority:'normal';$('entryUrl').value=x?x.url:'';$('entryDue').value=x?x.due:'';$('entryTags').value=x?(x.tags||[]).join('، '):'';$('entryDesc').value=x?x.desc:'';$('deleteEntry').classList.toggle('hidden',!x);$('modalTitle').textContent=x?'تعديل السجل':'إضافة سجل جديد';$('modal').classList.remove('hidden');setTimeout(()=>$('entryTitle').focus(),80);}
 async function exportVault(){const data=localStorage.getItem(KEY);if(!data)return toast('لا توجد بيانات للتصدير');const blob=new Blob([data],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sahab-command-center-encrypted-'+today()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('تم تجهيز نسخة مشفرة');}
 async function importVault(file){const txt=await file.text(),incoming=JSON.parse(txt);if(incoming.v===1&&incoming.salt&&incoming.iv){const p=prompt('أدخل كلمة مرور النسخة المستوردة:');if(!p)return;const restored=await decodeVault(incoming,p);if(!restored||!Array.isArray(restored.records))throw Error('صيغة غير صحيحة');if(!confirm('سيتم دمج سجلات النسخة المشفرة مع الموجود. متابعة؟'))return;merge(restored.records);}else if(Array.isArray(incoming.records)){if(!confirm('سيتم استيراد '+incoming.records.length+' سجلًا إلى خزنتك. متابعة؟'))return;merge(incoming.records);}else throw Error('ملف غير مدعوم');await save();draw();toast('اكتمل استيراد السجلات');}
@@ -123,10 +211,14 @@ async function unlock(){const p=$('pass').value,e=$('lockError');e.classList.add
 $('unlockBtn').addEventListener('click',unlock);$('pass').addEventListener('keydown',e=>{if(e.key==='Enter')unlock()});if(localStorage.getItem(KEY))$('lockLabel').textContent='كلمة مرور الخزنة';
 $('menuBtn').onclick=()=>{$('side').classList.toggle('open');$('overlay').classList.toggle('open')};$('overlay').onclick=()=>{$('side').classList.remove('open');$('overlay').classList.remove('open')};
 $('addBtn').onclick=()=>editor(null,page in TYPES?page:'idea');$('cancelModal').onclick=()=>$('modal').classList.add('hidden');
-$('entryForm').addEventListener('submit',async e=>{e.preventDefault();const id=$('entryId').value,title=$('entryTitle').value.trim();if(!title)return;const input={type:$('entryType').value,scope:$('entryScope').value,title,status:$('entryStatus').value,priority:$('entryPriority').value,url:urlOK($('entryUrl').value),due:$('entryDue').value,desc:$('entryDesc').value.trim(),tags:$('entryTags').value.split(/[,،]/).map(s=>s.trim()).filter(Boolean).slice(0,12),updated:new Date().toISOString()};if(id){const pos=db.records.findIndex(x=>x.id===id);if(pos>=0)db.records[pos]=Object.assign({},db.records[pos],input);}else db.records.unshift(makeRecord(input));await save();$('modal').classList.add('hidden');draw();toast('تم حفظ السجل');});
+$('entryForm').addEventListener('submit',async e=>{e.preventDefault();const id=$('entryId').value,title=$('entryTitle').value.trim();if(!title)return;const input={type:$('entryType').value,scope:$('entryScope').value,title,status:$('entryStatus').value,priority:$('entryPriority').value,url:urlOK($('entryUrl').value),due:$('entryDue').value,desc:$('entryDesc').value.trim(),tags:$('entryTags').value.split(/[,،]/).map(s=>s.trim()).filter(Boolean).slice(0,12),updated:new Date().toISOString()};if(id){const pos=db.records.findIndex(x=>x.id===id);if(pos>=0)db.records[pos]=Object.assign({},db.records[pos],input);}else {const newItem=makeRecord(input);db.records.unshift(newItem);if(['project','idea'].includes(input.type))makeAgentPlan(newItem);}await save();$('modal').classList.add('hidden');draw();toast('تم حفظ السجل');});
 $('deleteEntry').onclick=async()=>{const id=$('entryId').value;if(!confirm('حذف السجل نهائيًا من خزنتك؟'))return;db.records=db.records.filter(x=>x.id!==id);await save();$('modal').classList.add('hidden');draw();toast('تم حذف السجل')};
 $('exportBtn').onclick=exportVault;$('importBtn').onclick=()=>$('fileInput').click();$('fileInput').onchange=async e=>{if(!e.target.files[0])return;try{await importVault(e.target.files[0]);}catch(err){alert('تعذر الاستيراد: '+err.message)}e.target.value='';};
-document.addEventListener('click',e=>{let n=e.target.closest('[data-jump]');if(n){view(n.dataset.jump);return;}n=e.target.closest('[data-edit]');if(n){editor(n.dataset.edit);return;}n=e.target.closest('[data-new]');if(n){editor(null,n.dataset.new);return;}if(e.target.id==='exportSettings')exportVault();if(e.target.id==='importSettings')$('fileInput').click();if(e.target.id==='lockSettings'){db=null;passphrase='';$('app').classList.add('hidden');$('lock').classList.remove('hidden');$('lockLabel').textContent='كلمة مرور الخزنة';}
+document.addEventListener('click',e=>{let n=e.target.closest('[data-jump]');if(n){view(n.dataset.jump);return;}n=e.target.closest('[data-edit]');if(n){editor(n.dataset.edit);return;}n=e.target.closest('[data-new]');if(n){editor(null,n.dataset.new);return;}if(e.target.id==='planAgents'){const x=db.records.find(z=>z.id===$('agentProject')?.value);if(!x)return toast('اختر المشروع أولًا');const n=makeAgentPlan(x);save().then(()=>{draw();toast(n?'تمت إضافة '+n+' مهام مخططة للوكلاء':'الخطة موجودة بالفعل')});}
+if(e.target.id==='saveGoogleClient'){const id=String($('googleClientId')?.value||'').trim();if(!/^\d+-[\w-]+\.apps\.googleusercontent\.com$/.test(id))return toast('صيغة Google OAuth Client ID غير صحيحة');localStorage.setItem(GOOGLE_ID_KEY,id);toast('تم حفظ معرف Google OAuth لهذا المتصفح');}
+if(e.target.id==='connectGoogle')connectGoogle().catch(err=>{alert('تعذر الربط: '+err.message)});
+if(e.target.id==='syncGoogle')syncGoogle().catch(err=>{alert('تعذرت المزامنة: '+err.message)});
+if(e.target.id==='exportSettings')exportVault();if(e.target.id==='importSettings')$('fileInput').click();if(e.target.id==='lockSettings'){db=null;passphrase='';$('app').classList.add('hidden');$('lock').classList.remove('hidden');$('lockLabel').textContent='كلمة مرور الخزنة';}
 if(e.target.id==='askBtn'){const q=($('question')?.value||'').trim();if(!q)return toast('اكتب سؤالك');const parts=q.toLowerCase().split(/\s+/).filter(x=>x.length>2),ranked=db.records.map(x=>({x,score:parts.reduce((n,w)=>n+([x.title,x.desc,(x.tags||[]).join(' ')].join(' ').toLowerCase().includes(w)?1:0),0)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score).slice(0,12).map(z=>z.x);const match=ranked.length?ranked:db.records.slice(0,7);$('localAnswer').classList.remove('hidden');$('localAnswer').textContent='وجدت '+ranked.length+' سجلات تطابق السؤال. هذه نتائج بحث نصي داخل بياناتك، وليست استنتاجًا من نموذج ذكاء اصطناعي:\n\n'+match.map((x,i)=>(i+1)+'. '+x.title+' — '+(x.desc||'بدون وصف')+(x.url?'\n'+x.url:'')).join('\n\n');queryOut='أنت مساعد تنفيذي عربي لسحاب. السؤال: '+q+'\n\nاستخدم البيانات التالية فقط بوصفها سجلات أولية، وميّز بين الموثق وغير المؤكد. قدم توصيات واضحة ولا تنفذ أي إجراء دون موافقة:\n\n'+match.map(x=>JSON.stringify({title:x.title,type:x.type,status:x.status,desc:x.desc,url:x.url,tags:x.tags})).join('\n');$('copyPrompt').classList.remove('hidden');}
 if(e.target.id==='copyPrompt')navigator.clipboard.writeText(queryOut).then(()=>toast('تم نسخ السؤال والسياق')).catch(()=>toast('تعذر النسخ، اسمح بالوصول للحافظة'));
 });
