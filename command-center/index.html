@@ -62,7 +62,7 @@ const PUBLIC_SEED=[
 {type:'file',scope:'agency',title:'مكتبة عروض سحاب',status:'live',url:'https://github.com/sahabagency/proposals',desc:'مستودع العروض المنشورة. الملفات السرية يجب حفظها في خزنة خاصة.',tags:['عروض','GitHub']},
 {type:'file',scope:'agency',title:'موقع سحاب العام',status:'live',url:'https://sahab.agency',desc:'الموقع التعريفي للوكالة.',tags:['Brand','Website']}
 ];
-const NAV=[['home','⌂','الرئيسية'],['project','◈','المشاريع والمنتجات'],['client','♙','العملاء'],['idea','✧','الأفكار'],['study','⌕','الدراسات والأبحاث'],['proposal','▤','العقود والعروض'],['file','▣','الملفات والمصادر'],['task','☑','المهام'],['signal','↗','رادار السوق'],['assistant','✦','المساعد'],['settings','⚙','الإعدادات']];
+const NAV=[['home','⌂','الرئيسية'],['project','◈','المشاريع والمنتجات'],['client','♙','العملاء'],['idea','✧','الأفكار'],['study','⌕','الدراسات والأبحاث'],['proposal','▤','العقود والعروض'],['file','▣','الملفات والمصادر'],['task','☑','المهام'],['signal','↗','رادار السوق'],['notifications','◎','التنبيهات'],['assistant','✦','المساعد'],['settings','⚙','الإعدادات']];
 const TYPES={project:'مشروع / منتج',client:'عميل',idea:'فكرة',study:'دراسة / بحث',proposal:'عرض وعقد',file:'ملف',task:'مهمة',signal:'مستجد / فرصة'};
 const ICONS={project:'◈',client:'♙',idea:'✧',study:'⌕',proposal:'▤',file:'▣',task:'☑',signal:'↗'};
 const STATUSES={live:'منشور / موثق',progress:'جاري العمل',idea:'فكرة',wait:'بانتظار الربط',done:'منجز'};
@@ -85,7 +85,7 @@ const uid=()=>globalThis.crypto.randomUUID?crypto.randomUUID():String(Date.now()
 const urlOK=s=>{try{let u=new URL(s);return ['https:','http:'].includes(u.protocol)?u.href:''}catch(e){return ''}};
 const makeRecord=x=>Object.assign({id:uid(),type:'idea',scope:'agency',title:'',desc:'',status:'idea',url:'',tags:[],due:'',priority:'normal',updated:new Date().toISOString()},x);
 async function aesKey(p,salt){const base=await crypto.subtle.importKey('raw',encoder.encode(p),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:200000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
-const toB64=x=>btoa(String.fromCharCode.apply(null,new Uint8Array(x)));
+const toB64=x=>{const u=new Uint8Array(x);let s='';for(let i=0;i<u.length;i+=16384)s+=String.fromCharCode.apply(null,u.subarray(i,i+16384));return btoa(s)};
 const fromB64=x=>Uint8Array.from(atob(x),c=>c.charCodeAt(0));
 async function encodeVault(payload,p){const salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));const key=await aesKey(p,salt);const cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,encoder.encode(JSON.stringify(payload)));return {v:1,salt:toB64(salt),iv:toB64(iv),data:toB64(cipher)};}
 async function decodeVault(box,p){if(!box||box.v!==1)throw Error('غير صالح');const key=await aesKey(p,fromB64(box.salt));return JSON.parse(decoder.decode(await crypto.subtle.decrypt({name:'AES-GCM',iv:fromB64(box.iv)},key,fromB64(box.data))));}
