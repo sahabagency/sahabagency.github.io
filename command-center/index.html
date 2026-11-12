@@ -315,5 +315,7 @@ if(e.target.id==='copyPrompt')navigator.clipboard.writeText(queryOut).then(()=>t
 document.addEventListener('input',e=>{if(e.target.id==='listSearch'){search=e.target.value;const focused=e.target.selectionStart;draw();const field=$('listSearch');if(field){field.focus();field.setSelectionRange(focused,focused);}}});
 document.addEventListener('change',e=>{if(e.target.id==='scopeFilter'){scopeFilter=e.target.value;draw();}if(e.target.id==='statusFilter'){statusFilter=e.target.value;draw();}});
 if('serviceWorker' in navigator&&location.protocol==='https:')navigator.serviceWorker.register('./sw.js').catch(()=>{});
+loadGoogleScript().catch(()=>{});
+setInterval(()=>{if(!db||!googleToken)return;const last=db.lastGoogleSync?.at?new Date(db.lastGoogleSync.at).getTime():0;if(Date.now()-last<30*60*1000)return;syncGoogle().catch(err=>{if(String(err.message).includes('401'))googleToken='';})},10*60*1000);
 })();
 </script></body></html>
