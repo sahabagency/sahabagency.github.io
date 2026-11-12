@@ -28,7 +28,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 @media(max-width:1170px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.grid4{grid-template-columns:repeat(2,minmax(0,1fr))}.main{padding:20px 22px 50px}}@media(max-width:850px){.app{display:block}.sidebar{transform:translateX(105%);transition:.25s;position:fixed;right:0;width:min(290px,86vw);box-shadow:0 30px 80px #000a}.sidebar.open{transform:translateX(0)}.overlay.open{display:block;position:fixed;inset:0;background:#000a;z-index:10}.mobilemenu{display:block}.split{grid-template-columns:1fr}.main{padding:17px 15px 50px}.researchcards{grid-template-columns:repeat(2,1fr)}}@media(max-width:550px){.cards,.researchcards{grid-template-columns:1fr}.metric{padding:14px;min-height:100px}.metric strong{font-size:25px}.topdate{display:none}.hero{padding-top:22px}.hero h1{font-size:32px}.panel{padding:15px}.section-title h2{font-size:16px}.fields{grid-template-columns:1fr}.boxline{align-items:flex-start}.boxline .end{flex-direction:column}.project p{min-height:0}.dialogbox{padding:19px}.topbar{padding-bottom:16px}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style></head>
 <body>
-<div id="lock" class="lock"><div class="lockbox"><div class="mark">S</div><div class="eyebrow" style="margin-top:20px">PRIVATE WORKSPACE</div><h1>مركز قيادة <span style="color:var(--accent)">سحاب</span></h1><p>كل مشاريعك وأفكارك وعملاءك ومعرفتك، في واجهة واحدة.</p><div class="notice">بياناتك تُشفَّر داخل هذا المتصفح بكلمة مرور تختارها. لا تُرفع إلى GitHub ولا تتم مزامنتها مع أجهزة أخرى تلقائيًا.</div><div class="field"><label id="lockLabel">إنشاء كلمة مرور للخزنة</label><input type="password" id="pass" autocomplete="current-password" placeholder="12 حرفًا على الأقل"></div><button class="pbtn" id="unlockBtn">فتح مركز القيادة</button><div id="lockError" class="error hidden"></div><p class="small" style="margin-top:18px">تنبيه: احتفظ بكلمة المرور والنسخة الاحتياطية. لا توجد طريقة لاسترجاعها من الموقع.</p></div></div>
+<div id="lock" class="lock"><div class="lockbox"><div class="mark">S</div><div class="eyebrow" style="margin-top:20px">PRIVATE WORKSPACE</div><h1>مركز قيادة <span style="color:var(--accent)">سحاب</span></h1><p>كل مشاريعك وأفكارك وعملاءك ومعرفتك، في واجهة واحدة.</p><div class="notice">بياناتك تُشفَّر داخل هذا المتصفح بكلمة مرور تختارها. لا تُرفع إلى GitHub. يمكن ربط Google Sheets لمزامنة السجلات بعد إعداد OAuth بموافقتك.</div><div class="field"><label id="lockLabel">إنشاء كلمة مرور للخزنة</label><input type="password" id="pass" autocomplete="current-password" placeholder="12 حرفًا على الأقل"></div><button class="pbtn" id="unlockBtn">فتح مركز القيادة</button><div id="lockError" class="error hidden"></div><p class="small" style="margin-top:18px">تنبيه: احتفظ بكلمة المرور والنسخة الاحتياطية. لا توجد طريقة لاسترجاعها من الموقع.</p></div></div>
 <div id="overlay" class="overlay"></div>
 <div id="app" class="app hidden">
 <aside class="sidebar" id="side"><div class="logo"><div class="mark">S</div><div><b>سحاب | المركز</b><small>COMMAND CENTER</small></div></div>
@@ -127,7 +127,7 @@ const AGENT_STEPS=[
 function makeAgentPlan(project){
  if(db.records.some(x=>x.parentId===project.id&&x.agentRole))return 0;
  for(const [role,description,key] of AGENT_STEPS){
- db.records.unshift(makeRecord({type:'task',scope:project.scope,title:'['+role+'] '+project.title,desc:'خطة أولية — '+description+'. المشروع: '+project.title+'. هذه مهمة مسجلة، وليست وكيلاً يعمل على خادم.',status:'idea',priority:project.priority||'normal',tags:['وكيل','خطة عمل',key],parentId:project.id,agentRole:role,executionMode:'blueprint'}));
+ db.records.unshift(makeRecord({type:'task',scope:project.scope,title:'['+role+'] '+project.title,desc:'خطة أولية — '+description+'. المشروع: '+project.title+'. هذه مهمة مسجلة، وليست وكيلاً يعمل على خادم.',status:'idea',priority:project.priority||'normal',tags:['وكيل','خطة عمل',key],parentId:project.id,agentRole:role,executionMode:'blueprint',pendingSync:true}));
  }
  return AGENT_STEPS.length;
 }
@@ -173,7 +173,7 @@ async function connectGoogle(){
  const accessToken=await new Promise((resolve,reject)=>{
    googleClient=google.accounts.oauth2.initTokenClient({
      client_id:clientId,
-     scope:'openid email profile https://www.googleapis.com/auth/spreadsheets.readonly https://www.googleapis.com/auth/drive.metadata.readonly',
+     scope:'openid email profile https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.metadata.readonly',
      callback:(r)=>r.error?reject(new Error(r.error)):resolve(r.access_token),
      error_callback:(err)=>reject(new Error(err.type||'فشل الدخول إلى Google'))
    });
@@ -188,9 +188,9 @@ async function connectGoogle(){
  draw();
  return true;
 }
-async function googleFetch(url){
+async function googleFetch(url,options={}){
  if(!googleToken)throw Error('حساب Google غير متصل');
- const response=await fetch(url,{headers:{Authorization:'Bearer '+googleToken}});
+ const response=await fetch(url,{...options,headers:{Authorization:'Bearer '+googleToken,...(options.headers||{})}});
  if(!response.ok)throw Error('Google API: '+response.status+' — '+(await response.text()).slice(0,250));
  return response.json();
 }
@@ -201,9 +201,41 @@ function fromSheetValues(row){
  status:statusLabel.includes('فكرة')?'idea':statusLabel.includes('رابط موثق')?'live':statusLabel.includes('منشور')?'live':'progress',
  url:urlOK(row[4]||''),desc:String(row[5]||''),tags:String(row[6]||'').split(/[,،]/).map(x=>x.trim()).filter(Boolean),priority:String(row[7]||'normal'),due:String(row[8]||'')};
 }
+
+const SHEET_TYPES={project:'مشروع / منتج',client:'عميل',idea:'فكرة',study:'دراسة',proposal:'عرض / عقد',file:'ملف',task:'مهمة',signal:'فرصة',memory:'قرار / معرفة'};
+function sheetRow(x){
+ return [SHEET_TYPES[x.type]||'فكرة',x.title,x.scope==='personal'?'شخصي':x.scope==='product'?'منتج رقمي':'سحاب',
+ x.status==='live'?'رابط موثق':x.status==='progress'?'جاري العمل':x.status==='wait'?'يحتاج ربط':x.status==='done'?'منجز':'فكرة',
+ x.url||'',x.desc||'',(x.tags||[]).join('، '),x.priority||'normal',x.due||''];
+}
+async function uploadPending(currentRows){
+ if(!googleToken)return 0;
+ const prior=new Set(currentRows.slice(1).filter(row=>row[1]).map(row=>String(row[0]+'|'+row[1]).toLowerCase()));
+ const allPending=db.records.filter(x=>x.pendingSync&&x.title&&!x.syncedFromGoogle);
+ const toUpload=[];
+ for(const x of allPending){
+ const key=(SHEET_TYPES[x.type]+'|'+x.title).toLowerCase();
+ if(prior.has(key)){x.pendingSync=false;continue;}
+ prior.add(key);toUpload.push(x);
+ }
+ if(!toUpload.length){await save();return 0}
+ const range=encodeURIComponent("'السجل المركزي'!A:I");
+ const url='https://sheets.googleapis.com/v4/spreadsheets/'+GOOGLE_SHEET_ID+'/values/'+range+':append?valueInputOption=RAW&insertDataOption=INSERT_ROWS';
+ const payload={values:toUpload.map(sheetRow)};
+ await googleFetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+ for(const x of toUpload){x.pendingSync=false;x.syncedFromGoogle=true;}
+ await save();return toUpload.length;
+}
+async function pushPendingOnEdit(){
+ if(!googleToken)return 0;
+ const src='https://sheets.googleapis.com/v4/spreadsheets/'+GOOGLE_SHEET_ID+'/values/'+encodeURIComponent("'السجل المركزي'!A1:I10000");
+ const data=await googleFetch(src);
+ return uploadPending(data.values||[]);
+}
+
 async function syncGoogle(){
  if(!googleToken){const ok=await connectGoogle();if(!ok)return}
- const src='https://sheets.googleapis.com/v4/spreadsheets/'+GOOGLE_SHEET_ID+'/values/'+encodeURIComponent("'السجل المركزي'!A1:I500");
+ const src='https://sheets.googleapis.com/v4/spreadsheets/'+GOOGLE_SHEET_ID+'/values/'+encodeURIComponent("'السجل المركزي'!A1:I10000");
  const sheet=await googleFetch(src),raw=(sheet.values||[]).slice(1).filter(x=>x[1]);
  const existing=new Set(db.records.map(x=>String(x.type+'|'+x.title).toLowerCase()));
  merge(raw.map(fromSheetValues));
@@ -216,9 +248,10 @@ async function syncGoogle(){
  desc:'أحد أحدث 100 ملف ظاهر بحساب Google Drive؛ تم تحديثه '+(x.modifiedTime||'')+'. تصنيفه مبدئي ويحتاج مراجعة.',
  tags:['Google Drive','مزامنة حديثة']}));
  merge(files);
+ const uploaded=await uploadPending(sheet.values||[]);
  db.lastGoogleSync={at:new Date().toISOString(),email:googleEmail,sheetRows:raw.length,recentDriveFiles:files.length,moreDrivePages:!!drive.nextPageToken};
  await save();draw();
- toast('تمت مزامنة '+raw.length+' سجلًا من Sheet و'+files.length+' ملفًا حديثًا من Drive');
+ toast('تمت مزامنة '+raw.length+' سجلًا و'+files.length+' ملفًا؛ رفع '+uploaded+' سجل جديد إلى Google Sheets');
  return {raw:raw.length,files:files.length,sheetAdded:afterSheet-existing.size};
 }
 
@@ -246,15 +279,16 @@ async function saveBrain(){
  const text=String($('brainText')?.value||'').trim();if(text.length<4)return toast('أدخل نصًا واضحًا أولًا');
  const selected=$('brainType').value, type=selected==='auto'?classifyBrain(text):selected;
  const title=text.split(/[\n.!؟]/)[0].slice(0,85).trim()||'ملاحظة جديدة';
- const project=makeRecord({type,scope:$('brainScope').value,title,desc:text,status:type==='task'?'progress':'idea',priority:'normal',tags:['من صندوق الأفكار',...brainTags(text)],origin:'brain'});
+ const project=makeRecord({type,scope:$('brainScope').value,title,desc:text,status:type==='task'?'progress':'idea',priority:'normal',tags:['من صندوق الأفكار',...brainTags(text)],origin:'brain',pendingSync:true});
  db.records.unshift(project);
  const count=['idea','project','study'].includes(type)?makeAgentPlan(project):0;
- await save();draw();toast('تم حفظ '+TYPES[type]+(count?' وتوليد '+count+' مهام للوكلاء':''));
+ await save();draw();toast('تم الحفظ محليًا'+(count?' وإنشاء '+count+' مهام':'')+(googleToken?' — تجري مزامنة Google':' — بانتظار ربط Google'));
+ if(googleToken){try{const n=await pushPendingOnEdit();toast('تم إرسال '+n+' سجلًا إلى Google Sheets')}catch(e){toast('حُفظت محليًا؛ فشلت مزامنة Google: '+e.message)}}
 }
 
 function assistant(){return header('مساعدك المعرفي','ابحث في سجلاتك وأنشئ سياقًا كاملًا تتابعه مع ChatGPT.')+'<div class="split"><div class="panel"><div class="panelhead"><h2>اسأل عن مشاريعك</h2><span class="pill">بحث محلي</span></div><div class="assistant"><div class="field"><label>ماذا تريد أن تعرف أو تطور؟</label><textarea id="question" placeholder="مثال: ما المشاريع التسويقية الموجودة؟ وأي فكرة تحتاج متابعة؟" rows="5"></textarea></div><button class="pbtn" id="askBtn">تحليل سجلاتي</button><div id="localAnswer" class="answer hidden"></div><div class="actions"><button class="subbtn hidden" id="copyPrompt">نسخ السياق لـ ChatGPT</button><a class="subbtn" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">فتح ChatGPT ↗</a></div></div></div><div class="panel"><h2>ما الذي يفعله حاليًا؟</h2><div class="items" style="margin-top:15px"><div class="item"><span class="ic">⌕</span><span class="body"><b>بحث داخل معرفتك</b><small>العناوين والوصف والوسوم</small></span></div><div class="item"><span class="ic">▤</span><span class="body"><b>تجهيز سياق قابل للنسخ</b><small>لإرساله إلى ChatGPT وتحليله</small></span></div><div class="item"><span class="ic">⚑</span><span class="body"><b>لا ينفذ إجراءات خارجية</b><small>لا يراسل العملاء ولا يغير الملفات</small></span></div></div><p class="note" style="margin-top:18px">الذكاء الاصطناعي الحي وتنفيذ المهام يتطلبان خادمًا آمنًا وربطًا مصرحًا، ولم يتم تفعيلهما في هذه النسخة.</p></div></div>';}
 function settings(){return header('إعدادات الخزنة','الخصوصية، نقل البيانات بين الأجهزة، والنسخ الاحتياطي.')+
-'<section class="panel" style="margin:12px 0 20px"><div class="panelhead"><h2>الدخول بحساب Google وربط السجل الخاص</h2><span class="pill">OAuth — قيد الإعداد</span></div><p class="note">لبدء الدخول والمزامنة يحتاج هذا الموقع Client ID من Google Cloud مع إضافة https://sahabagency.github.io إلى Authorized JavaScript origins. لا تضع Client Secret هنا. بعد إعداده يمكن توثيق الحساب وإضافة سجلات السجل المركزي وأحدث 100 ملف من Drive إلى خزنتك الخاصة على هذا الجهاز. الدخول بالموقع نفسه يبقى بكلمة مرور الخزنة حتى يتوفر خادم هوية آمن.</p><div class="field"><label>Google OAuth Client ID (ليس سرًا)</label><input id="googleClientId" placeholder="000000000-xxxxxxxx.apps.googleusercontent.com"></div><div class="actions"><button class="subbtn" id="saveGoogleClient">حفظ معرف Google</button><button class="pbtn" id="connectGoogle">ربط حساب Google</button><button class="subbtn" id="syncGoogle">تحديث العملاء والملفات</button></div><p id="googleStatus" class="note">'+(googleEmail?'متصل: '+escape(googleEmail):'غير متصل بهذه الجلسة')+(db.lastGoogleSync?' · آخر مزامنة: '+escape(fmt(db.lastGoogleSync.at)):'')+'</p><a target="_blank" rel="noopener noreferrer" class="textlink" href="https://console.cloud.google.com/auth/clients">فتح إعداد عميل Google OAuth ↗</a></section>'+'<div class="split"><div class="panel"><h2>بياناتك وخصوصيتك</h2><p class="note">كل السجلات محفوظة في localStorage مشفرة باستخدام AES-GCM بمفتاح مشتق من كلمة مرورك. إذا مسحت بيانات المتصفح ستحتاج نسخة احتياطية.</p><div class="stack" style="margin-top:16px"><button class="item" id="exportSettings"><span class="ic">↓</span><span class="body"><b>تصدير نسخة مشفرة</b><small>احتفظ بها في مكان آمن أو انقلها إلى جهاز آخر</small></span></button><button class="item" id="importSettings"><span class="ic">↑</span><span class="body"><b>استيراد سجلات أو نسخة مشفرة</b><small>يُدمج ملف البداية أو تُستعاد نسخة الاحتياط</small></span></button><button class="item" id="lockSettings"><span class="ic">◎</span><span class="body"><b>قفل الواجهة</b><small>دون حذف البيانات من الجهاز</small></span></button></div></div><div class="panel"><h2>خارطة التكامل</h2><div class="items" style="margin-top:14px"><div class="item"><span class="ic">✓</span><span class="body"><b>المشاريع والأفكار والمهام</b><small>إضافة وتعديل وحذف مشفر على الجهاز</small></span>'+labelStatus('live')+'</div><div class="item"><span class="ic">◉</span><span class="body"><b>Gmail وGoogle Drive وGitHub</b><small>روابط وفهرسة مستوردة، دون مزامنة مباشرة</small></span>'+labelStatus('wait')+'</div><div class="item"><span class="ic">✦</span><span class="body"><b>مساعد الذكاء الاصطناعي المنفّذ</b><small>يتطلب خادمًا ومفاتيح وصول آمنة</small></span>'+labelStatus('wait')+'</div><div class="item"><span class="ic">♧</span><span class="body"><b>إشعارات الأجهزة</b><small>تتطلب خلفية خادمية وموافقة الإشعارات</small></span>'+labelStatus('wait')+'</div></div></div></div>';}
+'<section class="panel" style="margin:12px 0 20px"><div class="panelhead"><h2>الدخول بحساب Google وربط السجل الخاص</h2><span class="pill">OAuth — قيد الإعداد</span></div><p class="note">لبدء الدخول والمزامنة يحتاج هذا الموقع Client ID من Google Cloud مع إضافة https://sahabagency.github.io إلى Authorized JavaScript origins. لا تضع Client Secret هنا. بعد إعداده يمكن توثيق الحساب ومزامنة سجل Google Sheets قراءةً وإضافةً والاطلاع على أحدث ملفات Drive. سيطلب Google أذونات ذلك صراحةً. الدخول بالموقع نفسه يبقى بكلمة مرور الخزنة حتى يتوفر خادم هوية آمن.</p><div class="field"><label>Google OAuth Client ID (ليس سرًا)</label><input id="googleClientId" placeholder="000000000-xxxxxxxx.apps.googleusercontent.com"></div><div class="actions"><button class="subbtn" id="saveGoogleClient">حفظ معرف Google</button><button class="pbtn" id="connectGoogle">ربط حساب Google</button><button class="subbtn" id="syncGoogle">تحديث العملاء والملفات</button></div><p id="googleStatus" class="note">'+(googleEmail?'متصل: '+escape(googleEmail):'غير متصل بهذه الجلسة')+(db.lastGoogleSync?' · آخر مزامنة: '+escape(fmt(db.lastGoogleSync.at)):'')+'</p><a target="_blank" rel="noopener noreferrer" class="textlink" href="https://console.cloud.google.com/auth/clients">فتح إعداد عميل Google OAuth ↗</a></section>'+'<div class="split"><div class="panel"><h2>بياناتك وخصوصيتك</h2><p class="note">كل السجلات محفوظة في localStorage مشفرة باستخدام AES-GCM بمفتاح مشتق من كلمة مرورك. إذا مسحت بيانات المتصفح ستحتاج نسخة احتياطية.</p><div class="stack" style="margin-top:16px"><button class="item" id="exportSettings"><span class="ic">↓</span><span class="body"><b>تصدير نسخة مشفرة</b><small>احتفظ بها في مكان آمن أو انقلها إلى جهاز آخر</small></span></button><button class="item" id="importSettings"><span class="ic">↑</span><span class="body"><b>استيراد سجلات أو نسخة مشفرة</b><small>يُدمج ملف البداية أو تُستعاد نسخة الاحتياط</small></span></button><button class="item" id="lockSettings"><span class="ic">◎</span><span class="body"><b>قفل الواجهة</b><small>دون حذف البيانات من الجهاز</small></span></button></div></div><div class="panel"><h2>خارطة التكامل</h2><div class="items" style="margin-top:14px"><div class="item"><span class="ic">✓</span><span class="body"><b>المشاريع والأفكار والمهام</b><small>إضافة وتعديل وحذف مشفر على الجهاز</small></span>'+labelStatus('live')+'</div><div class="item"><span class="ic">◉</span><span class="body"><b>Gmail وGoogle Drive وGitHub</b><small>روابط وفهرسة مستوردة، دون مزامنة مباشرة</small></span>'+labelStatus('wait')+'</div><div class="item"><span class="ic">✦</span><span class="body"><b>مساعد الذكاء الاصطناعي المنفّذ</b><small>يتطلب خادمًا ومفاتيح وصول آمنة</small></span>'+labelStatus('wait')+'</div><div class="item"><span class="ic">♧</span><span class="body"><b>إشعارات الأجهزة</b><small>تتطلب خلفية خادمية وموافقة الإشعارات</small></span>'+labelStatus('wait')+'</div></div></div></div>';}
 function draw(){document.title='سحاب · '+(NAV.find(x=>x[0]===page)||['','','مركز القيادة'])[2];$('nav').innerHTML=NAV.map(x=>'<button type="button" data-jump="'+x[0]+'" class="'+(page===x[0]?'active':'')+'"><em>'+x[1]+'</em>'+x[2]+'</button>').join('');$('topdate').textContent=new Date().toLocaleDateString('ar-SA',{weekday:'long',year:'numeric',month:'long',day:'numeric'});$('view').innerHTML=page==='home'?home():page==='assistant'?assistant():page==='settings'?settings():page==='notifications'?insights():page==='agents'?agents():page==='brain'?brain():page==='drive'?drivePage():page==='signal'?market():listing(page);if($('scopeFilter'))$('scopeFilter').value=scopeFilter;if($('statusFilter'))$('statusFilter').value=statusFilter;if($('googleClientId'))$('googleClientId').value=localStorage.getItem(GOOGLE_ID_KEY)||'';}
 function editor(id,type){const x=id?db.records.find(v=>v.id===id):null;$('entryForm').reset();$('entryId').value=x?x.id:'';$('entryType').value=x?x.type:type||'idea';$('entryScope').value=x?x.scope:'agency';$('entryTitle').value=x?x.title:'';$('entryStatus').value=x?x.status:'idea';$('entryPriority').value=x?x.priority:'normal';$('entryUrl').value=x?x.url:'';$('entryDue').value=x?x.due:'';$('entryTags').value=x?(x.tags||[]).join('، '):'';$('entryDesc').value=x?x.desc:'';$('deleteEntry').classList.toggle('hidden',!x);$('modalTitle').textContent=x?'تعديل السجل':'إضافة سجل جديد';$('modal').classList.remove('hidden');setTimeout(()=>$('entryTitle').focus(),80);}
 async function exportVault(){const data=localStorage.getItem(KEY);if(!data)return toast('لا توجد بيانات للتصدير');const blob=new Blob([data],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sahab-command-center-encrypted-'+today()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('تم تجهيز نسخة مشفرة');}
@@ -264,7 +298,7 @@ async function unlock(){const p=$('pass').value,e=$('lockError');e.classList.add
 $('unlockBtn').addEventListener('click',unlock);$('pass').addEventListener('keydown',e=>{if(e.key==='Enter')unlock()});if(localStorage.getItem(KEY))$('lockLabel').textContent='كلمة مرور الخزنة';
 $('menuBtn').onclick=()=>{$('side').classList.toggle('open');$('overlay').classList.toggle('open')};$('overlay').onclick=()=>{$('side').classList.remove('open');$('overlay').classList.remove('open')};
 $('addBtn').onclick=()=>editor(null,page in TYPES?page:'idea');$('cancelModal').onclick=()=>$('modal').classList.add('hidden');
-$('entryForm').addEventListener('submit',async e=>{e.preventDefault();const id=$('entryId').value,title=$('entryTitle').value.trim();if(!title)return;const input={type:$('entryType').value,scope:$('entryScope').value,title,status:$('entryStatus').value,priority:$('entryPriority').value,url:urlOK($('entryUrl').value),due:$('entryDue').value,desc:$('entryDesc').value.trim(),tags:$('entryTags').value.split(/[,،]/).map(s=>s.trim()).filter(Boolean).slice(0,12),updated:new Date().toISOString()};if(id){const pos=db.records.findIndex(x=>x.id===id);if(pos>=0)db.records[pos]=Object.assign({},db.records[pos],input);}else {const newItem=makeRecord(input);db.records.unshift(newItem);if(['project','idea'].includes(input.type))makeAgentPlan(newItem);}await save();$('modal').classList.add('hidden');draw();toast('تم حفظ السجل');});
+$('entryForm').addEventListener('submit',async e=>{e.preventDefault();const id=$('entryId').value,title=$('entryTitle').value.trim();if(!title)return;const input={type:$('entryType').value,scope:$('entryScope').value,title,status:$('entryStatus').value,priority:$('entryPriority').value,url:urlOK($('entryUrl').value),due:$('entryDue').value,desc:$('entryDesc').value.trim(),tags:$('entryTags').value.split(/[,،]/).map(s=>s.trim()).filter(Boolean).slice(0,12),updated:new Date().toISOString()};if(id){const pos=db.records.findIndex(x=>x.id===id);if(pos>=0)db.records[pos]=Object.assign({},db.records[pos],input);}else {const newItem=makeRecord({...input,pendingSync:true});db.records.unshift(newItem);if(['project','idea'].includes(input.type))makeAgentPlan(newItem);}await save();$('modal').classList.add('hidden');draw();toast('تم حفظ السجل محليًا');if(googleToken){try{const n=await pushPendingOnEdit();if(n)toast('تم رفع '+n+' سجل إلى Google Sheets')}catch(err){toast('حُفظ محليًا — تعذرت المزامنة')}}});
 $('deleteEntry').onclick=async()=>{const id=$('entryId').value;if(!confirm('حذف السجل نهائيًا من خزنتك؟'))return;db.records=db.records.filter(x=>x.id!==id);await save();$('modal').classList.add('hidden');draw();toast('تم حذف السجل')};
 $('exportBtn').onclick=exportVault;$('importBtn').onclick=()=>$('fileInput').click();$('fileInput').onchange=async e=>{if(!e.target.files[0])return;try{await importVault(e.target.files[0]);}catch(err){alert('تعذر الاستيراد: '+err.message)}e.target.value='';};
 document.addEventListener('click',e=>{let n=e.target.closest('[data-jump]');if(n){view(n.dataset.jump);return;}n=e.target.closest('[data-edit]');if(n){editor(n.dataset.edit);return;}n=e.target.closest('[data-new]');if(n){editor(null,n.dataset.new);return;}if(e.target.id==='driveSearch')searchDrive().catch(err=>alert('تعذر البحث: '+err.message));
