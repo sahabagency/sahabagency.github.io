@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#151b2d">
+<title>Barber Guard — دراسة وإطلاق تركيا | سحاب</title>
+<meta name="description" content="لوحة شراكة عملية لإطلاق حامل أمشاط الحلاقة للساعد في إسطنبول: قرار الاستثمار، التوريد، التسويق، الحلاقون المستهدفون والربحية.">
+<style>
+:root{--ink:#1a2440;--muted:#6a748b;--line:#e6eaf1;--bg:#f5f7fb;--nav:#121a2d;--blue:#235bda;--bluelt:#eaf0ff;--green:#0b815d;--red:#b93b38;--amber:#a56a16;--radius:18px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,"Segoe UI",Arial,sans-serif;font-size:14px;line-height:1.9}
+button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:var(--blue)}a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:100vh}
+aside{background:var(--nav);color:white;padding:28px 18px;position:sticky;top:0;height:100vh;overflow-y:auto}
+.logo{display:flex;align-items:center;gap:11px;font-weight:bold;font-size:19px;margin-bottom:5px}
+.logo-mark{display:grid;place-items:center;background:#fff;color:#182f80;width:37px;height:37px;border-radius:12px;font-size:24px}
+.subbrand{color:#a5b1c9;font-size:11px;margin-right:48px}
+.sidelabel{font-size:10px;letter-spacing:1px;color:#8d9ab8;margin:33px 8px 9px;font-weight:bold}
+nav button{border:0;display:block;width:100%;padding:10px 13px;margin:2px 0;text-align:right;color:#c5cfe1;background:transparent;border-radius:10px}
+nav button:hover,nav button.active{background:#253555;color:white}
+nav button span{display:inline-block;margin-left:9px;opacity:.8}
+.asidefoot{border-top:1px solid #38435c;margin-top:22px;padding:18px 8px 2px;color:#9cabc6;font-size:11px}
+main{min-width:0;padding:36px clamp(14px,3.4vw,56px) 70px;max-width:1450px;width:100%;margin:auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:25px}
+.eyebrow{font-size:12px;font-weight:bold;color:#667b9e;letter-spacing:.5px}
+.topmeta{color:#718099;font-size:12px}
+h1{font-size:clamp(27px,4vw,46px);line-height:1.35;margin:8px 0 12px;letter-spacing:-.8px}
+h2{font-size:24px;line-height:1.5;margin:0 0 10px}
+h3{font-size:16px;margin:0 0 10px}
+p{margin:0 0 12px}.muted{color:var(--muted)}.small{font-size:12px}.tiny{font-size:11px}
+.hero{padding:clamp(22px,3vw,38px);color:white;background:linear-gradient(120deg,#182647,#284d97 72%,#335cb0);border-radius:25px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;left:-60px;top:-110px;width:340px;height:340px;border:1px solid #ffffff26;border-radius:50%;box-shadow:0 0 0 70px #ffffff06,0 0 0 150px #ffffff04;pointer-events:none}
+.hero p{color:#dce6fa;max-width:700px}.hero .eyebrow{color:#b9d6ff}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}.btn{border:1px solid var(--line);border-radius:11px;background:white;color:var(--ink);padding:9px 15px;display:inline-flex;gap:8px;align-items:center;text-decoration:none;font-weight:bold;font-size:12px}.btn:hover{background:#f3f6fd;text-decoration:none}
+.btn.primary{background:var(--blue);color:white;border-color:var(--blue)}.btn.primary:hover{background:#194ac0}.btn.ghost{background:#ffffff13;color:white;border-color:#ffffff50}
+.section{display:none;animation:appear .22s ease}.section.active{display:block}@keyframes appear{from{opacity:.2;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+.section-header{margin-bottom:22px}.section-header p{max-width:870px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:15px}
+.span3{grid-column:span 3}.span4{grid-column:span 4}.span5{grid-column:span 5}.span6{grid-column:span 6}.span7{grid-column:span 7}.span8{grid-column:span 8}.span12{grid-column:span 12}
+.panel{background:white;border:1px solid var(--line);border-radius:var(--radius);padding:22px;min-width:0;box-shadow:0 2px 9px #10205005}
+.metric{font-size:32px;font-weight:bold;line-height:1.3;letter-spacing:-1.3px}.metriclabel{font-size:12px;color:var(--muted)}.tag{display:inline-flex;align-items:center;font-size:11px;border-radius:99px;padding:3px 10px;font-weight:bold;background:#eff3fa;color:#667696}
+.tag.green{background:#e2f5ee;color:var(--green)}.tag.orange{background:#fff3dd;color:var(--amber)}.tag.red{background:#fff0ee;color:var(--red)}.tag.blue{background:var(--bluelt);color:var(--blue)}
+.divider{border-top:1px solid var(--line);margin:18px 0}.stack{display:grid;gap:14px}.row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+ul.clean{list-style:none;padding:0;margin:0}ul.clean li{position:relative;padding-right:24px;margin:7px 0}ul.clean li:before{content:"✓";position:absolute;right:0;color:var(--green);font-weight:bold}
+.evidence{border-right:3px solid #467de6;background:#f1f5fe;border-radius:8px;padding:12px 16px;color:#49617f}
+.warning{border-right:3px solid #e3a23d;background:#fff9eb;border-radius:8px;padding:12px 16px;color:#806037}
+.danger{border-right:3px solid #d35d56;background:#fff4f3;border-radius:8px;padding:12px 16px;color:#9d4140}
+.info{border:1px solid var(--line);border-radius:13px;padding:14px}.info strong{display:block;font-size:13px}.info small{display:block;color:var(--muted)}
+.check{display:flex;align-items:flex-start;gap:11px;padding:13px 0;border-bottom:1px solid var(--line)}
+.check input{appearance:none;width:20px;height:20px;border:1.5px solid #abb8d1;border-radius:6px;flex-shrink:0;margin:4px 0 0;background:white}
+.check input:checked{background:var(--blue);border-color:var(--blue)}.check input:checked:before{content:"✓";color:white;display:block;text-align:center;font-size:14px;line-height:18px}
+.check strong{display:block;line-height:1.6}.check small{display:block;color:var(--muted);line-height:1.6}.check:last-child{border-bottom:0}
+.progress{height:9px;background:#e8eef7;border-radius:99px;overflow:hidden}.progress>div{height:100%;width:0;background:var(--green);border-radius:99px;transition:width .3s}
+.pilltabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:17px}.pilltabs button{border:1px solid var(--line);background:white;border-radius:99px;padding:6px 14px;color:#50617e;font-weight:bold;font-size:12px}.pilltabs button.active{background:#233e77;color:white;border-color:#233e77}
+.period{display:none}.period.active{display:block}
+.input,.select,textarea{width:100%;background:#fff;border:1px solid #d7dfeb;padding:10px 12px;border-radius:10px;outline:0;color:var(--ink)}.input:focus,.select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px #235bda18}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+label.field{display:block;color:#56627b;font-size:12px;font-weight:bold;margin-bottom:6px}input[type=number]{direction:ltr;text-align:left}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+.scenarios{display:flex;gap:9px;flex-wrap:wrap}.scenario{padding:15px 18px;border-radius:12px;background:#f0f4fa;flex:1;min-width:150px}.scenario b{font-size:23px;display:block;line-height:1.7}
+.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:13px;background:white}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:12px}th{background:#f1f5fb;color:#596985;font-weight:bold;text-align:right;padding:13px 14px;white-space:nowrap}td{padding:12px 14px;border-top:1px solid #edf0f5;vertical-align:middle}tr:hover td{background:#f9fbfd}
+.stats{display:flex;gap:10px;flex-wrap:wrap}.stats>span{padding:7px 11px;background:#ecf1f9;color:#54708e;border-radius:7px;font-size:12px}
+.script{border:1px solid var(--line);background:#f8faff;border-radius:12px;padding:16px;margin:11px 0}.script .tr{font-size:14px;direction:ltr;text-align:left;line-height:1.8;color:#263d63}
+.leadfilters{display:grid;grid-template-columns:2fr 1fr 1fr;gap:9px;margin:13px 0}
+details{border:1px solid var(--line);background:white;padding:15px 17px;border-radius:12px;margin:8px 0}summary{cursor:pointer;font-weight:bold}details p{margin:9px 0 0;color:var(--muted)}
+.footer{margin-top:45px;padding-top:16px;border-top:1px solid var(--line);color:#8390a6;font-size:11px}
+.links a{display:block;margin:4px 0;overflow-wrap:anywhere}
+@media(max-width:960px){.shell{grid-template-columns:1fr}aside{position:sticky;top:0;z-index:10;height:auto;overflow:auto;padding:12px 14px;box-shadow:0 3px 12px #0c203526}.sidelabel,.asidefoot,.subbrand{display:none}.logo{font-size:15px;margin-bottom:7px}.logo-mark{width:27px;height:27px;border-radius:8px;font-size:19px}nav{display:flex;overflow:auto;gap:4px;scrollbar-width:none}nav button{white-space:nowrap;width:auto;font-size:11px;padding:6px 10px}nav button span{display:none}main{padding:16px 13px 50px}.span3{grid-column:span 6}.span4,.span5,.span6,.span7,.span8{grid-column:span 12}.hero{border-radius:17px}.leadfilters{grid-template-columns:1fr 1fr}.leadfilters input{grid-column:span 2}}
+@media(max-width:540px){.span3{grid-column:span 6}.metric{font-size:25px}.panel{padding:16px}.formgrid,.twocol{grid-template-columns:1fr}.topbar{align-items:flex-start}.topmeta{max-width:120px;text-align:left}.stats>span{font-size:11px}}
+@media print{aside,.actions,.btn,button,.leadfilters{display:none!important}.shell{display:block}main{max-width:none;padding:0}.section{display:block!important;page-break-before:always}.hero{color:#182647;background:#fff;border:1px solid #ddd}.hero p{color:#333}.panel{box-shadow:none}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside>
+  <div class="logo"><span class="logo-mark">س</span> SAHAB / PROJECT</div>
+  <div class="subbrand">لوحة دراسة ومناقشة الشركاء</div>
+  <div class="sidelabel">ملف المشروع</div>
+  <nav id="nav">
+    <button data-go="overview" class="active"><span>◈</span> الملخص والقرار</button>
+    <button data-go="product"><span>▣</span> المنتج والمورّدون</button>
+    <button data-go="roadmap"><span>✓</span> خطوات التنفيذ</button>
+    <button data-go="marketing"><span>◉</span> التسويق والمبيعات</button>
+    <button data-go="leads"><span>♧</span> الحلاقون المستهدفون</button>
+    <button data-go="finance"><span>≋</span> حاسبة الربحية</button>
+    <button data-go="partners"><span>◎</span> محضر الشركاء</button>
+    <button data-go="sources"><span>↗</span> المصادر والمخاطر</button>
+  </nav>
+  <div class="asidefoot">نسخة شراكة / 17 نوفمبر 2026<br>لا توجد مبيعات أو مورّد معتمد حتى الآن.</div>
+</aside>
+<main>
+  <div class="topbar"><div class="eyebrow">SAHAB BUSINESS LAB <span style="color:#9faac0">/</span> ISTANBUL 2026</div><div class="topmeta">آخر إعداد: 17 نوفمبر 2026</div></div>
+  <section id="overview" class="section active">
+    <div class="hero">
+      <div class="eyebrow">PROJECT FEASIBILITY · PARTNER REVIEW</div>
+      <h1>منتج بسيط. سوق متخصص.<br>اختبار قبل الاستيراد.</h1>
+      <p>خطة تشغيلية لطرح حامل أمشاط ماكينة الحلاقة للساعد في تركيا. من اختبار المنتج مع الحلاقين، إلى التوريد والتسعير والإعلانات والمتجر وقاعدة العملاء المحتملين.</p>
+      <div class="actions"><button class="btn primary" data-go="roadmap">ابدأ بخطة التنفيذ ←</button><button class="btn ghost" data-go="partners">افتح نقاش الشركاء</button></div>
+    </div>
+    <div class="grid" style="margin-top:16px">
+      <div class="panel span3"><div class="metric">10,493</div><div class="metriclabel">محل حلاقة رجالية في إسطنبول، وفق تصريح منشور</div></div>
+      <div class="panel span3"><div class="metric" id="statLeads">72</div><div class="metriclabel">سجل محل في ملف البداية</div></div>
+      <div class="panel span3"><div class="metric" id="statPhones">42</div><div class="metriclabel">أرقام عمل عامة منشورة</div></div>
+      <div class="panel span3"><div class="metric">1,299 ₺</div><div class="metriclabel">سعر بيع مقترح للاختبار، غير معتمد</div></div>
+      <div class="panel span7">
+       <h2>التوصية الحالية</h2><span class="tag orange">مرحلة ما قبل إثبات الطلب</span>
+       <p style="margin-top:14px">أطلق منتجًا واحدًا باسم تجاري بسيط وصفحة إنستغرام ومتجر تركي خفيف. لا تستورد كمية كبيرة الآن. نحتاج ثلاثة أدلة: المنتج يعمل مع أمشاط الحلاقين، الحلاق مستعد للدفع، والتكلفة الواصلة تسمح بهامش بعد الإعلان والشحن.</p>
+       <div class="divider"></div>
+       <div class="row"><div><strong>ما الذي نختبره؟</strong><div class="muted small">20 مقابلة ميدانية • 10 تجارب فعلية • طلبات شراء / عربون موثق</div></div><span class="tag green">اختبار منخفض التكلفة</span></div>
+      </div>
+      <div class="panel span5">
+       <h3>ما الذي لم يثبت بعد؟</h3>
+       <ul class="clean"><li>سعر جملة مطابق من Alibaba</li><li>توافق جميع مقاسات الأمشاط</li><li>قابلية بيع 1,299 ليرة في السوق</li><li>قانونية تصنيع نسخة مشابهة للمنتج</li><li>حصول العملاء المحتملين على إذن واتساب</li></ul>
+       <div class="danger small">قائمة الحلاقين = أعمال منشورة لأغراض البحث والمبيعات اليدوية؛ ليست قائمة موافقات واتساب.</div>
+      </div>
+      <div class="panel span12">
+       <div class="row"><div><h3>ما يجب حسمه في أول اجتماع</h3><p class="muted">أربعة قرارات تحمي رأس المال وتحدد المسؤوليات.</p></div><button class="btn" data-go="partners">دوّن القرار</button></div>
+       <div class="grid">
+        <div class="span3 info"><strong>1. سقف الاختبار</strong><small>12,000–16,000 ليرة كميزانية مبدئية، قبل التكاليف الرسمية الإضافية</small></div>
+        <div class="span3 info"><strong>2. جهة التوريد</strong><small>عينات من الأصل / تصميم مستقل محلي، دون نسخ محمي</small></div>
+        <div class="span3 info"><strong>3. البيع</strong><small>تجربة سعر 1,299 ليرة؛ قرار نهائي بعد مقابلات الحلاقين</small></div>
+        <div class="span3 info"><strong>4. توزيع العمل</strong><small>شريك للتوريد والجودة، شريك للتسويق والميدان، مسؤوليات محددة</small></div>
+       </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="product" class="section">
+   <div class="section-header"><div class="eyebrow">01 / PRODUCT & SOURCING</div><h2>المنتج والمورّدون</h2><p>حامل يُربط بالساعد ويتيح إبقاء أمشاط ماكينة القص المتدرجة قريبة من يد الحلاق. القيمة هي تنظيم الأدوات وتقليل حركة الرجوع للطاولة؛ لم يتم قياس الوقت الموفّر.</p></div>
+   <div class="grid">
+    <div class="panel span6"><h3>المنتج المقبول</h3><ul class="clean"><li>حزام ثابت وقابل للتعديل ومريح أثناء القص</li><li>تثبيت آمن للأمشاط دون سقوط في الحركة</li><li>توافق واضح مع أحجام وموديلات محددة</li><li>سهل التنظيف ومقاوم للاستخدام المتكرر</li><li>حواف غير حادة وقابلية تعبئة بسيطة للشحن</li></ul></div>
+    <div class="panel span6"><h3>خيارات التوريد</h3>
+      <div class="info"><strong>أصل جاهز / توزيع</strong><small><a target="_blank" rel="noopener" href="https://buysnaplok.com/products/snaplok-guard-holder">SnapLok</a> — سعر تجزئة معلن 40$ في الدراسة السابقة، وليس سعر مصنع.</small></div>
+      <div class="info" style="margin-top:9px"><strong>Retainit XL</strong><small><a target="_blank" rel="noopener" href="https://retainit.au/products/retainit-xl">مقارنة وظيفية</a> — سعر تجزئة 69.95 دولار أسترالي في الدراسة السابقة.</small></div>
+      <div class="info" style="margin-top:9px"><strong>مصنع / تصنيع محلي</strong><small>نطلب تصميمًا مستقلًا وعينات وحقوق التصنيع؛ لم يُعتمد مورد بعد.</small></div>
+    </div>
+    <div class="panel span8"><h3>طلب عرض السعر — أرسله إلى 5 موردين</h3>
+      <div class="script"><div class="tr" id="supplierMessage">Hello, we are evaluating a wearable forearm clipper guard holder for the Turkish barber market. Do you have a legally manufactured product of this functional type? Please quote samples and 100 / 300 / 500 / 1,000 units; MOQ; EXW, FOB and DDP (if available); production lead time; unit weight; carton dimensions; materials; compatible guard models; HS code suggestion; and IP ownership / authorization. Please attach real product photos and usage videos. Delivery destination: Istanbul, Türkiye.</div><button class="btn" data-copy="supplierMessage">نسخ الرسالة</button></div>
+      <div class="warning small">أسعار منتجات أخرى على Alibaba ليست سعرًا مطابقًا لهذا المنتج. لا نعتمد تكلفة الاستيراد قبل عرض مصنع رسمي واحتساب GTİP والشحن والتخليص وKDV.</div>
+    </div>
+    <div class="panel span4"><h3>روابط البداية</h3><div class="links"><a target="_blank" href="https://www.alibaba.com/trade/search?SearchText=forearm+clipper+guard+holder">بحث Alibaba – حامل أمشاط الساعد</a><a target="_blank" href="https://www.alibaba.com/trade/search?SearchText=magnetic+barber+clipper+guards+holder">بحث Alibaba – حامل مغناطيسي</a><a target="_blank" href="https://www.3dhizmetler.com/3d-baski-hizmeti">ورشة طباعة تركية – 3D Hizmetler</a></div></div>
+    <div class="panel span12"><h3>قائمة فحص العينة</h3><div class="grid">
+      <div class="span4 info"><strong>الثبات</strong><small>10 عمليات تبديل لكل رقم مشط، 3 حلاقين، دون سقوط أو اهتزاز زائد</small></div>
+      <div class="span4 info"><strong>التوافق</strong><small>Wahl / Moser / غيرها حسب الموجود لدى المشاركين، سجل نتائج كل مشط</small></div>
+      <div class="span4 info"><strong>الراحة</strong><small>استعمال خلال جلسة حلاقة فعلية، قياس الراحة وسرعة الوصول والعرقلة</small></div>
+    </div></div>
+   </div>
+  </section>
+
+  <section id="roadmap" class="section">
+   <div class="section-header"><div class="eyebrow">02 / EXECUTION</div><h2>خطوات عملية — أول 30 يومًا</h2><p>قائمة تنفيذ قابلة للتأشير. إنجاز الخطوات يُحفظ داخل هذا المتصفح فقط؛ لتوحيد عمل الشريكين انقلوا تحديثاتكم في محضر الاجتماع أو ملف CRM مشترك.</p></div>
+   <div class="panel">
+     <div class="row"><strong>مستوى الإنجاز على هذا الجهاز</strong><strong id="progressLabel">0 / 0</strong></div><div class="progress" style="margin:10px 0 20px"><div id="progressFill"></div></div>
+     <div class="pilltabs"><button class="active" data-week="1">الأسبوع 1 · تحقق</button><button data-week="2">الأسبوع 2 · تجربة</button><button data-week="3">الأسبوع 3 · إطلاق</button><button data-week="4">الأسبوع 4 · قرار</button></div>
+     <div class="period active" id="week1">
+       <h3>الأسبوع الأول — المورّدون والمقابلات</h3>
+       <label class="check"><input data-task="source5" type="checkbox"><span><strong>التواصل مع 5 مورّدين/ورش</strong><small>عروض عينات + 100/300/500 وحدة + وثائق الحقوق ومواصفات الشحن</small></span></label>
+       <label class="check"><input data-task="buySample" type="checkbox"><span><strong>الحصول على 1–3 عينات للمقارنة</strong><small>لا تعتمد الصور وحدها؛ افحص الحزام والمواد والتثبيت</small></span></label>
+       <label class="check"><input data-task="select20" type="checkbox"><span><strong>اختيار 20 محلًا من قاعدة البيانات</strong><small>ابدأ ببيليك دوزو وأفجلار للزيارة المباشرة؛ سجّل موعد كل محل</small></span></label>
+       <label class="check"><input data-task="interview5" type="checkbox"><span><strong>إجراء أول 5 مقابلات</strong><small>أسئلة عن الماكينة، الأمشاط، الألم، والسعر المقبول، دون بيع قسري</small></span></label>
+     </div>
+     <div class="period" id="week2">
+       <h3>الأسبوع الثاني — اختبار المنتج الحقيقي</h3>
+       <label class="check"><input data-task="demo10" type="checkbox"><span><strong>10 تجارب فعلية عند الحلاقين</strong><small>سجّل: الماكينة، المشط، الوقت، الراحة، الاعتراضات، الاستعداد للدفع</small></span></label>
+       <label class="check"><input data-task="videos3" type="checkbox"><span><strong>تصوير 3 فيديوهات استخدام أصلية</strong><small>بموافقة الحلاق وحقوق استخدام إعلاني واضحة</small></span></label>
+       <label class="check"><input data-task="prices" type="checkbox"><span><strong>اختبار 999 / 1,299 / 1,499 ₺</strong><small>سؤال مباشر عن قرار الشراء مع رصد طلب فعلي أو عربون</small></span></label>
+       <label class="check"><input data-task="landedCost" type="checkbox"><span><strong>حساب التكلفة الواصلة الواقعية</strong><small>عرض مورد + شحن + تخليص + ضرائب ومعالجة محاسبية</small></span></label>
+     </div>
+     <div class="period" id="week3">
+       <h3>الأسبوع الثالث — صفحة بيع وإعلانات</h3>
+       <label class="check"><input data-task="store" type="checkbox"><span><strong>تجهيز صفحة منتج واحدة باللغة التركية</strong><small>فيديو، صور أصلية، توافق واضح، سعر، ضمان، توصيل، سياسة استرجاع</small></span></label>
+       <label class="check"><input data-task="instagram" type="checkbox"><span><strong>إنشاء صفحة إنستغرام متخصصة</strong><small>6–9 منشورات قبل الإعلان، 3 فيديوهات استخدام، أسئلة متكررة</small></span></label>
+       <label class="check"><input data-task="meta" type="checkbox"><span><strong>إطلاق إعلانين تجريبيين على Meta</strong><small>Reels فيديو + Click-to-WhatsApp؛ الاستهداف جغرافي ومهني وفق خيارات الحساب</small></span></label>
+       <label class="check"><input data-task="tracking" type="checkbox"><span><strong>ضبط متابعة كل استفسار وطلب</strong><small>سجّل مصدر الإعلان، عدد المحادثات المؤهلة، البيع الفعلي، تكلفة الاكتساب</small></span></label>
+     </div>
+     <div class="period" id="week4">
+       <h3>الأسبوع الرابع — حساب النتيجة</h3>
+       <label class="check"><input data-task="orders" type="checkbox"><span><strong>توثيق الطلبات والمرتجعات والتوافق</strong><small>لا تحسب "مهتم" باعتباره مشترٍ</small></span></label>
+       <label class="check"><input data-task="wholesale" type="checkbox"><span><strong>تجربة 5 موزعين أدوات حلاقة</strong><small>طلب تجريبي 5–10 وحدات فقط إذا الهامش يسمح</small></span></label>
+       <label class="check"><input data-task="decision" type="checkbox"><span><strong>اجتماع GO / NO-GO</strong><small>قرر: شراء دفعة، تعديل المنتج، تعديل السعر، أو وقف المشروع</small></span></label>
+     </div>
+   </div>
+   <div class="grid" style="margin-top:15px">
+    <div class="panel span6"><h3>معيار GO المقترح</h3><ul class="clean"><li>10 تجارب عملية على الأقل؛ أعطال التثبيت محدودة</li><li>5 طلبات مدفوعة أو عربون موثّق من تجربة محدودة</li><li>تكلفة واصلة مستهدفة 350–400 ₺ للقطعة</li><li>هامش موجب بعد الشحن والعمولة وCAC الفعلي</li><li>وضوح حقوق التصنيع والتسجيل القانوني</li></ul><p class="muted small">هذه معايير إدارية مقترحة للاختبار وليست تقديرات طلب مبنية على إحصاءات مبيعات.</p></div>
+    <div class="panel span6"><h3>متى نوقف؟</h3><ul class="clean"><li>أكثر الحلاقين يجربون لكن لا يدفعون</li><li>سقوط الأمشاط أو عدم توافق مؤثر</li><li>تكلفة واصلة أو إعلانات تستهلك الهامش</li><li>مورد لا يثبت ملكية/حق تصنيع المنتج</li><li>مرتجعات مرتفعة أو شكاوى سلامة</li></ul></div>
+   </div>
+  </section>
+
+  <section id="marketing" class="section">
+   <div class="section-header"><div class="eyebrow">03 / SALES & MARKETING</div><h2>كيف نبيع للحلاقين؟</h2><p>البيع هنا B2B إلى حلاق أو صاحب محل. الفيديو العملي هو المحرك، ثم محادثة واردة وطلب وتجربة حقيقية، لا حملة واتساب عشوائية لعشرة آلاف رقم.</p></div>
+   <div class="grid">
+    <div class="panel span4"><span class="tag blue">قناة 1</span><h3 style="margin-top:9px">زيارة Demo مباشرة</h3><p>20 محلًا مختارًا، نموذج في يد الحلاق، تصوير بإذن، اعتراضات مكتوبة. هذه القناة تعطي أفضل فهم قبل إنفاق الإعلانات.</p><div class="info"><strong>مؤشر النجاح</strong><small>عدد تجارب المنتج ونسبة من طلب السعر أو اشترى بالفعل</small></div></div>
+    <div class="panel span4"><span class="tag blue">قناة 2</span><h3 style="margin-top:9px">Meta · Reels + WhatsApp</h3><p>فيديو 12–20 ثانية: المشكلة/التثبيت/التبديل/طلب التفاصيل. ابدأ بالجانب الأوروبي والغربي من إسطنبول.</p><div class="info"><strong>ميزانية اختبار</strong><small>1,500–2,000 ₺ أولًا، ثم اختبار نطاق 4,000–5,000 ₺ حسب المؤشرات</small></div></div>
+    <div class="panel span4"><span class="tag blue">قناة 3</span><h3 style="margin-top:9px">متاجر مستلزمات الحلاقة</h3><p>اعرض عينة على 5 متاجر. تفاوض على بيع 5–10 قطع، لكن احسب هامش الجملة قبل إعطاء خصم.</p><div class="info"><strong>مؤشر النجاح</strong><small>طلبات إعادة التوريد الفعلية من المتجر</small></div></div>
+    <div class="panel span7">
+     <h3>مسار العميل من الإعلان إلى الطلب</h3>
+     <div class="stack">
+      <div class="info"><strong>1. Reel موجّه</strong><small>يرى الحلاق تبديل المشط مباشرة على ساعد حلاق حقيقي</small></div>
+      <div class="info"><strong>2. محادثة واردة</strong><small>زر: “Uyumlu mu? WhatsApp'tan sor” — يسأل عن التوافق مع نوع الماكينة</small></div>
+      <div class="info"><strong>3. تأكيد التوافق</strong><small>نطلب الماركة/الموديل ثم نعرض السعر والفيديو وسياسة الإرجاع</small></div>
+      <div class="info"><strong>4. طلب من المتجر</strong><small>رابط طلب واضح، توصيل وفاتورة وحالة الطلب؛ يربط كل طلب بمصدره</small></div>
+     </div>
+    </div>
+    <div class="panel span5">
+     <h3>تجهيز المتجر وصفحة إنستغرام</h3><ul class="clean"><li>متجر تركي بمنتج واحد، ikas Start خيار أولي للمقارنة</li><li>عنوان واضح: Kola Takılan Tarak Tutucu</li><li>4 صور استخدام + فيديو + توافق الأمشاط</li><li>سعر شامل VAT وتوصيل/استرجاع واضحان</li><li>FAQ باللغة التركية دون ادعاءات غير مثبتة</li><li>إنستغرام: أول 9 منشورات، 3 Reels حقيقية</li><li>Meta Business Suite + Pixel إذا انطبق + متابعة UTM</li><li>متطلبات ETBİS والفاتورة والبيانات النظامية قبل البيع</li></ul>
+     <div class="warning small">لا تنشئ متجرًا فعليًا يقبل المدفوعات قبل تحديد الجهة القانونية البائعة وإكمال المتطلبات اللازمة.</div>
+    </div>
+    <div class="panel span12"><h3>نصوص تركية جاهزة</h3>
+      <div class="script"><div class="row"><strong>إعلان Reel — 15 ثانية</strong><span class="tag">TR</span></div><div class="tr" id="reelText">Tarak değiştirirken sürekli tezgâha mı dönüyorsun? Kola takılan tarak tutucu ile en sık kullandığın taraklar elinin altında! Hangi makineyle uyumlu olduğunu öğrenmek için mesaj at.</div><button class="btn" data-copy="reelText">نسخ الإعلان</button></div>
+      <div class="script"><div class="row"><strong>رد واتساب بعد أن يبدأ العميل التواصل أو يوافق</strong><span class="tag">TR</span></div><div class="tr" id="whatsText">Merhaba! İlginiz için teşekkürler. Kullandığınız makine ve tarak markasını paylaşır mısınız? Uyumluluğu kontrol edip kısa kullanım videosunu ve güncel satış koşullarını gönderelim.</div><button class="btn" data-copy="whatsText">نسخ الرد</button></div>
+      <div class="script"><div class="row"><strong>أسئلة زيارة الحلاق</strong><span class="tag">TR</span></div><div class="tr" id="demoText">Günde yaklaşık kaç saç kesimi yapıyorsunuz? En çok hangi numara tarakları kullanıyorsunuz? Çalışırken taraklara ulaşmak zor oluyor mu? Bu aparatı 2 dakika deneyebilir miyiz? Gerçekten faydalı bulursanız ne kadar ödemeyi düşünürsünüz?</div><button class="btn" data-copy="demoText">نسخ الأسئلة</button></div>
+    </div>
+    <div class="panel span12"><h3>واتساب وقاعدة البيانات: التنفيذ الصحيح</h3>
+     <div class="twocol">
+      <div><strong style="color:var(--green)">المسموح تشغيله الآن</strong><ul class="clean"><li>تصفية المحلات واختيار زيارات ومكالمات عمل مناسبة</li><li>إعلانات Click-to-WhatsApp ليبدأ العميل المحادثة</li><li>تسجيل إذن التسويق والاعتراض ومصدر الرقم</li><li>متابعة المهتمين الذين وافقوا على التواصل</li></ul></div>
+      <div><strong style="color:var(--red)">لا تفعله تلقائيًا</strong><ul class="clean"><li>سحب كل أرقام Google Maps وإرسال دفعات جماعية مباشرة</li><li>اعتبار الرقم المنشور إذنًا لرسائل واتساب</li><li>رفع أرقام مستخرجة كجمهور إعلاني دون أساس نظامي مناسب</li><li>تجاهل طلب “DUR” أو الاعتراض</li></ul></div>
+     </div><p class="muted small">القواعد التركية لبعض اتصالات الحرفيين تختلف عن شروط WhatsApp Business التي تتطلب opt-in؛ يجب التحقق من كل حالة مع مستشار محلي قبل حملة كبيرة.</p>
+    </div>
+   </div>
+  </section>
+
+  <section id="leads" class="section">
+   <div class="section-header"><div class="eyebrow">04 / ISTANBUL SALES CRM</div><h2>قاعدة الحلاقين المستهدفين</h2><p>عينة أولية من 72 نشاطًا في 9 مناطق. تتضمن بيانات العمل العامة المنشورة ومصدر كل سجل، وليست قائمة جميع الحلاقين في إسطنبول أو قائمة موافقات رسائل تسويقية.</p></div>
+   <div class="panel">
+    <div class="row"><div class="stats"><span id="totalCount">72 محلًا</span><span id="phoneCount">42 رقمًا منشورًا</span><span id="filteredCount">72 نتيجة</span></div><a class="btn primary" href="./leads.csv" download="istanbul-barbers-target-list.csv">↓ تحميل ملف الحلاقين CSV</a></div>
+    <div class="leadfilters"><input class="input" id="leadSearch" placeholder="ابحث بالاسم أو الحي أو العنوان..."><select class="select" id="districtFilter"><option value="">جميع المناطق</option></select><select class="select" id="priorityFilter"><option value="">كل الأولويات</option><option value="A">أولوية A</option><option value="B">أولوية B</option><option value="C">أولوية C</option></select></div>
+    <div class="warning small" style="margin-bottom:14px">الرقم المدرج رقم عمل منشور في مصدر عام، غير متحقق من صفة مالكه وصلاحيته للحملة. حالة واتساب لجميع السجلات: غير متحقق. لا تستعمل هذا الملف كقائمة إرسال جماعي آلي.</div>
+    <div class="tablewrap"><table><thead><tr><th>المحل</th><th>المنطقة</th><th>رقم العمل</th><th>الأولوية</th><th>المصدر / الخريطة</th><th>متابعة على هذا الجهاز</th></tr></thead><tbody id="leadRows"><tr><td colspan="6">جارٍ عرض البيانات…</td></tr></tbody></table></div>
+    <div style="margin-top:14px" class="row"><span class="muted tiny">للمشاركة التشغيلية بين الشركاء، استخدموا نسخة Excel في مساحة مشتركة؛ تعديلات الحالة هنا لا تتزامن بين الأجهزة.</span><button class="btn" id="exportStatuses">↓ تنزيل تحديثاتي CSV</button></div>
+   </div>
+  </section>
+
+  <section id="finance" class="section">
+   <div class="section-header"><div class="eyebrow">05 / UNIT ECONOMICS</div><h2>حاسبة الربحية — عدّل الأرقام مع شريكك</h2><p>المساهمة هي ما يبقى من سعر البيع الصافي بعد تكلفة القطعة والشحن والتغليف والمرتجعات ورسوم الدفع واكتساب العميل. ليست صافي أرباح الشركة أو توقع مبيعات.</p></div>
+   <div class="grid">
+    <div class="panel span5">
+     <div class="formgrid">
+      <div><label class="field">سعر البيع (₺، شامل KDV)</label><input id="price" class="input calc" type="number" value="1299" min="0"></div>
+      <div><label class="field">التكلفة الواصلة للقطعة (₺)</label><input id="unit" class="input calc" type="number" value="350" min="0"></div>
+      <div><label class="field">اكتساب عميل / إعلان (₺)</label><input id="cac" class="input calc" type="number" value="180" min="0"></div>
+      <div><label class="field">الشحن الداخلي (₺)</label><input id="ship" class="input calc" type="number" value="110" min="0"></div>
+      <div><label class="field">التغليف (₺)</label><input id="pack" class="input calc" type="number" value="20" min="0"></div>
+      <div><label class="field">احتياطي المرتجعات (₺)</label><input id="returns" class="input calc" type="number" value="35" min="0"></div>
+      <div><label class="field">رسوم الدفع المباشر (%)</label><input id="payFee" class="input calc" type="number" value="3.5" min="0" step="0.1"></div>
+      <div><label class="field">عمولة منصة افتراضية (%)</label><input id="marketFee" class="input calc" type="number" value="18" min="0" step="0.5"></div>
+      <div><label class="field">ضريبة القيمة المضافة المفترضة (%)</label><input id="vat" class="input calc" type="number" value="20" min="0"></div>
+      <div><label class="field">وحدات مباعة افتراضية</label><input id="unitsSold" class="input calc" type="number" value="100" min="0"></div>
+     </div>
+    </div>
+    <div class="panel span7">
+     <h3>صافي المساهمة بعد المصاريف المتغيرة</h3>
+     <div class="scenarios"><div class="scenario"><span class="muted small">متجر مباشر / قطعة</span><b id="directMargin">—</b><small id="directPercent">—</small></div><div class="scenario"><span class="muted small">سوق إلكتروني / قطعة</span><b id="marketMargin">—</b><small id="marketPercent">—</small></div></div>
+     <div class="divider"></div>
+     <div class="scenarios"><div class="scenario"><span class="muted small">مساهمة المتجر × كمية افتراضية</span><b id="directTotal">—</b></div><div class="scenario"><span class="muted small">إيراد إجمالي قبل الاستقطاعات</span><b id="revenueTotal">—</b></div></div>
+     <p class="muted small" style="margin-top:15px">رسوم ومصاريف مفترضة قابلة للتعديل، غير مؤكدة من مزوّد خدمة محدد. لا تشمل الإيجار والموظفين وتأسيس العمل والمحاسبة وضريبة الأرباح. افتراض «التكلفة الواصلة» بدون KDV قابل للاسترداد فقط إذا أكده المحاسب.</p>
+     <div class="warning">إذا كان الفرق بعد الإعلانات سلبيًا، فلا توسّع الطلبات؛ خفّض التكلفة أو ارفع السعر أو غيّر القناة.</div>
+    </div>
+    <div class="panel span12"><h3>الميزانية المبدئية للاختبار</h3>
+     <div class="tablewrap"><table><thead><tr><th>البند</th><th>نطاق تخطيطي</th><th>شرط الصرف</th></tr></thead><tbody>
+      <tr><td>عينات + تصميم وتجميع</td><td>5,000–6,500 ₺</td><td>بعد عرض سعر وتأكيد الوظيفة والحقوق</td></tr>
+      <tr><td>تصوير فيديو مع الحلاقين</td><td>2,000–2,500 ₺</td><td>عينة تعمل + تصريح تصوير واستخدام</td></tr>
+      <tr><td>Meta / تسويق تجريبي</td><td>4,000–5,000 ₺</td><td>بعد التحقق من التوافق وتجهيز صفحة البيع</td></tr>
+      <tr><td>تنقل/توصيل/مصاريف اختبار</td><td>1,000–2,000 ₺</td><td>وفق صرف فعلي موثق</td></tr>
+      <tr><td><b>الإجمالي المستهدف</b></td><td><b>12,000–16,000 ₺</b></td><td>لا يشمل التأسيس الرسمي أو دفعة استيراد كبيرة</td></tr>
+     </tbody></table></div>
+    </div>
+   </div>
+  </section>
+
+  <section id="partners" class="section">
+   <div class="section-header"><div class="eyebrow">06 / PARTNER MEETING</div><h2>محضر القرار بين الشركاء</h2><p>اكتبوا القرارات والاعتراضات والمسؤوليات، ثم انسخوا محضر الاجتماع أو نزّلوه. البيانات تُحفظ محليًا في الجهاز ولا تُنشر للخادم.</p></div>
+   <div class="grid">
+    <div class="panel span7">
+      <div class="formgrid">
+        <div><label class="field">اسم الشريك الأول</label><input class="input memo" id="partner1" placeholder="الشريك الأول"></div>
+        <div><label class="field">اسم الشريك الثاني</label><input class="input memo" id="partner2" placeholder="الشريك الثاني"></div>
+        <div><label class="field">ميزانية التجربة المعتمدة</label><input class="input memo" id="approvedBudget" placeholder="مثال: 15000 TRY"></div>
+        <div><label class="field">سعر البيع للاختبار</label><input class="input memo" id="approvedPrice" placeholder="مثال: 1299 TRY"></div>
+        <div><label class="field">مسؤول التوريد والعينات</label><input class="input memo" id="ownerSupply" placeholder="الاسم"></div>
+        <div><label class="field">مسؤول الميدان والإعلانات</label><input class="input memo" id="ownerMarket" placeholder="الاسم"></div>
+      </div>
+      <div style="margin-top:14px"><label class="field">الأسئلة والاعتراضات والنقاط المفتوحة</label><textarea class="memo" id="openQuestions" rows="5" placeholder="مثال: هل السعر مرتفع؟ ما بديل الاستيراد؟ هل البدء بكمية 30 قطعة أنسب؟"></textarea></div>
+      <div style="margin-top:14px"><label class="field">القرار النهائي لهذه المرحلة</label><select class="select memo" id="decision"><option value="قيد المناقشة">قيد المناقشة</option><option value="الموافقة على اختبار العينات">الموافقة على اختبار العينات</option><option value="تأجيل لحين عروض سعر">تأجيل لحين عروض سعر</option><option value="إيقاف الفكرة">إيقاف الفكرة</option></select></div>
+      <div class="actions"><button class="btn primary" id="copyMemo">نسخ محضر الاجتماع</button><button class="btn" id="downloadMemo">↓ تنزيل المحضر TXT</button></div>
+    </div>
+    <div class="panel span5"><h3>جدول اجتماع مقترح — 40 دقيقة</h3>
+      <div class="stack">
+        <div class="info"><strong>10 دقائق · فهم المنتج</strong><small>المشكلة، المنافسون، حقوق التصميم، تكلفة العينة</small></div>
+        <div class="info"><strong>10 دقائق · الأرقام</strong><small>سعر البيع، هامش القطعة، ميزانية التجربة، المخاطر</small></div>
+        <div class="info"><strong>10 دقائق · المبيعات</strong><small>زيارة المحلات، Meta، واتساب، المتجر، الموزعون</small></div>
+        <div class="info"><strong>10 دقائق · قرار ومهام</strong><small>من المسؤول؟ ما التسليم؟ ما بوابة القرار التالية؟</small></div>
+      </div>
+      <div class="warning small" style="margin-top:15px">هذه ليست مساحة تعليقات مشتركة لحظية؛ شارك المحضر عبر زر النسخ/التنزيل حتى يراه شريكك كما كتبته.</div>
+    </div>
+   </div>
+  </section>
+
+  <section id="sources" class="section">
+   <div class="section-header"><div class="eyebrow">07 / SOURCES & COMPLIANCE</div><h2>المصادر والقيود</h2><p>ما هو مؤكد منشور، وما هو افتراض أو يحتاج فحصًا قبل التنفيذ.</p></div>
+   <div class="grid">
+     <div class="panel span6"><h3>المعلومات المستندة لمراجع</h3>
+      <ul class="clean"><li>عدد محلات الحلاقة الرجالية في إسطنبول نُقل في أكتوبر 2026 عن جهة مهنية</li><li>منتجات مشابهة تباع دوليًا لكن أسعارها المذكورة تجزئة</li><li>في تركيا قواعد محددة للتواصل التجاري وİYS وKVKK</li><li>سياسة WhatsApp Business تتطلب opt-in للرسائل التسويقية</li><li>المتجر الإلكتروني يحتاج فحص متطلبات التسجيل والفوترة والمرتجعات</li></ul>
+     </div>
+     <div class="panel span6"><h3>افتراضات يجب عدم تقديمها كحقائق</h3><ul class="clean"><li>350 ليرة تكلفة واصلة مستهدفة — ليست عرض مورد</li><li>1299 ليرة سعر مقترح — لم تثبت قابلية البيع</li><li>نسب Meta وعمولات المنصات — نطاقات/افتراضات للتخطيط</li><li>72 محلًا ليست «كل حلاقي إسطنبول»، ولا الموافقات التسويقية</li><li>توافق موديلات الماكينات لم يخضع لتجربة منتج</li></ul></div>
+     <div class="panel span12"><h3>روابط تحقق رسمية وعامة</h3>
+      <div class="links">
+        <a target="_blank" rel="noopener" href="https://www.aa.com.tr/tr/ekonomi/genclerin-ilgisiyle-istanbulda-berber-ve-kuafor-isletmelerinin-sayisi-17-bini-asti/4091902">وكالة الأناضول — عدد الحلاقين بإسطنبول</a>
+        <a target="_blank" rel="noopener" href="https://iys.org.tr/iys/sss">İYS — الاستثناءات وشكاوى الرسائل التجارية</a>
+        <a target="_blank" rel="noopener" href="https://whatsappbusiness.com/policy/">WhatsApp Business Messaging Policy</a>
+        <a target="_blank" rel="noopener" href="https://www.kvkk.gov.tr/Icerik/7557/2022-107">KVKK — بيانات اتصال لأغراض تسويقية</a>
+        <a target="_blank" rel="noopener" href="https://ticaret.gov.tr/ic-ticaret/sikca-sorulan-sorular/elektronik-ticaret">وزارة التجارة — التجارة الإلكترونية وETBİS</a>
+        <a target="_blank" rel="noopener" href="https://ikas.com/tr/ucretsiz-e-ticaret-sitesi">ikas Start — خيار متجر تركي</a>
+        <a target="_blank" rel="noopener" href="https://buysnaplok.com/products/snaplok-guard-holder">SnapLok — منتج مشابه</a>
+        <a target="_blank" rel="noopener" href="https://retainit.au/products/retainit-xl">Retainit XL — منتج مشابه</a>
+       </div>
+     </div>
+   </div>
+  </section>
+  <div class="footer"><b>SAHAB · Business Lab</b> | دراسة تشغيلية أولية لشراكة تجارية · بيانات أعمال عامة لغرض التحقق اليدوي وليس الإرسال الآلي · نسخة 17/11/2026</div>
+</main>
+</div>
+<script>
+(function(){
+"use strict";
+var leads=[],statuses={};try{statuses=JSON.parse(localStorage.getItem("barberLeadStates")||"{}")}catch(e){}
+function $$(s){return Array.from(document.querySelectorAll(s))}
+function go(id){$$(".section").forEach(function(e){e.classList.toggle("active",e.id===id)});$$("[data-go]").forEach(function(e){e.classList.toggle("active",e.getAttribute("data-go")===id)});window.scrollTo({top:0,behavior:"smooth"});try{history.replaceState(null,"","#"+id)}catch(e){}}
+$$("[data-go]").forEach(function(b){b.addEventListener("click",function(){go(b.getAttribute("data-go"))})});
+var initial=location.hash.slice(1);if(initial&&document.getElementById(initial))go(initial);
+$$("[data-week]").forEach(function(b){b.addEventListener("click",function(){var w=b.getAttribute("data-week");$$("[data-week]").forEach(function(x){x.classList.toggle("active",x===b)});$$(".period").forEach(function(x){x.classList.toggle("active",x.id==="week"+w)})})});
+function updateProgress(){var arr=$$("[data-task]"),c=arr.filter(function(i){return i.checked}).length;document.getElementById("progressFill").style.width=(arr.length?100*c/arr.length:0)+"%";document.getElementById("progressLabel").textContent=c+" / "+arr.length}
+$$("[data-task]").forEach(function(e){e.checked=localStorage.getItem("barberTask:"+e.getAttribute("data-task"))==="1";e.addEventListener("change",function(){localStorage.setItem("barberTask:"+e.getAttribute("data-task"),e.checked?"1":"0");updateProgress()})});updateProgress();
+function number(id){return Number(document.getElementById(id).value)||0}
+function lira(n){return new Intl.NumberFormat("tr-TR",{maximumFractionDigits:0}).format(Math.round(n))+" ₺"}
+function calc(){var price=number("price"),net=price/(1+number("vat")/100),base=number("unit")+number("cac")+number("ship")+number("pack")+number("returns");var direct=net-base-price*number("payFee")/100,market=net-base-price*number("marketFee")/100-11;document.getElementById("directMargin").textContent=lira(direct);document.getElementById("marketMargin").textContent=lira(market);document.getElementById("directPercent").textContent=(price?direct/price*100:0).toFixed(1)+"% من سعر البيع";document.getElementById("marketPercent").textContent=(price?market/price*100:0).toFixed(1)+"% من سعر البيع";document.getElementById("directTotal").textContent=lira(direct*number("unitsSold"));document.getElementById("revenueTotal").textContent=lira(price*number("unitsSold"));["directMargin","marketMargin"].forEach(function(id){document.getElementById(id).style.color=(id==="directMargin"?direct:market)<0?"#b93b38":"#0b815d"})}
+$$(".calc").forEach(function(e){e.addEventListener("input",calc)});calc();
+function h(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
+function csvq(s){s=String(s==null?"":s);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s}
+function download(name,body,type){var b=new Blob(["\ufeff",body],{type:type||"text/plain;charset=utf-8"}),u=URL.createObjectURL(b),a=document.createElement("a");a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1000)}
+function fetchLeads(){fetch("./leads.json").then(function(r){if(!r.ok)throw Error("http "+r.status);return r.json()}).then(function(x){leads=x;document.getElementById("statLeads").textContent=leads.length;document.getElementById("statPhones").textContent=leads.filter(function(l){return !!l.business_phone}).length;document.getElementById("totalCount").textContent=leads.length+" محلًا";document.getElementById("phoneCount").textContent=leads.filter(function(l){return !!l.business_phone}).length+" رقمًا منشورًا";var ds=Array.from(new Set(leads.map(function(l){return l.district}))).sort();ds.forEach(function(d){var o=document.createElement("option");o.value=d;o.textContent=d;document.getElementById("districtFilter").appendChild(o)});renderLeads()}).catch(function(){document.getElementById("leadRows").innerHTML='<tr><td colspan="6">تعذر تحميل قاعدة البيانات. يمكنك تنزيل CSV مباشرة من الزر أعلاه.</td></tr>'})}
+function renderLeads(){var q=document.getElementById("leadSearch").value.toLowerCase().trim(),dist=document.getElementById("districtFilter").value,p=document.getElementById("priorityFilter").value,items=leads.filter(function(l){return (!dist||l.district===dist)&&(!p||l.priority===p)&&(!q||(l.business_name+" "+l.district+" "+l.neighborhood+" "+l.address).toLowerCase().includes(q))});document.getElementById("filteredCount").textContent=items.length+" نتيجة";
+document.getElementById("leadRows").innerHTML=items.map(function(l){var state=statuses[l.ID]||"لم يبدأ";return '<tr><td><strong>'+h(l.business_name)+'</strong><div class="muted tiny">'+h(l.neighborhood)+'</div></td><td>'+h(l.district)+'</td><td dir="ltr" style="text-align:right">'+h(l.business_phone||"—")+'</td><td><span class="tag '+(l.priority==="A"?"green":"")+'">'+h(l.priority)+'</span></td><td><a target="_blank" rel="noopener" href="'+h(l.maps_lookup)+'">الخريطة</a> · <a target="_blank" rel="noopener" href="'+h(l.source_url)+'">المصدر</a></td><td><select class="select leadstate" data-id="'+h(l.ID)+'"><option '+(state==="لم يبدأ"?"selected":"")+' value="لم يبدأ">لم يبدأ</option><option '+(state==="تم التحقق"?"selected":"")+' value="تم التحقق">تم التحقق</option><option '+(state==="تمت زيارة"?"selected":"")+' value="تمت زيارة">تمت زيارة</option><option '+(state==="مهتم"?"selected":"")+' value="مهتم">مهتم</option><option '+(state==="لا يرغب"?"selected":"")+' value="لا يرغب">لا يرغب</option></select></td></tr>'}).join("")||'<tr><td colspan="6">لا توجد نتائج مطابقة.</td></tr>';}
+["leadSearch","districtFilter","priorityFilter"].forEach(function(id){document.getElementById(id).addEventListener(id==="leadSearch"?"input":"change",renderLeads)});
+document.getElementById("leadRows").addEventListener("change",function(e){if(e.target.classList.contains("leadstate")){statuses[e.target.getAttribute("data-id")]=e.target.value;localStorage.setItem("barberLeadStates",JSON.stringify(statuses))}});
+document.getElementById("exportStatuses").addEventListener("click",function(){var rows=[["ID","Business","District","Public Business Phone","Local Follow-up","WhatsApp Permission"]].concat(leads.map(function(l){return [l.ID,l.business_name,l.district,l.business_phone,statuses[l.ID]||"لم يبدأ","غير متحقق"]}));download("barber-followups-local.csv",rows.map(function(r){return r.map(csvq).join(",")}).join("\r\n"),"text/csv;charset=utf-8")});
+$$("[data-copy]").forEach(function(b){b.addEventListener("click",function(){var x=document.getElementById(b.getAttribute("data-copy")).innerText;navigator.clipboard.writeText(x).then(function(){b.textContent="تم النسخ ✓";setTimeout(function(){b.textContent="نسخ النص"},1700)}).catch(function(){alert("حدد النص وانسخه يدويًا")})})});
+var fields=["partner1","partner2","approvedBudget","approvedPrice","ownerSupply","ownerMarket","openQuestions","decision"];
+fields.forEach(function(id){var el=document.getElementById(id),stored=localStorage.getItem("barberMemo:"+id);if(stored!==null)el.value=stored;el.addEventListener("input",function(){localStorage.setItem("barberMemo:"+id,el.value)})});
+function memo(){var lines=["محضر دراسة مشروع BARBER GUARD","التاريخ: "+new Date().toLocaleDateString("tr-TR"),"======================"];var names={partner1:"الشريك الأول",partner2:"الشريك الثاني",approvedBudget:"ميزانية التجربة",approvedPrice:"سعر البيع",ownerSupply:"مسؤول المورد والعينات",ownerMarket:"مسؤول الميدان والإعلانات",openQuestions:"أسئلة مفتوحة",decision:"قرار المرحلة"};fields.forEach(function(id){lines.push(names[id]+": "+document.getElementById(id).value)});lines.push("ملاحظة: بيانات الإنجاز والمحضر محفوظة على الجهاز وليست متزامنة على خادم.");return lines.join("\n")}
+document.getElementById("copyMemo").addEventListener("click",function(){navigator.clipboard.writeText(memo()).then(function(){alert("تم نسخ المحضر")}).catch(function(){alert("تعذر النسخ؛ استخدم تنزيل المحضر")})});
+document.getElementById("downloadMemo").addEventListener("click",function(){download("barber-partner-meeting.txt",memo(),"text/plain;charset=utf-8")});
+fetchLeads();
+})();
+</script>
+</body></html>
