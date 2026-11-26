@@ -1,0 +1,40 @@
+name: Command Center Agents
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/command-center-agents.yml'
+      - 'command-center/runtime/actions_worker.py'
+      - 'command-center/runtime/test_actions_worker.py'
+permissions:
+  contents: read
+concurrency:
+  group: command-center-agents
+  cancel-in-progress: false
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify queue behavior
+        working-directory: command-center
+        run: python -m unittest runtime.test_actions_worker
+      - name: Install Google authentication
+        run: pip install 'google-auth>=2.38,<3' 'requests>=2.32,<3'
+      - name: Process private jobs
+        working-directory: command-center
+        env:
+          CENTER_GOOGLE_CREDENTIALS: ${{ secrets.CENTER_GOOGLE_CREDENTIALS }}
+          CENTER_SHEET_ID: ${{ secrets.CENTER_SHEET_ID }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CENTER_MODEL: ${{ vars.CENTER_MODEL }}
+        run: python -m runtime.actions_worker

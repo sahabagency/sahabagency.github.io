@@ -185,6 +185,6 @@ def home():
 
 @app.get("/{name}")
 def asset(name:str):
-    if name not in {"index.html","manifest.webmanifest","icon.svg","sw.js","runtime.js"}:
+    if name not in {"index.html","manifest.webmanifest","icon.svg","sw.js","runtime.js","scheduled-agents.js"}:
         raise HTTPException(404)
     return FileResponse(ROOT / name)

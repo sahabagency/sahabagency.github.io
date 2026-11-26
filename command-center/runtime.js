@@ -1,5 +1,5 @@
 // Private single-owner runtime, served from the same origin as the dashboard.
-function attachCenter({snapshot, restore, seed, save, records, draw, toast, steps, escape}) {
+function attachCenter({scheduled, snapshot, restore, seed, save, records, draw, toast, steps, escape}) {
   let token = '', busy = false, epoch = 0, connected = false;
   let message = 'أدخل رمز الخادم لربط الخزنة', ai = false;
   const baseKey = 'center-last-sync-v1';
@@ -67,14 +67,13 @@ function attachCenter({snapshot, restore, seed, save, records, draw, toast, step
     } finally { busy = false; }
   }
   function panel(){
-    if (location.pathname.startsWith('/command-center/')) {
-      return '<section class="panel"><h2>حالة التشغيل</h2><p>المحفظة وخطط العمل متاحة داخل مركز القيادة. تشغيل مسودات الذكاء والمزامنة الخادمية ينتظر تفعيل الاستضافة.</p></section>';
-    }
+    if (scheduled) return scheduled.panel();
     return '<section class="panel"><h2>الخادم الخاص</h2><p id="centerStatus">'+escape(message)+'</p><input type="password" id="centerToken" autocomplete="off" placeholder="رمز الخادم"><button class="subbtn" id="centerConnect">ربط ومزامنة</button></section>';
   }
   async function click(e) {
     const el=e.target.closest('button');
     if (!el || !snapshot()) return;
+    if (scheduled && (el.dataset.centerRun || el.id==='centerAsk')) return;
     if (el.id==='centerConnect') {
       const field=document.getElementById('centerToken');
       if(field.value){ token=field.value.trim(); field.value=''; }
