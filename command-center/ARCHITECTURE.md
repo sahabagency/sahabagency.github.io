@@ -34,3 +34,9 @@ Type: product, agency operating system, client, idea, study, document, contract/
 
 ## Privacy
 The GitHub repository is PUBLIC. Never commit internal client inventories, contracts, financial data, Gmail contents or access tokens to this source. Local vault uses Web Crypto AES-GCM+PBKDF2 and requires recovery backups. Google access tokens stay in memory. Production auth, RLS and backend audit are not provided by a static website.
+
+## Development runtime
+Serve the dashboard and API from the same origin. The static Pages deployment continues to support offline use.
+On a Mac with Python 3.10+ run Start.command in Terminal and open the printed loopback address. Enter the vault passphrase, then the local server token under Portfolio. For a new encrypted bootstrap use its supplied vault passphrase.
+For a hosted development instance build the command-center Dockerfile, mount a private persistent volume at /data and expose HTTPS. The single-owner access token is in /data/access. Use one replica and one Uvicorn worker. Back up the volume and both encryption keys securely. Configure OPENAI_API_KEY and optionally CENTER_MODEL in the server environment.
+The browser syncs an encrypted vault snapshot every ten seconds while connected and unlocked. Divergent revisions prompt for an explicit restore after backup. A server worker processes submitted role-specific draft jobs independently of browser state, recovers interrupted jobs, and retains completed outputs for the next session. Only the selected project brief or the question context goes to the configured model. Outputs are drafts, without external research or execution privileges. Existing Google Sheets/Drive OAuth flows remain browser-based.
