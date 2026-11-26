@@ -34,7 +34,7 @@ jobs:
         working-directory: command-center
         env:
           CENTER_GOOGLE_CREDENTIALS: ${{ secrets.CENTER_GOOGLE_CREDENTIALS }}
-          CENTER_SHEET_ID: ${{ secrets.CENTER_SHEET_ID }}
+          CENTER_SHEET_ID: 1QWkzo383aW1Px1YKluSRCElcgXq2WO-U83zuO9BAXFA
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           CENTER_MODEL: ${{ vars.CENTER_MODEL }}
         run: python -m runtime.actions_worker
