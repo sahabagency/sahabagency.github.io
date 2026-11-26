@@ -43,7 +43,7 @@ function attachScheduledAgents({getDB, save, draw, toast, connect, fetchGoogle, 
         if (!result || task.scheduledUpdated === result[3]) continue;
         Object.assign(task,{scheduledState:result[1],scheduledUpdated:result[3],updated:result[3]});
         if (result[1]==='done' && result[2]) {
-          task.desc=result[2];task.status='done';
+          task.desc=result[2];task.status='done';task.executionMode='draft';
         } else if (['failed','review'].includes(result[1])) {
           task.status='wait';
           task.desc='يحتاج الطلب إلى مراجعة. '+(result[4]||'');
@@ -71,7 +71,7 @@ function attachScheduledAgents({getDB, save, draw, toast, connect, fetchGoogle, 
       if(getDB()!==db)return;
       const additions=[], assignments=[];
       for(const task of tasks) {
-        const context=JSON.stringify(project?{title:project.title,brief:project.desc,assignment:task.title}:{question,records:db.records.filter(x=>!x.agentRole).map(x=>({title:x.title,status:x.status,desc:x.desc?.slice(0,240)}))});
+        const context=JSON.stringify(project?{title:project.title,brief:project.desc,assignment:task.title}:CenterIntelligence.context(question,db.records,document.getElementById('brainScope')?.value||'agency'));
         if(context.length>32000)throw Error('السياق أكبر من حد الطلب. استخدم مشروعًا محددًا.');
         const id=await hash(task.agentRole,context);
         if(!existing.has(id)) {
@@ -105,5 +105,5 @@ function attachScheduledAgents({getDB, save, draw, toast, connect, fetchGoogle, 
     run().catch(err=>{setStatus(err.message);toast(err.message);});
   });
   setInterval(()=>sync().catch(()=>setStatus('تعذرت قراءة النتائج. أعد ربط Google.')),60000);
-  return {panel:()=>'<section class="panel"><h2>تشغيل الوكلاء عبر GitHub</h2><p id="scheduledStatus">'+escape(status)+'</p><p>دورة كل 15 دقيقة بعد إعداد الاتصال، بحد 24 مسودة خلال 24 ساعة. تبقى المهام والنتائج في السجل الخاص.</p><button class="subbtn" id="scheduledSync">ربط Google وتحديث النتائج</button><a class="subbtn" href="https://github.com/sahabagency/sahabagency.github.io/actions/workflows/command-center-agents.yml" target="_blank" rel="noopener">حالة دورات التشغيل</a></section>'};
+  return {panel:()=>'<section class="panel"><h2>تشغيل الوكلاء عبر GitHub</h2><p id="scheduledStatus">'+escape(status)+'</p><p>الجدولة كل 15 دقيقة تقريبًا عند تفعيل الاتصال، بحد 24 محاولة خلال 24 ساعة. نجاح دورة GitHub لا يعني أن الوكلاء نفذوا: افتح مرحلة execute وتأكد أنها لم تُتجاوز. تبقى المهام والنتائج في السجل الخاص.</p><button class="subbtn" id="scheduledSync">ربط Google وتحديث النتائج</button><a class="subbtn" href="https://github.com/sahabagency/sahabagency.github.io/actions/workflows/command-center-agents.yml" target="_blank" rel="noopener">حالة دورات التشغيل</a></section>'};
 }
