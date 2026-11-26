@@ -48,6 +48,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 </div><div class="dialog-actions"><button class="pbtn" type="submit">حفظ السجل</button><button type="button" class="subbtn" id="cancelModal">إلغاء</button><button type="button" class="subbtn hidden" id="deleteEntry" style="color:var(--danger)">حذف</button></div></form></div></div>
 <div id="toast" class="toast hidden"></div>
 <script src="./runtime.js"></script>
+<script src="./scheduled-agents.js"></script>
 <script>
 (function(){
 'use strict';
@@ -99,7 +100,11 @@ function save(){
  saveQueue=saveQueue.catch(()=>{}).then(async()=>localStorage.setItem(KEY,JSON.stringify(await encodeVault(data,password))));
  return saveQueue;
 }
-const runtime=attachCenter({snapshot:()=>db,records:()=>db.records,seed:merge,save,draw,toast,steps:p=>{makeAgentPlan(p);return db.records.filter(x=>x.parentId===p.id&&x.agentRole);},escape,
+const scheduled=location.pathname.startsWith('/command-center/')?attachScheduledAgents({
+ getDB:()=>db,save,draw,toast,connect:connectGoogle,fetchGoogle:googleFetch,isConnected:()=>Boolean(googleToken),
+ makePlan:makeAgentPlan,makeRecord,sheetId:GOOGLE_SHEET_ID,escape
+}):null;
+const runtime=attachCenter({scheduled,snapshot:()=>db,records:()=>db.records,seed:merge,save,draw,toast,steps:p=>{makeAgentPlan(p);return db.records.filter(x=>x.parentId===p.id&&x.agentRole);},escape,
  restore:async(box,before,session,epoch)=>{const original=db, stamp=JSON.stringify(db);const next=await decodeVault(box,passphrase);
  await saveQueue;if(session!==epoch()||original!==db||stamp!==JSON.stringify(db)||localStorage.getItem(KEY)!==before)throw Error('تغيرت النسخة المحلية أثناء التحميل');
  if(!Array.isArray(next.records))throw Error('خزنة غير صالحة');db=next;localStorage.setItem(KEY,JSON.stringify(box));}
