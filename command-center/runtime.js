@@ -67,6 +67,9 @@ function attachCenter({snapshot, restore, seed, save, records, draw, toast, step
     } finally { busy = false; }
   }
   function panel(){
+    if (location.pathname.startsWith('/command-center/')) {
+      return '<section class="panel"><h2>حالة التشغيل</h2><p>المحفظة وخطط العمل متاحة داخل مركز القيادة. تشغيل مسودات الذكاء والمزامنة الخادمية ينتظر تفعيل الاستضافة.</p></section>';
+    }
     return '<section class="panel"><h2>الخادم الخاص</h2><p id="centerStatus">'+escape(message)+'</p><input type="password" id="centerToken" autocomplete="off" placeholder="رمز الخادم"><button class="subbtn" id="centerConnect">ربط ومزامنة</button></section>';
   }
   async function click(e) {
