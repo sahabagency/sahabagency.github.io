@@ -15,7 +15,37 @@ concurrency:
   group: command-center-agents
   cancel-in-progress: false
 jobs:
+  configuration:
+    name: Check configuration
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    outputs:
+      ready: ${{ steps.check.outputs.ready }}
+    steps:
+      - name: Check required connections
+        id: check
+        env:
+          CENTER_GOOGLE_CREDENTIALS: ${{ secrets.CENTER_GOOGLE_CREDENTIALS }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import os
+          required = ("CENTER_GOOGLE_CREDENTIALS", "OPENAI_API_KEY")
+          missing = [name for name in required if not os.environ.get(name, "").strip()]
+          with open(os.environ["GITHUB_OUTPUT"], "a") as output:
+              output.write("ready=" + ("false" if missing else "true") + "\n")
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a") as summary:
+              if missing:
+                  summary.write("## Waiting for configuration\n\n")
+                  summary.write("Agent execution was skipped. Missing repository secrets\n\n")
+                  summary.write("\n".join("- " + name for name in missing) + "\n")
+              else:
+                  summary.write("Required settings are present. Agent execution will validate them.\n")
+          PY
   execute:
+    needs: configuration
+    if: needs.configuration.outputs.ready == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
