@@ -121,6 +121,8 @@ app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None
 
 @app.middleware("http")
 async def guard(req: WebRequest, next_handler):
+    if req.url.path == "/health":
+        return JSONResponse({"status":"ok"}, headers={"Cache-Control":"no-store"})
     hosted = os.getenv("CENTER_HOSTED") == "1"
     is_api = req.url.path.startswith("/api/")
     if hosted:
@@ -137,6 +139,8 @@ async def guard(req: WebRequest, next_handler):
                 return JSONResponse({"detail": "owner_only"}, status_code=401, headers={"WWW-Authenticate": 'Basic realm="Sahab Private", charset="UTF-8"', "Cache-Control": "no-store"})
     if is_api:
         auth = req.headers.get("authorization", "").encode()
+        if req.headers.get("sec-fetch-site") == "cross-site":
+            return JSONResponse({}, status_code=403)
         if not hmac.compare_digest(auth, b"Bearer " + TOKEN):
             return JSONResponse({}, status_code=401)
         if req.method == "POST":
@@ -149,6 +153,13 @@ async def guard(req: WebRequest, next_handler):
     response.headers["Cache-Control"] = "no-store"
     response.headers["X-Content-Type-Options"] = "nosniff"
     return response
+
+
+@app.get("/session")
+def owner_session():
+    if os.getenv("CENTER_HOSTED") != "1":
+        raise HTTPException(404)
+    return {"token": TOKEN.decode()}
 
 
 @app.get("/api/state")
