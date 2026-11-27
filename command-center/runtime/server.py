@@ -5,6 +5,8 @@ import hashlib
 import hmac
 import json
 import os
+import re
+import shutil
 from pathlib import Path
 import secrets
 import sqlite3
@@ -17,6 +19,9 @@ from cryptography.fernet import Fernet
 from fastapi import FastAPI, HTTPException, Request as WebRequest
 from fastapi.responses import FileResponse, JSONResponse
 
+from .media import render as render_media
+
+MEDIA_LOCK = threading.Lock()
 ROOT = Path(__file__).resolve().parents[1]
 DATA = Path(os.getenv("CENTER_DATA", str(Path.home() / ".sahab-center")))
 DATA.mkdir(parents=True, exist_ok=True, mode=0o700)
@@ -152,7 +157,7 @@ def state():
         row = c.execute("SELECT * FROM vault WHERE id=1").fetchone()
         seed = c.execute("SELECT rows FROM inventory WHERE id=1").fetchone()
         return {"rev": row["rev"] if row else 0, "box": unseal(row["box"]) if row else None,
-                "inventory": unseal(seed[0]) if seed and not row else [], "ai": bool(os.getenv("OPENAI_API_KEY"))}
+                "inventory": unseal(seed[0]) if seed and not row else [], "ai": bool(os.getenv("OPENAI_API_KEY")), "media": bool(shutil.which("ffmpeg"))}
 
 
 @app.post("/api/state")
@@ -192,6 +197,37 @@ def fetch_job(key:str):
         if not row:
             raise HTTPException(404)
         return {"state":row[0],"result":unseal(row[1]) if row[1] else None}
+
+
+@app.post("/api/media")
+def create_media(body: dict):
+    if not MEDIA_LOCK.acquire(blocking=False):
+        raise HTTPException(429, "renderer_busy")
+    try:
+        folder = DATA / "media"
+        if folder.exists() and sum(p.stat().st_size for p in folder.glob("*/*") if p.is_file()) > 500_000_000:
+            raise HTTPException(507, "media_storage_limit")
+        return render_media(folder, body.get("title"), body.get("slides"), body.get("seconds", 5))
+    except ValueError:
+        raise HTTPException(422, "invalid_media")
+    except HTTPException:
+        raise
+    except Exception:
+        raise HTTPException(503, "render_failed")
+    finally:
+        MEDIA_LOCK.release()
+
+
+@app.get("/api/media/{key}/{kind}")
+def get_media(key: str, kind: str):
+    names = {"video": ("video.mp4", "video/mp4"), "carousel": ("carousel.zip", "application/zip")}
+    if not re.fullmatch(r"[0-9a-f]{32}", key) or kind not in names:
+        raise HTTPException(404)
+    filename, mimetype = names[kind]
+    path = DATA / "media" / key / filename
+    if not path.is_file():
+        raise HTTPException(404)
+    return FileResponse(path, media_type=mimetype, filename="sahab-" + filename)
 
 
 @app.get("/")
