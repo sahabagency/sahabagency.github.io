@@ -1,4 +1,6 @@
 """Single-owner command center. Run one process with one persistent data directory."""
+import base64
+import binascii
 import hashlib
 import hmac
 import json
@@ -114,7 +116,21 @@ app = FastAPI(lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None
 
 @app.middleware("http")
 async def guard(req: WebRequest, next_handler):
-    if req.url.path.startswith("/api/"):
+    hosted = os.getenv("CENTER_HOSTED") == "1"
+    is_api = req.url.path.startswith("/api/")
+    if hosted:
+        password = os.getenv("CENTER_OWNER_PASSWORD", "")
+        if len(password) < 24:
+            return JSONResponse({"detail": "owner_access_unconfigured"}, status_code=503, headers={"Cache-Control": "no-store"})
+        if not is_api:
+            supplied = req.headers.get("authorization", "")
+            try:
+                decoded = base64.b64decode(supplied[6:], validate=True) if supplied.startswith("Basic ") else b""
+            except (ValueError, binascii.Error):
+                decoded = b""
+            if not hmac.compare_digest(decoded, ("owner:" + password).encode()):
+                return JSONResponse({"detail": "owner_only"}, status_code=401, headers={"WWW-Authenticate": 'Basic realm="Sahab Private", charset="UTF-8"', "Cache-Control": "no-store"})
+    if is_api:
         auth = req.headers.get("authorization", "").encode()
         if not hmac.compare_digest(auth, b"Bearer " + TOKEN):
             return JSONResponse({}, status_code=401)
@@ -185,6 +201,8 @@ def home():
 
 @app.get("/{name}")
 def asset(name:str):
-    if name not in {"index.html","manifest.webmanifest","icon.svg","sw.js","runtime.js","scheduled-agents.js"}:
+    if name not in {"index.html","manifest.webmanifest","icon.svg","sw.js","runtime.js","scheduled-agents.js","intelligence.js","content-factory.js"}:
+        raise HTTPException(404)
+    if name == "sw.js" and os.getenv("CENTER_HOSTED") == "1":
         raise HTTPException(404)
     return FileResponse(ROOT / name)
