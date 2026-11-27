@@ -77,6 +77,7 @@ function attachCenter({scheduled, snapshot, restore, seed, save, records, draw, 
     if (el.id==='centerConnect') {
       const field=document.getElementById('centerToken');
       if(field.value){ token=field.value.trim(); field.value=''; }
+      if(!token){const r=await fetch('/session',{cache:'no-store',credentials:'same-origin'});if(!r.ok)throw Error('تعذر التحقق من دخول المالك');token=(await r.json()).token;}
       if(!token) throw Error('أدخل رمز الخادم');
       await sync(true);
     }
@@ -88,12 +89,17 @@ function attachCenter({scheduled, snapshot, restore, seed, save, records, draw, 
     if (!project && !q) throw Error('اكتب توجيهك أولًا');
     const tasks = project ? steps(project) : [];
     if (!project) {
-      const context=JSON.stringify({question:q,records:records().filter(x=>!x.agentRole).map(x=>[x.title,x.status,x.desc?.slice(0,240)])});
+      const scope=document.getElementById('brainScope')?.value||'agency';
+      const words=q.toLowerCase().split(/\s+/).filter(w=>w.length>2);
+      const selected=records().filter(x=>!x.agentRole&&x.scope===scope).map(x=>({x,score:words.filter(w=>[x.title,x.desc,(x.tags||[]).join(' ')].join(' ').toLowerCase().includes(w)).length})).sort((a,b)=>b.score-a.score).slice(0,20).map(({x})=>[x.title,x.status,x.desc?.slice(0,240)]);
+      if(!confirm('إرسال السؤال والسجلات المختارة إلى مزود الذكاء الاصطناعي؟'))return;
+      const context=JSON.stringify({question:q,scope,records:selected});
       if(context.length>32000) throw Error('السياق أكبر من حد الطلب. نفّذ خطة مشروع محدد.');
       const job=await api('jobs',{role:'العقل المركزي',context,retry:true});
       if(session!==epoch)return;
       if(!records().some(x=>x.centerJob===job.id))records().unshift({id:crypto.randomUUID(),type:'task',scope:'agency',title:q.slice(0,160),desc:'بانتظار مسودة العقل المركزي',tags:[],status:'progress',origin:'brain',updated:new Date().toISOString(),centerJob:job.id});
     } else {
+      if(!confirm('إرسال موجز المشروع ومهامه إلى مزود الذكاء الاصطناعي؟'))return;
       for (const task of tasks.filter(x=>!x.centerJob || x.centerState==='failed')) {
         const context=JSON.stringify({title:project.title,brief:project.desc,assignment:task.title,instructions:task.desc,role:task.agentRole});
         const job=await api('jobs',{role:task.agentRole,context,retry:true});
