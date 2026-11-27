@@ -95,7 +95,7 @@ function attachCenter({scheduled, snapshot, restore, seed, save, records, draw, 
       if(!records().some(x=>x.centerJob===job.id))records().unshift({id:crypto.randomUUID(),type:'task',scope:'agency',title:q.slice(0,160),desc:'بانتظار مسودة العقل المركزي',tags:[],status:'progress',origin:'brain',updated:new Date().toISOString(),centerJob:job.id});
     } else {
       for (const task of tasks.filter(x=>!x.centerJob || x.centerState==='failed')) {
-        const context=JSON.stringify({title:project.title,brief:project.desc,assignment:task.title});
+        const context=JSON.stringify({title:project.title,brief:project.desc,assignment:task.title,instructions:task.desc,role:task.agentRole});
         const job=await api('jobs',{role:task.agentRole,context,retry:true});
         if(session!==epoch)return;
         Object.assign(task,{centerJob:job.id,centerState:'queued',status:'progress'});
@@ -106,5 +106,18 @@ function attachCenter({scheduled, snapshot, restore, seed, save, records, draw, 
   }
   document.addEventListener('click',e=>click(e).catch(err=>{status(err.message);toast(err.message);}));
   setInterval(()=>{if(connected)sync().catch(err=>status(err.message));},10000);
-  return {panel,lock(){epoch++; token='';connected=false;ai=false;message='أدخل رمز الخادم لربط الخزنة';}};
+  async function renderMedia(body){
+    if(!connected || !token) throw Error('اربط الخادم الخاص أولًا');
+    return api('media',body);
+  }
+  async function downloadMedia(id,kind){
+    if(!connected || !token) throw Error('اربط الخادم الخاص أولًا');
+    if(!/^[a-f0-9]{32}$/.test(id)||!['video','carousel'].includes(kind))throw Error('ملف غير صالح');
+    const r=await fetch('/api/media/'+id+'/'+kind,{headers:{Authorization:'Bearer '+token},cache:'no-store'});
+    if(!r.ok)throw Error('تعذر تحميل الملف');
+    const url=URL.createObjectURL(await r.blob()),a=document.createElement('a');
+    a.href=url;a.download=kind==='video'?'sahab-video.mp4':'sahab-carousel.zip';
+    document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+  return {panel,renderMedia,downloadMedia,lock(){epoch++; token='';connected=false;ai=false;message='أدخل رمز الخادم لربط الخزنة';}};
 }
