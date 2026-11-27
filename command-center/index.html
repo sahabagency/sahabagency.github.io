@@ -337,11 +337,34 @@ return header('محفظة الابتكار','إدارة المشاريع وال�
 +'<div class="cards">'+records.sort((a,b)=>String(b.updated).localeCompare(String(a.updated))).map(x=>{const linked=db.records.filter(t=>t.parentId===x.id&&t.type==='task');return '<section>'+card(x)+'<div class="actions"><span class="pill">'+linked.filter(t=>t.status==='done').length+' / '+linked.length+' مهام منجزة</span><button class="subbtn" data-portfolio-plan="'+escape(x.id)+'">إنشاء خطة وكلاء</button><button class="subbtn" data-center-run="'+escape(x.id)+'">تشغيل مسودات الوكلاء</button></div></section>';}).join('')+'</div>';
 }
 async function importPortfolio(){const raw=$('portfolioImport').value;if(raw.length>1000000)throw Error('الملف كبير');const input=JSON.parse(raw);const rows=Array.isArray(input)?input:input?.records?.filter(x=>['project','idea','study'].includes(x?.type));if(!Array.isArray(rows)||rows.length>1000||rows.some(x=>!x||!['project','idea','study'].includes(x.type)||typeof x.title!=='string'||!x.title.trim()))throw Error('صيغة الجرد غير صحيحة');const before=db.records.length;merge(rows);await save();draw();toast('تمت إضافة '+(db.records.length-before)+' سجل');}
+function contentRenderPanel(){
+ const files=db.records.filter(x=>x.mediaId);
+ return '<section class="panel" style="margin-top:18px"><h2>إنتاج ملفات جاهزة للمراجعة</h2><p class="note">فيديو عمودي نصي صامت + شرائح PNG. اكتب النص المعتمد؛ لا ينشر النظام تلقائيًا.</p><div class="field"><label>عنوان الفيديو</label><input id="mediaTitle" maxlength="100"></div><div class="field"><label>كل سطر شريحة مستقلة (حتى 8، كل سطر 140 حرفًا)</label><textarea id="mediaSlides" rows="7"></textarea></div><div class="actions"><button class="pbtn" id="mediaRender">إنتاج MP4 وكاروسيل</button></div><div class="stack">'+files.map(x=>'<div class="boxline"><div><h3>'+escape(x.title)+'</h3><p>'+escape(x.desc)+'</p></div><div class="end"><button class="subbtn" data-media-id="'+escape(x.mediaId)+'" data-media-kind="video">MP4</button><button class="subbtn" data-media-id="'+escape(x.mediaId)+'" data-media-kind="carousel">PNG ZIP</button></div></div>').join('')+'</div></section>';
+}
+document.addEventListener('click',async e=>{
+ const button=e.target.closest('button');
+ if(!button||!db)return;
+ if(button.dataset.mediaId){
+  try{await runtime.downloadMedia(button.dataset.mediaId,button.dataset.mediaKind)}catch(err){toast(err.message)}
+  return;
+ }
+ if(button.id!=='mediaRender')return;
+ const title=$('mediaTitle').value.trim(),slides=$('mediaSlides').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+ if(!title||title.length>100||!slides.length||slides.length>8||slides.some(x=>x.length>140))return toast('تحقق من العنوان والشرائح');
+ const current=db;button.disabled=true;button.textContent='جاري الإنتاج...';
+ try{
+  const result=await runtime.renderMedia({title,slides,seconds:5});
+  if(db!==current)return;
+  db.records.unshift(makeRecord({type:'file',scope:'agency',title,desc:'فيديو نصي صامت · '+result.duration+' ثانية · '+result.slides+' شرائح · يحتاج اعتماد قبل النشر',status:'wait',tags:['مصنع المحتوى','مخرجات'],mediaId:result.id}));
+  await save();draw();toast('تم إنتاج الملفات وحفظ مرجعها');
+ }catch(err){toast(err.message)}finally{button.disabled=false;button.textContent='إنتاج MP4 وكاروسيل'}
+});
 function contentFactoryPage(){
  const cycles=db.records.filter(x=>x.contentCycle),tasks=db.records.filter(x=>x.contentAgent),done=tasks.filter(x=>x.status==='done');
- return header('مصنع المحتوى الذكي','فريق من 14 دورًا داخل مركز القيادة. المسار الحالي ينتج مسودات نصية، ولا يولد أو ينشر ملفات فيديو بعد.')
+ return header('مصنع المحتوى الذكي','فريق من 14 دورًا داخل مركز القيادة. مسودات الوكلاء + إنتاج فيديو نصي وكاروسيل على الخادم. لا يوجد نشر تلقائي أو أفاتار فعلي بعد.')
  +'<div class="grid4"><div class="metric"><small>الأدوار</small><strong>'+SahabContentFactory.roles.length+'</strong></div><div class="metric"><small>دورات الإنتاج</small><strong>'+cycles.length+'</strong></div><div class="metric"><small>مهام محفوظة</small><strong>'+tasks.length+'</strong></div><div class="metric"><small>مسودات منجزة</small><strong>'+done.length+'</strong></div></div>'
  +runtime.panel()
+ +contentRenderPanel()
  +'<section class="panel" style="margin-top:18px"><h2>دورة محتوى جديدة</h2><div class="field"><label>الموضوع والتوجيه</label><textarea id="contentBrief" maxlength="3000"></textarea></div><div class="field"><label>المصادر والملاحظات (نصوص أو روابط مرجعية؛ لا يتم فتح الروابط تلقائيًا)</label><textarea id="contentSources" maxlength="8000"></textarea></div><div class="field"><label>صيغة الإنتاج</label><select id="contentMode"><option value="real">تصويري</option><option value="avatar">أفاتار</option><option value="faceless">بدون ظهور</option><option value="carousel">كاروسيل</option></select></div><div class="actions"><button class="pbtn" id="contentCreate">إنشاء الدورة و14 مهمة</button></div></section>'
  +'<div class="section-title"><h2>فريق المحتوى</h2></div><div class="cards">'+SahabContentFactory.roles.map(([key,role,assignment])=>'<section class="project"><span class="bigicon">✦</span><h3>'+escape(role)+'</h3><p>'+escape(assignment)+'</p><div class="tagline"><span class="pill">'+tasks.filter(x=>x.contentAgent===key&&x.status==='done').length+' مسودة منجزة</span></div></section>').join('')+'</div>'
  +'<div class="section-title"><h2>دورات الإنتاج والنتائج</h2></div>'+cycles.map(p=>'<section class="panel" style="margin-top:12px"><h2>'+escape(p.title)+'</h2><p>'+escape(p.desc)+'</p><button class="subbtn" data-center-run="'+escape(p.id)+'">إرسال المهام النصية للخادم</button><div class="cards" style="margin-top:12px">'+tasks.filter(t=>t.parentId===p.id).map(card).join('')+'</div></section>').join('');
